@@ -9,7 +9,7 @@ from jinja2 import Environment, FileSystemLoader
 from gpx import gpxtricks
 
 """ Load the rapport template"""
-myloader = FileSystemLoader('C:\\python\\kommuner')
+myloader = FileSystemLoader('C:\\Users\\gjermund.vingerhagen\\Documents\\git\\sccs\\gpx\\resourch\\templates')
 env = Environment(loader=myloader)
 template_rapport = env.get_template('template_rapport.html')
 
