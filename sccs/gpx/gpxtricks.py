@@ -188,9 +188,7 @@ def readkommunexml():
             print('<wpt lat="{}" lon="{}"><name>{}</name></wpt>'.format(lat,lng,tnavn))
             f.write('L.marker( [{},{}],{{icon: myIcon1}} ).addTo(map);\n'.format(lat,lng))
             teller += 1 
-            
     print(teller)
-        
     f.close()
 
 
