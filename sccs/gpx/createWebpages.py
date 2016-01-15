@@ -14,7 +14,8 @@ env = Environment(loader=myloader)
 template_rapport = env.get_template('template_rapport.html')
 
 file = open('C:\\python\\kommuner\\outdata\\testfile.html','w')
+
 file.write(template_rapport.render(topp='test'))
 
-print('hurra')
-print('hurrra,hurra')
+
+
