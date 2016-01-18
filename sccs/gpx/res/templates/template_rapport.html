@@ -53,13 +53,13 @@
 		Fylke:<br>
 		<select name="textbox_id1" id="textbox_id1" onchange="updateTextBox2(this.selectedIndex)">
 			<option selected>Velg fylke</option>
-			<option selected>Akershus</option>
-			<option selected>Aust-Agder</option>
-			<option selected>Buskerud</option>
-			<option selected>Finmark</option>
-			<option selected>Hedmark</option>
-			<option selected>Hordaland</option>
-			<option selected>Møre og Romsdal</option>
+			<option>Akershus</option>
+			<option>Aust-Agder</option>
+			<option>Buskerud</option>
+			<option>Finmark</option>
+			<option>Hedmark</option>
+			<option>Hordaland</option>
+			<option>Møre og Romsdal</option>
 			<option>Nord-Trøndelag</option>
 			<option>Nordland</option>
 			<option>Oppland</option>
@@ -212,7 +212,7 @@ var myIcon2 = L.icon({
 });
 
 
-var map = L.map('map').setView([{{lat}},{{lon}}], 11);
+var map = L.map('map').setView([62,7], 11);
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
 	attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
 	maxZoom: 18,
@@ -220,7 +220,10 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 	accessToken: 'pk.eyJ1IjoiZ2plcm12IiwiYSI6IjM5N2EwZjkxZDA5MTIxYTI1MjI0MGFiZDJmNzhmMmE4In0.y2ULEYqhR4rXG4x5EbVK-Q'
 }).addTo(map);
 
+{{toppcoordinates}}
 
+toppMarker = L.marker([62,7],{icon: IconTop});
+toppMarker.addTo(map);
 
 {{tripcoordinates}}
 

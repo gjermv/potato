@@ -16,7 +16,9 @@ import googlemaps
 
 
 def parseGPX(filename):
-    """ Reads a gpx file and returns a dataframe with the important parameters """
+    """ Reads a gpx file and returns a dataframe with the important parameters.
+    'name','desc','segno','dist','lat','lng','ele','time','duration','speed' """
+    
     
     f = open(filename,encoding='utf-8')
     ns = '{http://www.topografix.com/GPX/1/1}'
@@ -74,7 +76,6 @@ def parseGPX(filename):
     return gpxdf
 
 def getmainInfo(dataframe):
-  
     print('Number of points:',len(dataframe))    
     print('Length:',max(dataframe['dist']))
     print('Lowest point:', min(dataframe['ele']))
@@ -85,8 +86,6 @@ def getmainInfo(dataframe):
     print('Walking time:',dtt(seconds=max(dataframe['duration'])-sum(dataframe['duration'].diff()[a])))
     print('Total time:',dtt(seconds=max(dataframe['duration'])))
 
-    
-   
 def googleElevation(dataframe):
     lat = dataframe['lat']
     lng = dataframe['lng']
@@ -173,30 +172,26 @@ def findStopLocations(dataframe):
     if totdur>30:
         print("Break",latS,lngS,totdur)        
 
-def readkommunexml():
-    xml_file = 'C:\\python\\kommuner\\kommunetopplisteV2.xml'
+def readkommunexml(xml_file):
+    kommunedict = dict()
+    
     p = etree.XMLParser(remove_blank_text=True)
-    et = etree.parse(xml_file,parser=p)
-    f = open('C:\\python\\kommuner\\kf.txt','a')    
-    teller = 0    
+    et = etree.parse(xml_file,parser=p)    
     for kommune in et.iter('kommune'):
-        if True:        
-            
-            lat = kommune.find('lat').text
-            lng = kommune.find('lng').text
-            tnavn = kommune.find('topp').text + '-' + kommune.find('hoyde2').text
-            print('<wpt lat="{}" lon="{}"><name>{}</name></wpt>'.format(lat,lng,tnavn))
-            f.write('L.marker( [{},{}],{{icon: myIcon1}} ).addTo(map);\n'.format(lat,lng))
-            teller += 1 
-    print(teller)
-    f.close()
+        d = dict()
+        d['areal'] = kommune.find('areal')
+        d['befolkning'] = kommune.find('befolkning')
+        d['beskrivelse'] = kommune.find('beskrivelse')
+        d['besteget'] = kommune.find('besteget')
+        d['dato'] = kommune.find('dato')
+        d['hoyde2'] = kommune.find('hoyde2')
+        d['kommunenavn'] = kommune.find('kommunenavn')
+        d['kommunenr'] = kommune.find('kommunenr')
+        d['lat'] = kommune.find('lat')
+        d['lng'] = kommune.find('lng')
+        d['topp'] = kommune.find('topp')
+        yield d
 
 
-#===============================================================================
-# gp = parseGPX('C:\\python\\kommuner\\0121.gpx')
-# reducePoints(gp)
-#===============================================================================
 
-#readkommunexml()
-#googleElevation(gp)
 
