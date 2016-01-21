@@ -126,8 +126,8 @@
 		<hr>
 		<table width='100%'>
 		<tr><td><b>Fottur</b></td><td align='left'></td><td align='right'></td></tr><tr>
-<td align='left'>7.84 km <i>(16)</i></td><td align='center'> 2:51:04 t <i>(9)</i></td><td align='right'>2.75 km/t <i>(58)</i></td></tr><tr>
-</table><hr><table width='100%'><tr><td>Pauser:</td><td align='right'> 0:50:45 t</td><td align='right'><i>(22)</i></td></tr><tr><td>Pausefaktor:</td><td align='right'> 29.7% </td><td align='right'><i>(38)</i></td></tr><tr><td>Høydeforskjell:</td><td align='right'> 699.4 m</td><td align='right'><i>(14)</i></td></tr><tr><td>Bratthet:</td><td align='right'> 178.44 m/km</td><td align='right'><i>(7)</i></td></tr><tr><td>Høydemeter pr min:</td><td align='right'> 8.18 m/min</td><td align='right'><i>(23)</i></td></tr><tr><td>Total stigning:</td><td align='right'> 960 m</td><td align='right'><i>(13)</i></td></tr><tr><td>Kuperthetsfaktor:</td><td align='right'> 1.37 </td><td align='right'><i>(34)</i></td></tr><tr><td>Toppturfaktor:</td><td align='right'> 68.2 %</td><td align='right'><i>(40)</i></td></tr><tr>
+<td align='left'>{{length}} km </td><td align='center'> {{tottime}} t </td><td align='right'>{{avg_speed}} km/t </td></tr><tr>
+</table><hr><table width='100%'><tr><td>Pauser:</td><td align='right'>* {{stop_time}} t</td><td align='right'><i>(22)</i></td></tr><tr><td>Pausefaktor:</td><td align='right'> 29.7% </td><td align='right'><i>(38)</i></td></tr><tr><td>Høydeforskjell:</td><td align='right'>* {{elediff}}</td><td align='right'><i>(14)</i></td></tr><tr><td>Bratthet:</td><td align='right'> 178.44 m/km</td><td align='right'><i>(7)</i></td></tr><tr><td>Høydemeter pr min:</td><td align='right'> 8.18 m/min</td><td align='right'><i>(23)</i></td></tr><tr><td>Total stigning:</td><td align='right'>* {{climbing}} m</td><td align='right'><i>(13)</i></td></tr><tr><td>Kuperthetsfaktor:</td><td align='right'> 1.37 </td><td align='right'><i>(34)</i></td></tr><tr><td>Toppturfaktor:</td><td align='right'> 68.2 %</td><td align='right'><i>(40)</i></td></tr><tr>
 <table></div></div></div>
 
 </body>
@@ -205,14 +205,14 @@ var IconTop = L.icon({
 	iconAnchor: [2, 48],
 });
 
-var myIcon2 = L.icon({
+var myIconStop = L.icon({
 	iconUrl: 'fig/flag-pause-32.png',
 	iconSize: [32, 32],
 	iconAnchor: [14, 29],
 });
 
 
-var map = L.map('map').setView([62,7], 11);
+var map = L.map('map').setView([{{lat}},{{lng}}], 13);
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
 	attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
 	maxZoom: 18,
@@ -220,11 +220,10 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 	accessToken: 'pk.eyJ1IjoiZ2plcm12IiwiYSI6IjM5N2EwZjkxZDA5MTIxYTI1MjI0MGFiZDJmNzhmMmE4In0.y2ULEYqhR4rXG4x5EbVK-Q'
 }).addTo(map);
 
-{{toppcoordinates}}
-
-toppMarker = L.marker([62,7],{icon: IconTop});
+toppMarker = L.marker([{{lat}},{{lng}}],{icon: IconTop});
 toppMarker.addTo(map);
 
+{{stoplocations}}
 {{tripcoordinates}}
 
 map.fitBounds([

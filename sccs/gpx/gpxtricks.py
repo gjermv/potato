@@ -19,7 +19,6 @@ def parseGPX(filename):
     """ Reads a gpx file and returns a dataframe with the important parameters.
     'name','desc','segno','dist','lat','lng','ele','time','duration','speed' """
     
-    
     f = open(filename,encoding='utf-8')
     ns = '{http://www.topografix.com/GPX/1/1}'
     xml = etree.parse(f)
@@ -85,6 +84,16 @@ def getmainInfo(dataframe):
     print('Stop time:',dtt(seconds=sum(dataframe['duration'].diff()[a])))
     print('Walking time:',dtt(seconds=max(dataframe['duration'])-sum(dataframe['duration'].diff()[a])))
     print('Total time:',dtt(seconds=max(dataframe['duration'])))
+    
+    info = dict()
+    info['length'] = round(max(dataframe['dist'])/1000,2) #km 
+    info['tottime'] = dtt(seconds=max(dataframe['duration']))
+    info['avg_speed'] = round(max(dataframe['dist'])/max(dataframe['duration'])*3.6,2)
+    info['stop_time'] = dtt(seconds=sum(dataframe['duration'].diff()[a]))
+    info['climbing'] = reducedElePoints(dataframe)
+    info['elediff'] = round(max(dataframe['ele'])-min(dataframe['ele']),1)
+    
+    return info
 
 def googleElevation(dataframe):
     lat = dataframe['lat']
@@ -125,7 +134,10 @@ def reducedElePoints(dataframe):
     
     print(sum(red[red['elediff']>0]['elediff']))
     print(sum(red[red['elediff']<0]['elediff']))
+    
     print(dt.now())
+    
+    return sum(red[red['elediff']>0]['elediff'])
 
 def reducePoints(dataframe):
     lat = dataframe['lat']
@@ -136,13 +148,15 @@ def reducePoints(dataframe):
         l.append((coord[0],coord[1]))
 
     red = pd.DataFrame(algos.ramerdouglas(l,dist=5),columns=['lat','lng'])
-    plt.plot(*zip(*l))
-    plt.plot(red['lat'],red['lng'])
-    plt.show()
-    
-    print(len(red))
+    #plt.plot(*zip(*l))
+    #plt.plot(red['lat'],red['lng'])
+    #plt.show()
+    pos = zip(lat,lng)
+    return pos
     
 def findStopLocations(dataframe):
+    stopLoc = []
+    
     ind = dataframe[dataframe['speed']<0.50][['duration']].index
     dur = (dataframe['duration'].diff()[ind])
     lat = (dataframe['lat'][ind])
@@ -163,33 +177,62 @@ def findStopLocations(dataframe):
                 totdur += dur[i]
             else:
                 if totdur>30:
-                    print("Break",i,latS,lngS,totdur)
+                    
+                    stopLoc.append([latS,lngS,totdur])
                 latS = lat[i]
                 lngS = lng[i]
                 totdur += dur[i]
                 totdur = 0
             tmp = i
-    if totdur>30:
-        print("Break",latS,lngS,totdur)        
+
+              
+    return stopLoc
+
+def exportStopLoc(dataframe):
+    stopLoc = findStopLocations(dataframe)
+    s = ''
+    for loc in stopLoc:
+        s += "toppMarker = L.marker([{},{}],{{icon: myIconStop}});\ntoppMarker.addTo(map);\n".format(loc[0],loc[1])
+    return s
+
+def exportRedPoints(dataframe):
+    s = ''
+    for p in reducePoints(dataframe):
+        s += '[{0},{1}],'.format(p[1],p[0])
+        
+    geojson = """var myLines = [{
+    "type": "LineString",
+    "coordinates": ["""
+    geojson += s
+    geojson += """]
+}];
+
+L.geoJson(myLines, {
+    style: myWalk
+}).addTo(map);"""     
+    
+    
+    return  geojson
 
 def readkommunexml(xml_file):
+    """ Reads the Offical kommunedatalist and yields a dictionary """
     kommunedict = dict()
     
     p = etree.XMLParser(remove_blank_text=True)
     et = etree.parse(xml_file,parser=p)    
     for kommune in et.iter('kommune'):
         d = dict()
-        d['areal'] = kommune.find('areal')
-        d['befolkning'] = kommune.find('befolkning')
-        d['beskrivelse'] = kommune.find('beskrivelse')
-        d['besteget'] = kommune.find('besteget')
-        d['dato'] = kommune.find('dato')
-        d['hoyde2'] = kommune.find('hoyde2')
-        d['kommunenavn'] = kommune.find('kommunenavn')
-        d['kommunenr'] = kommune.find('kommunenr')
-        d['lat'] = kommune.find('lat')
-        d['lng'] = kommune.find('lng')
-        d['topp'] = kommune.find('topp')
+        d['areal'] = kommune.find('areal').text
+        d['befolkning'] = kommune.find('befolkning').text
+        d['beskrivelse'] = kommune.find('beskrivelse').text
+        d['besteget'] = kommune.find('besteget').text
+        d['dato'] = kommune.find('dato').text
+        d['hoyde2'] = kommune.find('hoyde2').text
+        d['kommunenavn'] = kommune.find('kommunenavn').text
+        d['kommunenr'] = kommune.find('kommunenr').text
+        d['lat'] = kommune.find('lat').text
+        d['lng'] = kommune.find('lng').text
+        d['topp'] = kommune.find('topp').text
         yield d
 
 
