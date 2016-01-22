@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" creator="HOLUX ezTour Plus" version="1.1">
+<metadata>
+<link href="http://www.holux.com"><text>HOLUX Technology, Inc.</text></link>
+<time>2012-06-07T15:59:03Z</time></metadata>
+<trk>
+<name><![CDATA[Gjermund2011/08/03_12:00]]></name>
+<trkseg>
+<trkpt lat="58.754444122" lon="5.644830704">
+<ele>90.910156</ele>
+<time>2011-08-03T11:46:22Z</time>
+<speed>0.750000</speed>
+</trkpt>
+<trkpt lat="58.754421234" lon="5.643990993">
+<ele>101.091797</ele>
+<time>2011-08-03T11:46:56Z</time>
+<speed>2.070000</speed>
+</trkpt>
+<trkpt lat="58.754295349" lon="5.643615246">
+<ele>100.574219</ele>
+<time>2011-08-03T11:47:15Z</time>
+<speed>1.640000</speed>
+</trkpt>
+<trkpt lat="58.753986359" lon="5.642946243">
+<ele>98.412109</ele>
+<time>2011-08-03T11:47:48Z</time>
+<speed>1.530000</speed>
+</trkpt>
+<trkpt lat="58.753803253" lon="5.642691612">
+<ele>101.228516</ele>
+<time>2011-08-03T11:48:08Z</time>
+<speed>0.510000</speed>
+</trkpt>
+<trkpt lat="58.753597260" lon="5.642560959">
+<ele>91.876953</ele>
+<time>2011-08-03T11:48:24Z</time>
+<speed>1.650000</speed>
+</trkpt>
+<trkpt lat="58.753417969" lon="5.642257690">
+<ele>93.654297</ele>
+<time>2011-08-03T11:48:43Z</time>
+<speed>1.370000</speed>
+</trkpt>
+<trkpt lat="58.753646851" lon="5.642683506">
+<ele>95.410156</ele>
+<time>2011-08-03T11:51:47Z</time>
+<speed>1.260000</speed>
+</trkpt>
+<trkpt lat="58.753871918" lon="5.642712593">
+<ele>94.058594</ele>
+<time>2011-08-03T11:54:17Z</time>
+<speed>1.550000</speed>
+</trkpt>
+<trkpt lat="58.754325867" lon="5.643724442">
+<ele>89.638672</ele>
+<time>2011-08-03T11:55:24Z</time>
+<speed>1.880000</speed>
+</trkpt>
+<trkpt lat="58.754421234" lon="5.644130707">
+<ele>86.556641</ele>
+<time>2011-08-03T11:55:41Z</time>
+<speed>1.750000</speed>
+</trkpt>
+<trkpt lat="58.754432678" lon="5.644559383">
+<ele>83.863281</ele>
+<time>2011-08-03T11:56:00Z</time>
+<speed>1.320000</speed>
+</trkpt>
+</trkseg>
+</trk>
+</gpx>

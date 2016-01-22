@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" creator="HOLUX ezTour Plus" version="1.1">
+<metadata>
+<link href="http://www.holux.com"><text>HOLUX Technology, Inc.</text></link>
+<time>2012-06-07T15:59:03Z</time></metadata>
+<trk>
+<name><![CDATA[Gjermund2011/08/03_12:00]]></name>
+<trkseg>
+<trkpt lat="58.884033203" lon="5.681028843">
+<ele>23.904785</ele>
+<time>2011-08-03T12:36:04Z</time>
+<speed>0.980000</speed>
+</trkpt>
+<trkpt lat="58.884189606" lon="5.681341648">
+<ele>23.534668</ele>
+<time>2011-08-03T12:36:31Z</time>
+<speed>1.060000</speed>
+</trkpt>
+<trkpt lat="58.884407043" lon="5.681436062">
+<ele>29.825684</ele>
+<time>2011-08-03T12:36:52Z</time>
+<speed>1.050000</speed>
+</trkpt>
+<trkpt lat="58.884613037" lon="5.681241035">
+<ele>31.354004</ele>
+<time>2011-08-03T12:37:07Z</time>
+<speed>0.690000</speed>
+</trkpt>
+<trkpt lat="58.884674072" lon="5.680822849">
+<ele>31.439453</ele>
+<time>2011-08-03T12:37:31Z</time>
+<speed>1.030000</speed>
+</trkpt>
+<trkpt lat="58.884807587" lon="5.680457592">
+<ele>30.125977</ele>
+<time>2011-08-03T12:37:57Z</time>
+<speed>1.010000</speed>
+</trkpt>
+<trkpt lat="58.885002136" lon="5.680221081">
+<ele>31.889160</ele>
+<time>2011-08-03T12:38:25Z</time>
+<speed>0.830000</speed>
+</trkpt>
+<trkpt lat="58.885631561" lon="5.679842472">
+<ele>51.072266</ele>
+<time>2011-08-03T12:39:53Z</time>
+<speed>0.600000</speed>
+</trkpt>
+<trkpt lat="58.885799408" lon="5.680105686">
+<ele>58.270508</ele>
+<time>2011-08-03T12:40:41Z</time>
+<speed>0.290000</speed>
+</trkpt>
+<trkpt lat="58.885818481" lon="5.680532932">
+<ele>64.900391</ele>
+<time>2011-08-03T12:42:52Z</time>
+<speed>0.460000</speed>
+</trkpt>
+<trkpt lat="58.886302948" lon="5.681499958">
+<ele>100.183594</ele>
+<time>2011-08-03T12:48:24Z</time>
+<speed>0.590000</speed>
+</trkpt>
+<trkpt lat="58.886264801" lon="5.681066990">
+<ele>101.142578</ele>
+<time>2011-08-03T12:50:18Z</time>
+<speed>0.760000</speed>
+</trkpt>
+<trkpt lat="58.886699677" lon="5.681182384">
+<ele>96.222656</ele>
+<time>2011-08-03T13:08:56Z</time>
+<speed>1.360000</speed>
+</trkpt>
+<trkpt lat="58.887126923" lon="5.680177212">
+<ele>94.775391</ele>
+<time>2011-08-03T13:10:09Z</time>
+<speed>0.700000</speed>
+</trkpt>
+<trkpt lat="58.887081146" lon="5.679414749">
+<ele>72.894531</ele>
+<time>2011-08-03T13:11:33Z</time>
+<speed>0.340000</speed>
+</trkpt>
+<trkpt lat="58.887214661" lon="5.679104805">
+<ele>62.658203</ele>
+<time>2011-08-03T13:12:32Z</time>
+<speed>0.420000</speed>
+</trkpt>
+<trkpt lat="58.887413025" lon="5.678890228">
+<ele>58.533203</ele>
+<time>2011-08-03T13:12:53Z</time>
+<speed>0.840000</speed>
+</trkpt>
+<trkpt lat="58.887844086" lon="5.678795815">
+<ele>42.155273</ele>
+<time>2011-08-03T13:13:53Z</time>
+<speed>0.490000</speed>
+</trkpt>
+<trkpt lat="58.888019562" lon="5.678591251">
+<ele>30.866699</ele>
+<time>2011-08-03T13:14:31Z</time>
+<speed>1.050000</speed>
+</trkpt>
+<trkpt lat="58.888175964" lon="5.677790165">
+<ele>19.838867</ele>
+<time>2011-08-03T13:15:18Z</time>
+<speed>1.410000</speed>
+</trkpt>
+<trkpt lat="58.888130188" lon="5.677352905">
+<ele>18.360352</ele>
+<time>2011-08-03T13:15:32Z</time>
+<speed>1.460000</speed>
+</trkpt>
+<trkpt lat="58.887977600" lon="5.677021503">
+<ele>21.012695</ele>
+<time>2011-08-03T13:16:12Z</time>
+<speed>0.970000</speed>
+</trkpt>
+<trkpt lat="58.887771606" lon="5.676831722">
+<ele>21.395020</ele>
+<time>2011-08-03T13:16:34Z</time>
+<speed>0.790000</speed>
+</trkpt>
+<trkpt lat="58.887542725" lon="5.676874638">
+<ele>21.736328</ele>
+<time>2011-08-03T13:16:52Z</time>
+<speed>0.830000</speed>
+</trkpt>
+<trkpt lat="58.887317657" lon="5.676828384">
+<ele>19.723633</ele>
+<time>2011-08-03T13:17:06Z</time>
+<speed>0.880000</speed>
+</trkpt>
+<trkpt lat="58.887088776" lon="5.676906586">
+<ele>19.972168</ele>
+<time>2011-08-03T13:17:31Z</time>
+<speed>0.570000</speed>
+</trkpt>
+<trkpt lat="58.886856079" lon="5.676762104">
+<ele>22.890137</ele>
+<time>2011-08-03T13:17:49Z</time>
+<speed>1.150000</speed>
+</trkpt>
+<trkpt lat="58.886718750" lon="5.676411629">
+<ele>25.503418</ele>
+<time>2011-08-03T13:18:01Z</time>
+<speed>1.770000</speed>
+</trkpt>
+<trkpt lat="58.886497498" lon="5.676397800">
+<ele>31.773926</ele>
+<time>2011-08-03T13:18:17Z</time>
+<speed>1.930000</speed>
+</trkpt>
+<trkpt lat="58.885837555" lon="5.675967216">
+<ele>40.623047</ele>
+<time>2011-08-03T13:19:03Z</time>
+<speed>1.740000</speed>
+</trkpt>
+<trkpt lat="58.885662079" lon="5.675674915">
+<ele>38.655273</ele>
+<time>2011-08-03T13:19:19Z</time>
+<speed>1.970000</speed>
+</trkpt>
+<trkpt lat="58.885261536" lon="5.675272465">
+<ele>30.162109</ele>
+<time>2011-08-03T13:19:48Z</time>
+<speed>0.870000</speed>
+</trkpt>
+<trkpt lat="58.885135651" lon="5.676126003">
+<ele>34.868164</ele>
+<time>2011-08-03T13:20:23Z</time>
+<speed>0.840000</speed>
+</trkpt>
+<trkpt lat="58.884960175" lon="5.676359653">
+<ele>43.090820</ele>
+<time>2011-08-03T13:20:36Z</time>
+<speed>1.430000</speed>
+</trkpt>
+<trkpt lat="58.884822845" lon="5.676722527">
+<ele>45.781250</ele>
+<time>2011-08-03T13:20:53Z</time>
+<speed>1.490000</speed>
+</trkpt>
+<trkpt lat="58.884532928" lon="5.677924633">
+<ele>54.734375</ele>
+<time>2011-08-03T13:21:40Z</time>
+<speed>1.260000</speed>
+</trkpt>
+<trkpt lat="58.884078979" lon="5.680845737">
+<ele>42.590820</ele>
+<time>2011-08-03T13:23:31Z</time>
+<speed>1.190000</speed>
+</trkpt>
+</trkseg>
+</trk>
+</gpx>

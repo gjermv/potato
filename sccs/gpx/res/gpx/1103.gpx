@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" creator="HOLUX ezTour Plus" version="1.1">
+<metadata>
+<link href="http://www.holux.com"><text>HOLUX Technology, Inc.</text></link>
+<time>2012-06-07T15:59:03Z</time></metadata>
+<trk>
+<name><![CDATA[Gjermund2011/08/03_12:00]]></name>
+<trkseg>
+<trkpt lat="58.942523956" lon="5.704824448">
+<ele>95.171875</ele>
+<time>2011-08-03T13:52:56Z</time>
+<speed>0.520000</speed>
+</trkpt>
+<trkpt lat="58.942348480" lon="5.704521179">
+<ele>93.687500</ele>
+<time>2011-08-03T13:53:18Z</time>
+<speed>1.110000</speed>
+</trkpt>
+<trkpt lat="58.941738129" lon="5.705160141">
+<ele>91.835938</ele>
+<time>2011-08-03T13:54:46Z</time>
+<speed>0.730000</speed>
+</trkpt>
+<trkpt lat="58.940971375" lon="5.706108093">
+<ele>103.060547</ele>
+<time>2011-08-03T13:55:59Z</time>
+<speed>0.670000</speed>
+</trkpt>
+<trkpt lat="58.940525055" lon="5.706375122">
+<ele>110.437500</ele>
+<time>2011-08-03T13:56:29Z</time>
+<speed>1.430000</speed>
+</trkpt>
+<trkpt lat="58.940380096" lon="5.706717491">
+<ele>117.992188</ele>
+<time>2011-08-03T13:57:00Z</time>
+<speed>2.040000</speed>
+</trkpt>
+<trkpt lat="58.940372467" lon="5.706574440">
+<ele>133.644531</ele>
+<time>2011-08-03T14:03:00Z</time>
+<speed>0.580000</speed>
+</trkpt>
+<trkpt lat="58.940517426" lon="5.706234932">
+<ele>133.058594</ele>
+<time>2011-08-03T14:03:52Z</time>
+<speed>0.950000</speed>
+</trkpt>
+<trkpt lat="58.940750122" lon="5.706247807">
+<ele>130.851563</ele>
+<time>2011-08-03T14:05:09Z</time>
+<speed>1.320000</speed>
+</trkpt>
+<trkpt lat="58.940948486" lon="5.706078053">
+<ele>123.248047</ele>
+<time>2011-08-03T14:05:24Z</time>
+<speed>1.340000</speed>
+</trkpt>
+<trkpt lat="58.941127777" lon="5.705840588">
+<ele>116.371094</ele>
+<time>2011-08-03T14:05:45Z</time>
+<speed>0.800000</speed>
+</trkpt>
+<trkpt lat="58.941558838" lon="5.705471992">
+<ele>111.652344</ele>
+<time>2011-08-03T14:06:33Z</time>
+<speed>0.960000</speed>
+</trkpt>
+<trkpt lat="58.941734314" lon="5.705195427">
+<ele>110.759766</ele>
+<time>2011-08-03T14:06:49Z</time>
+<speed>0.650000</speed>
+</trkpt>
+<trkpt lat="58.941947937" lon="5.705043316">
+<ele>107.785156</ele>
+<time>2011-08-03T14:07:09Z</time>
+<speed>0.760000</speed>
+</trkpt>
+<trkpt lat="58.942329407" lon="5.704533100">
+<ele>98.453125</ele>
+<time>2011-08-03T14:07:43Z</time>
+<speed>1.740000</speed>
+</trkpt>
+<trkpt lat="58.942531586" lon="5.704751492">
+<ele>94.763672</ele>
+<time>2011-08-03T14:08:09Z</time>
+<speed>1.020000</speed>
+</trkpt>
+</trkseg>
+</trk>
+</gpx>

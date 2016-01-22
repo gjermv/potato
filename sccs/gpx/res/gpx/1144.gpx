@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx creator="GPS Visualizer http://www.gpsvisualizer.com/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd" xmlns="http://www.topografix.com/GPX/1/0" version="1.0">
+<trk>
+<name>GPS Visualizer Sandbox</name>
+<type/>
+<desc>Length: 0.591 km (0.367 mi)</desc>
+<trkseg>
+<trkpt lat="59.0846803" lon="5.4904497">
+<ele>2.204</ele>
+<time>2011-08-02T12:00:00Z</time></trkpt>
+<trkpt lat="59.0846417" lon="5.4898274">
+<ele>3.481</ele>
+<time>2011-08-02T12:00:28Z</time></trkpt>
+<trkpt lat="59.0849503" lon="5.4892051">
+<ele>3.883</ele>
+<time>2011-08-02T12:01:07Z</time></trkpt>
+<trkpt lat="59.0853141" lon="5.4884219">
+<ele>8.306</ele>
+<time>2011-08-02T12:01:54Z</time></trkpt>
+<trkpt lat="59.085474" lon="5.4874671">
+<ele>14.556</ele>
+<time>2011-08-02T12:02:40Z</time></trkpt>
+<trkpt lat="59.0856063" lon="5.4861689">
+<ele>15.678</ele>
+<time>2011-08-02T12:03:39Z</time></trkpt>
+<trkpt lat="59.0856283" lon="5.4859865">
+<ele>15.723</ele>
+<time>2011-08-02T12:03:48Z</time></trkpt>
+<trkpt lat="59.085711" lon="5.4861902">
+<ele>16.96</ele>
+<time>2011-08-02T12:04:00Z</time></trkpt>
+<trkpt lat="59.085712" lon="5.4861903">
+<ele>16.96</ele>
+<time>2011-08-02T12:12:00Z</time></trkpt>
+<trkpt lat="59.0856834" lon="5.4865873">
+<ele>17.106</ele>
+<time>2011-08-02T12:12:19Z</time></trkpt>
+<trkpt lat="59.0856008" lon="5.4868662">
+<ele>16.104</ele>
+<time>2011-08-02T12:12:34Z</time></trkpt>
+<trkpt lat="59.0855732" lon="5.4873061">
+<ele>15.59</ele>
+<time>2011-08-02T12:12:55Z</time></trkpt>
+<trkpt lat="59.0855016" lon="5.4879284">
+<ele>12.45</ele>
+<time>2011-08-02T12:13:26Z</time></trkpt>
+<trkpt lat="59.085485" lon="5.4884648">
+<ele>9.483</ele>
+<time>2011-08-02T12:13:52Z</time></trkpt>
+<trkpt lat="59.0853913" lon="5.488776">
+<ele>7.476</ele>
+<time>2011-08-02T12:14:09Z</time></trkpt>
+<trkpt lat="59.0852149" lon="5.4890442">
+<ele>5.439</ele>
+<time>2011-08-02T12:14:30Z</time></trkpt>
+<trkpt lat="59.085022" lon="5.4893017">
+<ele>4.093</ele>
+<time>2011-08-02T12:14:52Z</time></trkpt>
+<trkpt lat="59.0848511" lon="5.4896021">
+<ele>3.736</ele>
+<time>2011-08-02T12:15:13Z</time></trkpt>
+<trkpt lat="59.0846968" lon="5.4898703">
+<ele>3.58</ele>
+<time>2011-08-02T12:15:32Z</time></trkpt>
+<trkpt lat="59.0847409" lon="5.4904282">
+<ele>2.307</ele>
+<time>2011-08-02T12:16:00Z</time></trkpt></trkseg></trk></gpx>
