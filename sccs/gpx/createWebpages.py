@@ -35,7 +35,5 @@ def func2():
     dir = os.path.dirname(__file__)
     gpxfile = os.path.join(dir, 'res\\gpx\\0105.gpx')
     
-    
-    
-       
+          
 func1() 
