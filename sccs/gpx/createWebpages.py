@@ -37,5 +37,4 @@ def func2():
     
     
     
-       
 func1()
