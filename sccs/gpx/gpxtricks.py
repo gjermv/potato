@@ -20,7 +20,7 @@ def parseGPX(filename):
     'name','desc','segno','dist','lat','lng','ele','time','duration','speed' """
     
     f = open(filename,encoding='utf-8')
-    ns = findNamespace(f)
+    ns = '{http://www.topografix.com/GPX/1/1}'
     xml = etree.parse(f)
     f.close()
     
@@ -74,50 +74,25 @@ def parseGPX(filename):
     
     return gpxdf
 
-def findNamespace(file):
-    str = file.read(1000)
-    file.seek(0)
-    ind1 = str.find('xmlns=')+7
-    ind2 = str[ind1+1:].find('"')
-    print(ind1,ind2)
-    s = '{'+str[ind1:ind1+ind2+1]+'}'
-    print(s)
-    return s
-
 def getmainInfo(dataframe):
-    length = max(dataframe['dist'])
-    tottime = max(dataframe['duration'])
-    dateandtime = dataframe['time'][0] 
+    print('Number of points:',len(dataframe))    
+    print('Length:',max(dataframe['dist']))
+    print('Lowest point:', min(dataframe['ele']))
+    print('Highest point:', max(dataframe['ele']))
     
-    stopframe = (dataframe[dataframe['speed']<0.50][['duration']].index)
-    stoptime = sum(dataframe['duration'].diff()[stopframe])
-    walktime = tottime - stoptime
-    average_speed = length/walktime
-    pausefaktor = stoptime/tottime
-    ele_min = min(dataframe['ele'])
-    ele_max = max(dataframe['ele'])
-    elediff = ele_max-ele_min
-    climbing = reducedElePoints(dataframe)
-    steepness = climbing/(length/2)
-    climbingrate = climbing/(walktime/2)
-    kupert_faktor = climbing/elediff
-    topptur_faktor = elediff/ele_max
+    a = (dataframe[dataframe['speed']<0.50][['duration']].index)
+    print('Stop time:',dtt(seconds=sum(dataframe['duration'].diff()[a])))
+    print('Walking time:',dtt(seconds=max(dataframe['duration'])-sum(dataframe['duration'].diff()[a])))
+    print('Total time:',dtt(seconds=max(dataframe['duration'])))
     
     info = dict()
-    info['length'] = round(length/1000,2) #km 
-    info['dateandtime'] = dateandtime
-    info['tottime'] = dtt(seconds=tottime)
-    info['stop_time'] = dtt(seconds=stoptime)
-    info['walk_time'] = dtt(seconds=walktime)
-    info['pause_faktor'] = round(pausefaktor*100,1)
-    info['avg_speed'] = round(average_speed*3.6,2)
+    info['length'] = round(max(dataframe['dist'])/1000,2) #km 
+    info['tottime'] = dtt(seconds=max(dataframe['duration']))
+    info['avg_speed'] = round(max(dataframe['dist'])/max(dataframe['duration'])*3.6,2)
+    info['stop_time'] = dtt(seconds=sum(dataframe['duration'].diff()[a]))
+    info['climbing'] = reducedElePoints(dataframe)
+    info['elediff'] = round(max(dataframe['ele'])-min(dataframe['ele']),1)
     
-    info['elediff'] = round(elediff,1)
-    info['climbing'] = round(climbing,1)
-    info['steepness'] = round(steepness*1000,1)
-    info['climbingrate'] = round(climbingrate*60,1)
-    info['kupert_faktor'] = round(kupert_faktor,2)
-    info['topptur_faktor'] = round(topptur_faktor*100,1)
     return info
 
 def googleElevation(dataframe):
@@ -153,7 +128,7 @@ def reducedElePoints(dataframe):
     l = []
     for i in range(len(dist)):
         l.append((dist[i],ele[i]))
-    red = pd.DataFrame(algos.ramerdouglas(l,dist=7.5),columns=['dist','ele'])
+    red = pd.DataFrame(algos.ramerdouglas(l,dist=5),columns=['dist','ele'])
 
     red['elediff'] = red['ele'].diff()
     
