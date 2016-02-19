@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="rapport.css" />
+		<link rel="stylesheet" href="res/leaflet.css" />
+		<script src="res/leaflet.js"></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title></title>
+    </head>
+    <body>
+	
+<div id="fb-root"></div>
+<script>
+/*(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/nb_NO/sdk.js#xfbml=1&version=v2.4";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+*/
+</script>
+	<div id="header">
+	<hr>
+		<div id="statistikk">
+		<!-- <img src='img/statistic.png' width='30px' align='left'> -->
+		        <a href='index.html'>LITT STATISTIKK:</a><br>
+		<a href='stat02.html'>{{tot_antall_besteget}}/429 kommuner</a><br>
+		<a href='stat06.html'>{{tot_tottid}} timer på tur</a><br>
+		<a href='stat04.html'>{{tot_length}} kilometer</a><br>
+		<a href='stat14.html'>{{tot_elevation}} høydemeter</a></a>
+		
+		</div>
+		<div id="turrapporter">
+		<!-- <img src='img/report.png' width='30px' align='left'> -->
+		NOEN TURRAPPORTER:<br>
+        {{siste_rapporter}}	
+		</div>
+		<div id="search">
+		<img src='img/search2.png' width='30px' align='left'>
+		<form name="searchform">
+		Fylke:<br>
+		<select name="textbox_id1" id="textbox_id1">
+			<option selected>Hele landet</option>
+		</select>
+		<br>
+		Liste:<br>
+		<select name="textbox_id2" id="textbox_id2" onchange="goToNewPage(this.options[this.options.selectedIndex].value)">
+			<option selected>Velg liste</option>
+			<option selected>Velg liste</option>
+			<option value="stat00.html">Raskeste gåturer</option>
+			<option value="stat01.html">Sakteste gåturer</option>
+			<option value="stat02.html">Høyeste topper</option>
+			<option value="stat03.html">Laveste topper</option>
+			<option value="stat04.html">Lengste turer (km)</option>
+			<option value="stat05.html">Korteste turer (km)</option>
+			<option value="stat06.html">Lengste tid totalt</option>
+			<option value="stat07.html">Korteste tid totalt</option>
+			<option value="stat08.html">Lengste tid</option>
+			<option value="stat09.html">Korteste tid</option>
+			<option value="stat10.html">Størst høydeforskjell</option>
+			<option value="stat11.html">Minst høydeforskjell</option>
+			<option value="stat12.html">Bratteste topper</option>
+			<option value="stat13.html">Slakkeste topper</option>
+			<option value="stat14.html">Flest høydemeter</option>
+			<option value="stat15.html">Færrest høydemeter</option>
+			<option value="stat16.html">Størst klatrefart</option>
+			<option value="stat17.html">Minst klatrefart</option>
+			<option value="stat18.html">Størst toppturfaktor</option>
+			<option value="stat19.html">Minst toppturfaktor</option>
+			<option value="stat20.html">Størst pausefaktor</option>
+			<option value="stat21.html">Minst pausefaktor</option>
+
+		</select>
+		</form>
+		</div>
+		<div id="banner">
+		<img src='img/banner-logo3.png'>
+		
+		</div>
+	</div>
+	<div id="main">
+
+	<hr>
+	</div>
+	<div id="main">
+		<div id="article">
+			<div id="map">
+			<div class="fb-comments" data-href="http://www.vingerhagen.com/topp/stat.html" data-width="640" data-numposts="5"></div>
+		</div>
+		
+		<div id="pic">
+			<div id="piclistheader">
+			Høyeste topper
+			</div>
+			<div id="piclist">
+				<img src='fig/p-01.png'  align='left'><a href="0512.html">Lesja - Storstygge Svanåtind<br>2209.00 moh</a>
+			</div>
+			<div id="piclist">
+				<img src='fig/p-02.png'  align='left'><a href="1563.html">Sunndal - Storskrymten<br>1985.00 moh</a>
+			</div>	
+			<div id="piclist">
+				<img src='fig/p-03.png'  align='left'><a href="1634.html">Oppdal - Storskrymten<br>1985.00 moh</a>
+			</div>	
+			<div id="piclist">
+				<img src='fig/p-04.png'  align='left'><a href="1665.html">Tydal - Storsylen<br>1762.00 moh</a>
+			</div>	
+			<div id="piclist">
+				<img src='fig/p-05.png'  align='left'><a href="1566.html">Surnadal - Snota<br>1669.00 moh</a>
+			</div>	
+			<div id="piclist">
+				<img src='fig/p-06.png'  align='left'><a href="1635.html">Rennebu - Svarthetta<br>1548.00 moh</a>
+			</div>	
+			<div id="piclist">
+				<img src='fig/p-07.png'  align='left'><a href="0434.html">Engerdal - Elgåhogna<br>1459.00 moh</a>
+			</div>		
+			<div id="piclist">
+				<img src='fig/p-08.png'  align='left'><a href="1711.html">Meråker - Fongen<br>1441.00 moh</a>
+			</div>
+			<div id="piclist">
+				<img src='fig/p-09.png'  align='left'><a href="1664.html">Selbu - Fongen<br>1441.00 moh</a>
+			</div>				
+			<div id="piclist">
+				<img src='fig/p-10.png'  align='left'><a href="1644.html">Holtålen - Forollhogna<br>1332.00 moh</a>
+			</div>	
+							
+		</div>
+	</div>
+<script>
+	function goToNewPage(listenummer) {
+		window.open(listenummer,"_self");
+		}
+</script>
+
+<script>
+/*
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-3916590-3', 'auto');
+  ga('send', 'pageview');
+*/
+</script>
+
+
+	
+</body>
+
+</html>
+	
+	
+	
+	

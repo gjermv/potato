@@ -13,7 +13,7 @@ from datetime import timedelta as dtt
 from matplotlib import pyplot as plt
 import time
 import googlemaps
-
+import glob 
 
 def parseGPX(filename):
     """ Reads a gpx file and returns a dataframe with the important parameters.
@@ -79,9 +79,7 @@ def findNamespace(file):
     file.seek(0)
     ind1 = str.find('xmlns=')+7
     ind2 = str[ind1+1:].find('"')
-    print(ind1,ind2)
     s = '{'+str[ind1:ind1+ind2+1]+'}'
-    print(s)
     return s
 
 def getmainInfo(dataframe):
@@ -154,16 +152,32 @@ def reducedElePoints(dataframe):
     for i in range(len(dist)):
         l.append((dist[i],ele[i]))
     red = pd.DataFrame(algos.ramerdouglas(l,dist=7.5),columns=['dist','ele'])
-
     red['elediff'] = red['ele'].diff()
     
-    print(sum(red[red['elediff']>0]['elediff']))
-    print(sum(red[red['elediff']<0]['elediff']))
-    
-    print(dt.now())
-    
+    #===========================================================================
+    # print(sum(red[red['elediff']>0]['elediff']))
+    # print(sum(red[red['elediff']<0]['elediff']))
+    #===========================================================================
+ 
     return sum(red[red['elediff']>0]['elediff'])
 
+def createElevationProfile(dataframe,filename):
+    dist = list(dataframe['dist'])
+    ele = list(dataframe['ele'])
+    
+    dist = [0] +dist+ [max(dist)]
+    ele = [0] +ele+ [0]
+
+    plt.figure(figsize=(15, 4), dpi=80)
+    plt.plot(dist,ele,'#666666',linewidth=2)
+    plt.axis([0, max(dist), 0, max(ele)*1.1])
+    ax = plt.axes()
+    ax.yaxis.grid(True)
+    ax.set_axisbelow(True)
+    plt.fill(dist,ele,'#838fd7')
+    plt.savefig(filename, bbox_inches='tight')
+    plt.close()
+    
 def reducePoints(dataframe):
     lat = dataframe['lat']
     lng = dataframe['lng']
@@ -240,7 +254,7 @@ L.geoJson(myLines, {
     return  geojson
 
 def readkommunexml(xml_file):
-    """ Reads the Offical kommunedatalist and yields a dictionary """
+    """ Reads the Offical kommunedatalist and yields a dictionary with basic information """
     kommunedict = dict()
     
     p = etree.XMLParser(remove_blank_text=True)
@@ -258,8 +272,77 @@ def readkommunexml(xml_file):
         d['lat'] = kommune.find('lat').text
         d['lng'] = kommune.find('lng').text
         d['topp'] = kommune.find('topp').text
+        
+        if d['beskrivelse'] == None:
+            d['beskrivelse'] = ''
+        
         yield d
 
+def get_besteget_kommuner(xml_file):
+    """ Returns a list of all kommuner that is besteget"""
+    kommunelist = []
+    
+    p = etree.XMLParser(remove_blank_text=True)
+    et = etree.parse(xml_file,parser=p)    
+    
+    for kommune in et.iter('kommune'):
+        kommunelist.append(kommune.find('kommunenr').text)
+    
+    kommunelist = [kommunelist[len(kommunelist)-1]] + kommunelist + [kommunelist[0]]
+    return kommunelist
 
+def get_selected_fylke(kommunenr):
+    
+    fylke_to_line = {2:1,9:17,6:3,20:4,4:5,12:6,15:7,17:8,18:9,5:10,3:11,11:12,14:13,16:14,8:15,19:16,10:17,7:18,1:19}
+    fylkenr = fylke_to_line[int(kommunenr[:2])]
+    
+    line = list()
+    line.append('\t\t\t<option>Velg fylke</option>\n') #0
+    line.append('\t\t\t<option>Akershus</option>\n') #1
+    line.append('\t\t\t<option>Aust-Agder</option>\n')#2
+    line.append('\t\t\t<option>Buskerud</option>\n')#3
+    line.append('\t\t\t<option>Finmark</option>\n')#4
+    line.append('\t\t\t<option>Hedmark</option>\n')#5
+    line.append('\t\t\t<option>Hordaland</option>\n')#6
+    line.append('\t\t\t<option>Møre og Romsdal</option>\n')#7
+    line.append('\t\t\t<option>Nord-Trøndelag</option>\n')#8
+    line.append('\t\t\t<option>Nordland</option>\n')#9
+    line.append('\t\t\t<option>Oppland</option>\n')#10
+    line.append('\t\t\t<option>Oslo</option>\n')#11
+    line.append('\t\t\t<option>Rogaland</option>\n')#12
+    line.append('\t\t\t<option>Sogn og Fjordane</option>\n')#13
+    line.append('\t\t\t<option>Sør-Trøndelag</option>\n')#14
+    line.append('\t\t\t<option>Telemark</option>\n')#15
+    line.append('\t\t\t<option>Troms</option>\n')#16
+    line.append('\t\t\t<option>Vest-Agder</option>\n')#17
+    line.append('\t\t\t<option>Vestfold</option>\n')#18
+    line.append('\t\t\t<option>Østfold</option>\n')#19
+    
+    line[fylkenr] = line[fylkenr].replace('option','option selected')
+    selecttxt = ''
+    for item in line:
+        selecttxt += item
+        
+    return selecttxt
 
-
+def get_selected_kommune(xml_file):
+    txtstr = 'kommuner[0] = "";\n'
+    
+    p = etree.XMLParser(remove_blank_text=True)
+    et = etree.parse(xml_file,parser=p)    
+    i = 1
+    for fylke in et.iter('fylke'):
+        txtstr += 'kommuner[{}] = ["Velg kommune|0000",'.format(i)
+        i += 1
+        for kommune in fylke.iter('kommune'):
+            knavn = kommune.find('kommunenavn').text
+            knum = kommune.find('kommunenr').text
+            bes = kommune.find('besteget').text
+            if bes == 'True':
+                txtstr += '"* {0}|{1}",'.format(knavn,knum)
+            else:
+                txtstr += '"{0}|{1}",'.format(knavn,knum)
+        txtstr += '];\n'
+        
+        txtstr.replace(',];\n','];\n')
+    return txtstr
