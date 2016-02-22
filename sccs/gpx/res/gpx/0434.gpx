@@ -4,7 +4,7 @@
 <link href="http://www.holux.com"><text>HOLUX Technology, Inc.</text></link>
 <time>2011-10-31T19:42:33Z</time></metadata>
 <trk>
-<name>Walk,Walk</name>
+<name>Walk,Walk,Walk</name>
 <trkseg>
 <trkpt lat="62.127765656" lon="11.998463631">
 <ele>767.921875</ele>
@@ -764,5 +764,94 @@
 <speed>1.600000</speed>
 </trkpt>
 </trkseg>
+  <trkseg>
+    <trkpt lat="62.1465601" lon="12.0365095">
+      <ele>1097.288</ele>
+    <time>2011-07-03T08:44:00Z</time></trkpt>
+    <trkpt lat="62.1459385" lon="12.0349646">
+      <ele>1093.508</ele>
+    <time>2011-02-19T11:32:14Z</time></trkpt>
+    <trkpt lat="62.1448357" lon="12.0332265">
+      <ele>1069.576</ele>
+    <time>2011-02-19T11:34:25Z</time></trkpt>
+    <trkpt lat="62.1439935" lon="12.0303726">
+      <ele>1034.989</ele>
+    <time>2011-02-19T11:36:55Z</time></trkpt>
+    <trkpt lat="62.1416072" lon="12.0229483">
+      <ele>958.103</ele>
+    <time>2011-02-19T11:43:36Z</time></trkpt>
+    <trkpt lat="62.1414468" lon="12.020545">
+      <ele>958.572</ele>
+    <time>2011-02-19T11:45:25Z</time></trkpt>
+    <trkpt lat="62.1409855" lon="12.0190859">
+      <ele>953.697</ele>
+    <time>2011-02-19T11:46:43Z</time></trkpt>
+    <trkpt lat="62.1398424" lon="12.0160818">
+      <ele>931.324</ele>
+    <time>2011-02-19T11:49:36Z</time></trkpt>
+    <trkpt lat="62.1392809" lon="12.0148158">
+      <ele>908.158</ele>
+    <time>2011-02-19T11:50:53Z</time></trkpt>
+    <trkpt lat="62.1392809" lon="12.0130348">
+      <ele>908.355</ele>
+    <time>2011-02-19T11:52:13Z</time></trkpt>
+    <trkpt lat="62.1388497" lon="12.0112967">
+      <ele>899.872</ele>
+    <time>2011-02-19T11:53:40Z</time></trkpt>
+    <trkpt lat="62.137887" lon="12.0093441">
+      <ele>871.038</ele>
+    <time>2011-02-19T11:55:47Z</time></trkpt>
+    <trkpt lat="62.137902" lon="12.0078903">
+      <ele>865.746</ele>
+    <time>2011-02-19T11:56:51Z</time></trkpt>
+    <trkpt lat="62.1375761" lon="12.0069087">
+      <ele>859.868</ele>
+    <time>2011-02-19T11:57:45Z</time></trkpt>
+    <trkpt lat="62.1369844" lon="12.0067102">
+      <ele>859.457</ele>
+    <time>2011-02-19T11:58:42Z</time></trkpt>
+    <trkpt lat="62.1364128" lon="12.0062113">
+      <ele>840.502</ele>
+    <time>2011-02-19T11:59:41Z</time></trkpt>
+    <trkpt lat="62.1358562" lon="12.0049453">
+      <ele>836.95</ele>
+    <time>2011-02-19T12:00:58Z</time></trkpt>
+    <trkpt lat="62.1352996" lon="12.0039797">
+      <ele>815.894</ele>
+    <time>2011-02-19T12:02:07Z</time></trkpt>
+    <trkpt lat="62.1345574" lon="12.004602">
+      <ele>805.103</ele>
+    <time>2011-02-19T12:03:23Z</time></trkpt>
+    <trkpt lat="62.1336047" lon="12.0054817">
+      <ele>813.145</ele>
+    <time>2011-02-19T12:05:02Z</time></trkpt>
+    <trkpt lat="62.1326167" lon="12.0057499">
+      <ele>793.308</ele>
+    <time>2011-02-19T12:06:37Z</time></trkpt>
+    <trkpt lat="62.1317692" lon="12.0063186">
+      <ele>783.854</ele>
+    <time>2011-02-19T12:08:01Z</time></trkpt>
+    <trkpt lat="62.1298333" lon="12.0062542">
+      <ele>778.14</ele>
+    <time>2011-02-19T12:11:06Z</time></trkpt>
+    <trkpt lat="62.1293618" lon="12.0062542">
+      <ele>770.192</ele>
+    <time>2011-02-19T12:11:51Z</time></trkpt>
+    <trkpt lat="62.1289054" lon="12.0050097">
+      <ele>751.587</ele>
+    <time>2011-02-19T12:13:01Z</time></trkpt>
+    <trkpt lat="62.1288177" lon="12.003057">
+      <ele>751.487</ele>
+    <time>2011-02-19T12:14:29Z</time></trkpt>
+    <trkpt lat="62.1282722" lon="12.0013511">
+      <ele>766.579</ele>
+    <time>2011-02-19T12:16:01Z</time></trkpt>
+    <trkpt lat="62.1281098" lon="11.9998115">
+      <ele>754.474</ele>
+    <time>2011-02-19T12:17:11Z</time></trkpt>
+    <trkpt lat="62.1277067" lon="11.9983578">
+      <ele>749.476</ele>
+    <time>2011-02-19T12:18:26Z</time></trkpt>
+  </trkseg>
 </trk>
 </gpx>
