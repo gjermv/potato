@@ -68,6 +68,12 @@ def siste_rapporter_HTML(datolist):
     d['siste_rapporter'] = txtstring
     return  d
 
+def create_stat_details(k_list):
+    txtstr = ''
+    for item in sorted(k_list,reverse=True):
+        txtstr += """<div id="piclist"><a href="{2}.html">{1} - {0}</a></div>""".format(item[0],item[1],item[2])
+    return txtstr
+
 def func1():
     """ Load the rapport template"""
     my_dir = os.path.dirname(__file__)
@@ -75,6 +81,7 @@ def func1():
     myloader = FileSystemLoader(template_dir)
     env = Environment(loader=myloader)
     template_rapport = env.get_template('template_rapport.html')
+    template_stat = env.get_template('template_stat.html')
     
     besteget = gpxtricks.get_besteget_kommuner(my_dir+'\\res\\kommunetopplisteV2.xml') # links to previuous and next kommune.
     bC=2
@@ -133,11 +140,22 @@ def func1():
         komm.update(siste_rapporter)
         file = open('C:\\python\\kommuner\\outdata\\{}.html'.format(komm['kommunenr']),'w',encoding='utf-8')
         file.write(template_rapport.render(komm))
+        file.close()
     print("Finished creating reports!")
-    print(totstat1)
     
-
-
+    newStat = dict()
+    newStat.update(totstat1)
+    newStat.update(siste_rapporter)
+    i = 1
+    for key in stat:
+        newStat['stat_overskrift'] = key
+        newStat['stat_detaljer'] = create_stat_details(stat[key])
+        file = open('C:\\python\\kommuner\\outdata\\stat{:0>2}.html'.format(i),'w',encoding='utf-8')
+        file.write(template_stat.render(newStat))
+        file.close()
+        i += 1
+        
+    
 def func2():
     my_dir = os.path.dirname(__file__)
     gpxfile = os.path.join(my_dir, 'res\\gpx\\0105.gpx')

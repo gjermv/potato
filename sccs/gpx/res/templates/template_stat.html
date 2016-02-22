@@ -87,45 +87,18 @@
 	</div>
 	<div id="main">
 		<div id="article">
+			<div id="articlemapbig">
 			<div id="map">
+			</div>
+			</div>
 			<div class="fb-comments" data-href="http://www.vingerhagen.com/topp/stat.html" data-width="640" data-numposts="5"></div>
 		</div>
 		
 		<div id="pic">
 			<div id="piclistheader">
-			Høyeste topper
+			{{stat_overskrift}}
 			</div>
-			<div id="piclist">
-				<img src='fig/p-01.png'  align='left'><a href="0512.html">Lesja - Storstygge Svanåtind<br>2209.00 moh</a>
-			</div>
-			<div id="piclist">
-				<img src='fig/p-02.png'  align='left'><a href="1563.html">Sunndal - Storskrymten<br>1985.00 moh</a>
-			</div>	
-			<div id="piclist">
-				<img src='fig/p-03.png'  align='left'><a href="1634.html">Oppdal - Storskrymten<br>1985.00 moh</a>
-			</div>	
-			<div id="piclist">
-				<img src='fig/p-04.png'  align='left'><a href="1665.html">Tydal - Storsylen<br>1762.00 moh</a>
-			</div>	
-			<div id="piclist">
-				<img src='fig/p-05.png'  align='left'><a href="1566.html">Surnadal - Snota<br>1669.00 moh</a>
-			</div>	
-			<div id="piclist">
-				<img src='fig/p-06.png'  align='left'><a href="1635.html">Rennebu - Svarthetta<br>1548.00 moh</a>
-			</div>	
-			<div id="piclist">
-				<img src='fig/p-07.png'  align='left'><a href="0434.html">Engerdal - Elgåhogna<br>1459.00 moh</a>
-			</div>		
-			<div id="piclist">
-				<img src='fig/p-08.png'  align='left'><a href="1711.html">Meråker - Fongen<br>1441.00 moh</a>
-			</div>
-			<div id="piclist">
-				<img src='fig/p-09.png'  align='left'><a href="1664.html">Selbu - Fongen<br>1441.00 moh</a>
-			</div>				
-			<div id="piclist">
-				<img src='fig/p-10.png'  align='left'><a href="1644.html">Holtålen - Forollhogna<br>1332.00 moh</a>
-			</div>	
-							
+			{{stat_detaljer}}		
 		</div>
 	</div>
 <script>
@@ -145,13 +118,19 @@
   ga('send', 'pageview');
 */
 </script>
+<script>
 
+var map = L.map('map').setView([65.5,15.7], 5);
+L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+	attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+	maxZoom: 18,
+	id: 'gjermv.5ad98fd6',
+	accessToken: 'pk.eyJ1IjoiZ2plcm12IiwiYSI6IjM5N2EwZjkxZDA5MTIxYTI1MjI0MGFiZDJmNzhmMmE4In0.y2ULEYqhR4rXG4x5EbVK-Q'
+}).addTo(map);
+		
+</script>
 
 	
 </body>
 
 </html>
-	
-	
-	
-	
