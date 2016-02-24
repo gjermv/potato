@@ -19,7 +19,7 @@ import datetime
 
 
 def calcTime(startTime,avgSpeed,dist):
-    t = datetime.datetime.strptime(s, "%Y-%m-%dT%H:%M:%SZ")
+    t = datetime.datetime.strptime(startTime, "%Y-%m-%dT%H:%M:%SZ")
     sec =  dist/avgSpeed
     t2 = t + datetime.timedelta(seconds=sec)
     print(t2.strftime("%Y-%m-%dT%H:%M:%SZ"))
@@ -62,5 +62,5 @@ def GPXaddTimes(filename,startTime,avgSpeed=5):
     f.close()
 
 
-s = '2011-02-19T11:30:44Z'    
+  
 GPXaddTimes('C:\\python\\kommuner\\0434-d.gpx','2011-07-03T08:44:00Z',4.2/3.6)

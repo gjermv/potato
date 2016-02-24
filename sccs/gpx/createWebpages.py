@@ -10,6 +10,15 @@ from gpx import gpxtricks
 import os.path
 from datetime import timedelta as dtt
 
+def select_statistikk_overskrifter():
+    txtstring = '<option selected>Velg liste</option>\n'
+    for i,item in enumerate(statistikk_overskrifter()):
+        txtstring += '<option value="stat{0:0>2}.html">{1}</option>'.format(i,item)
+    return txtstring
+
+def statistikk_overskrifter():
+    statfak = ['Dato','Lengde','Turtid','Gåtid','Pausefaktor','Gjennomsnittsfart','Høydemeter','Høydeforskjell','Bratthet','Klatrehastighet','Kuperthetsfaktor','Toppturfaktor']   
+    return statfak
 
 def createTotStat():
     """ Creates a placeholder for total stat data. """
@@ -30,33 +39,25 @@ def modTotStat(totstat):
 
 def createDetailedStat():
     stat = dict()
-    stat['Dato'] = []
-    stat['Lengde'] = []
-    stat['Total tid'] = []
-    stat['Ga tid'] = []
-    stat['Pausefaktor'] = []
-    stat['Gjennomsnittsfart'] = []
-    stat['Hoydemeter'] = []
-    stat['Hoydeforskjell'] = []
-    stat['Bratthet'] = []
-    stat['Klatrehastighet'] = []
-    stat['Kuperthetsfaktor'] = []
-    stat['Toppturfaktor'] = []
+    for item in statistikk_overskrifter():
+        stat[item] = []
     return stat
 
 def updateDetailedStat(stat,mainInfo,kom):
     stat['Dato'].append((mainInfo['dateandtime'],kom['kommunenavn'],kom['kommunenr']))
     stat['Lengde'].append((mainInfo['length'],kom['kommunenavn'],kom['kommunenr']))
-    stat['Total tid'].append((mainInfo['tottime'],kom['kommunenavn'],kom['kommunenr']))
-    stat['Ga tid'].append((mainInfo['walk_time'],kom['kommunenavn'],kom['kommunenr']))
+    stat['Turtid'].append((mainInfo['tottime'],kom['kommunenavn'],kom['kommunenr']))
+    stat['Gåtid'].append((mainInfo['walk_time'],kom['kommunenavn'],kom['kommunenr']))
     stat['Pausefaktor'].append((mainInfo['pause_faktor'],kom['kommunenavn'],kom['kommunenr']))
     stat['Gjennomsnittsfart'].append((mainInfo['avg_speed'],kom['kommunenavn'],kom['kommunenr']))
-    stat['Hoydemeter'].append((mainInfo['climbing'],kom['kommunenavn'],kom['kommunenr']))
-    stat['Hoydeforskjell'].append((mainInfo['elediff'],kom['kommunenavn'],kom['kommunenr']))
+    #stat['Høyde'].append((mainInfo['hoyde2'],kom['kommunenavn'],kom['kommunenr'])) 
+    stat['Høydemeter'].append((mainInfo['climbing'],kom['kommunenavn'],kom['kommunenr']))
+    stat['Høydeforskjell'].append((mainInfo['elediff'],kom['kommunenavn'],kom['kommunenr']))
     stat['Bratthet'].append((mainInfo['steepness'],kom['kommunenavn'],kom['kommunenr']))
     stat['Klatrehastighet'].append((mainInfo['climbingrate'],kom['kommunenavn'],kom['kommunenr']))
     stat['Kuperthetsfaktor'].append((mainInfo['kupert_faktor'],kom['kommunenavn'],kom['kommunenr']))
-    stat['Toppturfaktor'].append((mainInfo['topptur_faktor'],kom['kommunenavn'],kom['kommunenr'])) 
+    stat['Toppturfaktor'].append((mainInfo['topptur_faktor'],kom['kommunenavn'],kom['kommunenr']))
+    
     return stat
 
 def siste_rapporter_HTML(datolist):
@@ -71,11 +72,11 @@ def siste_rapporter_HTML(datolist):
 def create_stat_details(k_list):
     txtstr = ''
     for item in sorted(k_list,reverse=True):
-        txtstr += """<div id="piclist"><a href="{2}.html">{1} - {0}</a></div>""".format(item[0],item[1],item[2])
+        txtstr += """<div id="piclist"><img src='img/{2}.jpg' height='20px' align='left'><a href="{2}.html"><div align='right'>{1} - {0}</div></a></div>""".format(item[0],item[1],item[2])
     return txtstr
 
 def func1():
-    """ Load the rapport template"""
+    """ Load the rapport template """
     my_dir = os.path.dirname(__file__)
     template_dir = os.path.join(my_dir, 'res\\templates')
     myloader = FileSystemLoader(template_dir)
@@ -138,28 +139,24 @@ def func1():
     for komm in komm_data:
         komm.update(totstat1)
         komm.update(siste_rapporter)
+        
         file = open('C:\\python\\kommuner\\outdata\\{}.html'.format(komm['kommunenr']),'w',encoding='utf-8')
         file.write(template_rapport.render(komm))
         file.close()
     print("Finished creating reports!")
     
     newStat = dict()
+    newStat['stat_select_list'] = select_statistikk_overskrifter()
     newStat.update(totstat1)
     newStat.update(siste_rapporter)
-    i = 1
-    for key in stat:
+    
+    for i,key in enumerate(statistikk_overskrifter()):
         newStat['stat_overskrift'] = key
         newStat['stat_detaljer'] = create_stat_details(stat[key])
+        
         file = open('C:\\python\\kommuner\\outdata\\stat{:0>2}.html'.format(i),'w',encoding='utf-8')
         file.write(template_stat.render(newStat))
         file.close()
-        i += 1
+
         
-    
-def func2():
-    my_dir = os.path.dirname(__file__)
-    gpxfile = os.path.join(my_dir, 'res\\gpx\\0105.gpx')
-    
-    
-      
 func1()
