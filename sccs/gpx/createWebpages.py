@@ -65,7 +65,7 @@ def siste_rapporter_HTML(datolist):
     rapports = sorted(datolist,reverse=True)[0:4]
     txtstring = ''
     for tur in rapports:
-        txtstring += "<a href='{0}.html'>{1} {2}</a><br>".format(tur[2],tur[0],tur[1])
+        txtstring += "<a href='{0}.html'>{1} {2}</a><br>".format(tur[2],tur[0].strftime("%Y-%m-%d"),tur[1])
     d['siste_rapporter'] = txtstring
     return  d
 
@@ -145,6 +145,7 @@ def func1():
         file.close()
     print("Finished creating reports!")
     
+    
     newStat = dict()
     newStat['stat_select_list'] = select_statistikk_overskrifter()
     newStat.update(totstat1)
@@ -160,3 +161,4 @@ def func1():
 
         
 func1()
+

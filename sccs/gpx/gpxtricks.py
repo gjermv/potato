@@ -82,6 +82,13 @@ def findNamespace(file):
     s = '{'+str[ind1:ind1+ind2+1]+'}'
     return s
 
+def calcEleDiff(elemin,elemax):
+    if elemin < 0:
+        return elemax
+    else:
+        elediff = elemax-elemin
+        return elediff
+
 def getmainInfo(dataframe):
     length = max(dataframe['dist'])
     tottime = max(dataframe['duration'])
@@ -94,7 +101,7 @@ def getmainInfo(dataframe):
     pausefaktor = stoptime/tottime
     ele_min = min(dataframe['ele'])
     ele_max = max(dataframe['ele'])
-    elediff = ele_max-ele_min
+    elediff = calcEleDiff(ele_min,ele_max)
     climbing = reducedElePoints(dataframe)
     steepness = climbing/(length/2)
     climbingrate = climbing/(walktime/2)
@@ -346,3 +353,10 @@ def get_selected_kommune(xml_file):
         
         txtstr.replace(',];\n','];\n')
     return txtstr
+
+def createPicPage():
+    for image in glob.glob('C:\\python\\kommuner\\outdata\\img\\*.jpg'):
+        print('<img id="pagepic2" src="img/{}">'.format(image.split('\\')[5]))
+        
+        
+createPicPage()
