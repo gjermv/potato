@@ -300,7 +300,25 @@ def get_besteget_kommuner(xml_file):
 
 def get_selected_fylke(kommunenr):
     
-    fylke_to_line = {2:1,9:17,6:3,20:4,4:5,12:6,15:7,17:8,18:9,5:10,3:11,11:12,14:13,16:14,8:15,19:16,10:17,7:18,1:19}
+    fylke_to_line = {2:1,
+                     9:2,
+                     6:3,
+                     20:4,
+                     4:5,
+                     12:6,
+                     15:7,
+                     17:8,
+                     18:9,
+                     5:10,
+                     3:11,
+                     11:12,
+                     14:13,
+                     16:14,
+                     8:15,
+                     19:16,
+                     10:17,
+                     7:18,
+                     1:19}
     fylkenr = fylke_to_line[int(kommunenr[:2])]
     
     line = list()
