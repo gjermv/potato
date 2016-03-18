@@ -14,6 +14,8 @@ from matplotlib import pyplot as plt
 import time
 import googlemaps
 import glob 
+import json
+
 
 def parseGPX(filename):
     """ Reads a gpx file and returns a dataframe with the important parameters.
@@ -39,8 +41,7 @@ def parseGPX(filename):
     for trk in trks:
         name = trk.find(ns+'name')
         if name != None:
-            name = name.text
-            
+            name = name.text 
         else: name = "NA"
         
         desc = trk.find(ns+'desc')
@@ -94,7 +95,7 @@ def getmainInfo(dataframe):
     tottime = max(dataframe['duration'])
     dateandtime = dataframe['time'][0] 
     
-    stopframe = (dataframe[dataframe['speed']<0.50][['duration']].index)
+    stopframe = (dataframe[dataframe['speed']<0.4167][['duration']].index)
     stoptime = sum(dataframe['duration'].diff()[stopframe])
     walktime = tottime - stoptime
     average_speed = length/walktime
@@ -188,16 +189,20 @@ def createElevationProfile(dataframe,filename):
 def reducePoints(dataframe):
     lat = dataframe['lat']
     lng = dataframe['lng']
-    l = []
-    for i in range(len(lat)):
-        coord = utm.from_latlon(lat[i],lng[i])
-        l.append((coord[0],coord[1]))
+    desc = dataframe['desc']
+    
+    #===========================================================================
+    # l = []
+    # for i in range(len(lat)):
+    #     coord = utm.from_latlon(lat[i],lng[i])
+    #     l.append((coord[0],coord[1]))
+    #===========================================================================
 
-    red = pd.DataFrame(algos.ramerdouglas(l,dist=5),columns=['lat','lng'])
+    #red = pd.DataFrame(algos.ramerdouglas(l,dist=5),columns=['lat','lng'])
     #plt.plot(*zip(*l))
     #plt.plot(red['lat'],red['lng'])
     #plt.show()
-    pos = zip(lat,lng)
+    pos = zip(lat,lng,desc)
     return pos
     
 def findStopLocations(dataframe):
@@ -300,7 +305,8 @@ def get_besteget_kommuner(xml_file):
 
 def get_selected_fylke(kommunenr):
     
-    fylke_to_line = {2:1,
+    fylke_to_line = {0:0,
+                     2:1,
                      9:2,
                      6:3,
                      20:4,
@@ -375,6 +381,20 @@ def get_selected_kommune(xml_file):
 def createPicPage():
     for image in glob.glob('C:\\python\\kommuner\\outdata\\img\\*.jpg'):
         print('<img id="pagepic2" src="img/{}">'.format(image.split('\\')[5]))
+
+def getKommuneGrense(filename='C:\\python\\kommuner\\kom_grens-mod.json',kommune='0101'):
+    """ Leser kom-grens-mod og henter ut geometrien til en kommune
+    basert paa kommunenummer   """
+    l = []
+    s = open(filename,'r',encoding='utf-8').read()
+    js = json.loads(s)
+    for item in js['features']:
+        if item['properties']['komm'] == int(kommune):
+            for pos in item['geometry']['coordinates'][0]:
+                l.append([pos[1],pos[0]])
+    return l
+    
+print(parseGPX('C:\\Users\\gjermund.vingerhagen\\Documents\\git\\sccs\\gpx\\res\\gpx\\1001.gpx'))
+    
+    
         
-        
-createPicPage()

@@ -75,6 +75,16 @@ def create_stat_details(k_list):
         txtstr += """<div id="piclist"><img src='img/{2}.jpg' height='20px' align='left'><a href="{2}.html"><div align='right'>{1} - {0}</div></a></div>""".format(item[0],item[1],item[2])
     return txtstr
 
+def create_stat_komm_grenser(k_list):
+    txtstr = ''
+    for i,item in enumerate(k_list):
+        txtstr += """
+var polygon{0} = L.polygon(
+{1}, kommstyle).addTo(map);
+polygon{0}.bindPopup("{2}<br>{3}");""".format(i,gpxtricks.getKommuneGrense(kommune=item[2]),item[1],item[0])
+    return txtstr
+        
+  
 def func1():
     """ Load the rapport template """
     my_dir = os.path.dirname(__file__)
@@ -83,6 +93,7 @@ def func1():
     env = Environment(loader=myloader)
     template_rapport = env.get_template('template_rapport.html')
     template_stat = env.get_template('template_stat.html')
+    template_stat_expl = env.get_template('template_stat_forklaring.html')
     
     besteget = gpxtricks.get_besteget_kommuner(my_dir+'\\res\\kommunetopplisteV2.xml') # links to previuous and next kommune.
     bC=2
@@ -144,6 +155,14 @@ def func1():
         file.write(template_rapport.render(komm))
         file.close()
     print("Finished creating reports!")
+    # Lage forklaring til statistikk sidene. 
+    newStatExpl = dict()
+    newStatExpl['select_fylkeliste'] = gpxtricks.get_selected_fylke('00')
+    newStatExpl['select_kommuneliste'] = kommune_selected
+    newStatExpl.update(totstat1)
+    newStatExpl.update(siste_rapporter)
+    file = open('C:\\python\\kommuner\\outdata\\stat_forklaring.html','w',encoding='utf-8')
+    file.write(template_stat_expl.render(newStatExpl))
     
     
     newStat = dict()
@@ -154,6 +173,8 @@ def func1():
     for i,key in enumerate(statistikk_overskrifter()):
         newStat['stat_overskrift'] = key
         newStat['stat_detaljer'] = create_stat_details(stat[key])
+        newStat['stat_komm_grenser'] = create_stat_komm_grenser(stat[key])
+        
         
         file = open('C:\\python\\kommuner\\outdata\\stat{:0>2}.html'.format(i),'w',encoding='utf-8')
         file.write(template_stat.render(newStat))

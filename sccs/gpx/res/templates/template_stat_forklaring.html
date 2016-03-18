@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="rapport.css" />
+	<link rel="stylesheet" href="res/leaflet.css" />
+	<script src="res/leaflet.js"></script>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title></title>
+
+<script>
+(function(d, s, id) {
+	var js, fjs = d.getElementsByTagName(s)[0];
+	if (d.getElementById(id)) return;
+	js = d.createElement(s); js.id = id;
+	js.src = "//connect.facebook.net/nb_NO/sdk.js#xfbml=1&version=v2.4";
+	fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+</script>
+
+<script>
+
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	
+	ga('create', 'UA-3916590-3', 'auto');
+	ga('send', 'pageview');
+
+</script>
+</head>
+
+<body>
+	<div id="header">
+		<div id="statistikk">
+		<!-- <img src='fig/statistic.png' width='30px' align='left'> -->
+		<a href='index.html'>LITT STATISTIKK:</a><br>
+		<a href='stat02.html'>{{tot_antall_besteget}}/429 kommuner</a><br>
+		<a href='stat06.html'>{{tot_tottid}} timer på tur</a><br>
+		<a href='stat04.html'>{{tot_length}} kilometer</a><br>
+		<a href='stat05.html'>{{tot_elevation}} høydemeter</a></a>
+		</div>
+		<div id="turrapporter">
+		<!-- <img src='fig/report.png' width='30px' align='left'> -->
+		NOEN TURRAPPORTER:<br>
+		{{siste_rapporter}}
+		</div>
+		<div id="search">
+		<img src='fig/search2.png' width='30px' align='left'>
+		<form name="searchform">
+		Fylke:<br>
+		<select name="textbox_id1" id="textbox_id1" onchange="updateTextBox2(this.selectedIndex)">
+		{{select_fylkeliste}}
+		</select>
+		<br>
+		Kommune:<br>
+		<select name="textbox_id2" id="textbox_id2" size="1" onchange="goToNewPage(this.options[this.options.selectedIndex].value)">
+		</select>
+		</form>
+		</div>
+		<div id="banner">
+		<img src='fig/banner-logo3.png'>
+		</div>
+	</div>
+
+	<div id="main">
+	<hr>
+	</div>
+	
+	<div id="main">
+		<div id="article">
+
+			<div id="articlestat">Dato</div>
+			<div id="articletekst">
+			Startidspunktet for turen, direkte hentet fra første punktet i GPS-filen, forhåpentligvis i riktig tidssone. 
+			</div>
+			
+			<div id="articlestat">Lengde</div>
+			<div id="articletekst">
+			Lengde langs bakken, regnet ut fra lengdegrad og breddegrad ved bruk av haversine-formelen og jordradius på 6371000 meter. 
+(http://stackoverflow.com/questions/4913349/haversine-formula-in-python-bearing-and-distance-between-two-gps-points)
+			</div>
+			
+			<div id="articlestat">Turtid</div>
+			<div id="articletekst">
+			Totaltiden fra GPS-en ble startet på begynnelsen av turen til den ble stoppet på slutten av turen, inkludert korte pauser for å titte på kartet, lange pauser for å spise nistematen og overnattinger underveis i telt og hytter. 
+			</div>
+			
+			<div id="articlestat">Gåtid</div>
+			<div id="articletekst">
+			Dette er den totale tiden med registrert bevegelse, som har blitt definert til at hastigheten mellom to GPS-punkter må være høyere enn 1.5 km/t. I bratte oppoverbakker er det mulig at det blir registrert litt mye pauser, men går man i pausetempo, så får det heller bli registrert som pauser.
+			
+			</div>	
+			
+			<div id="articlestat">Pausefaktor</div>
+			<div id="articletekst">
+			Pausefaktoren er (Totaltiden - Gåtiden)/Totaltiden i prosent. Hvis man bruker en halv time på å gå opp og ned, og i tillegg har en halv time pause på toppen blir pausefaktoren 50%. Hvis man fullstending kutter ut pausen på toppen får man en pausefaktor på 0%. Turer med overnatting vil naturligvis få en høy pausefaktor. 			
+			</div>	
+			<div id="articlestat">Gjennomsnittsfart</div>
+			<div id="articletekst">
+			Turlengde / Gåtid. For maks uttelling her kunne det antakelig lønne seg med litt lange intervaller i høyt tempo, for så å ha pause med full stopp.
+			</div>
+			<div id="articlestat">Høydemeter</div>
+			<div id="articletekst">
+			Dette er den totale stigningen på turen. Siden GPS'en ikke gir spesielt nøyaktige målinger av høyde, har jeg brukt Ramer-Douglas-Pecker algoritme for å unngå å måle alt for mye GPS støy.Det medfører også at alle humper og dumper mindre enn 7.5 meter ikke blir målt.  http://stackoverflow.com/questions/2573997/reduce-number-of-points-in-line
+			</div>	
+			
+			<div id="articlestat">Høydeforskjell</div>
+			<div id="articletekst">
+			Differansen mellom høyeste og laveste høyde i GPS dataene. Hvis laveste målte høyde er lavere enn 0, har jeg kun brukt høyeste høyde som høydeforskjell. Siden GPS'en oppgir ellipsoidisk høyde kan det godt være at man skulle akseptert negativ høyde. Uansett gjelder dette unntaket kun noen lave kystkommuner, så veldig viktig er det vel egentlig ikke. 
+			</div>
+			
+			<div id="articlestat">Bratthet</div>
+			<div id="articletekst">
+			Brattheten måles i høydemeter pr kilometer. Mer nøyaktig så blir det Høydemeter / (Lengde/2), siden ca halvparten av turen burde bli nedover. Om man går forskjellig vei opp og ned burde vel fortsatt gjennomsnittlig hellning bli riktig.			
+			</div>
+			<div id="articlestat">Klatrehastighet</div>
+			<div id="articletekst">
+			Ikke mer sofistikert enn at man antar at halve gåtiden brukes oppover på høydemeterne, så Høyde / (Gåtid/2). Enheten blir høydemeter pr minutt. Er man i dårlig form på vei oppover og ligger an til dårlig klatrehastighet, kan man kompansere med rask retur og sikkert forsatt få brukbar klatrehastighet.
+			</div>
+			<div id="articlestat">Kuperthetsfaktor</div>
+			<div id="articletekst">
+			Ikke alle topper går jevnt oppover mot toppen. Fra tid til annen må man både over berg og dal for å komme til kommunetoppen. Kuperthetsfaktoren er definert some Høydemeter / Høydeforskjell. En topptur som går jevnt oppover fra parkeringsplassen til høyeste punkt, og deretter jevnt nedover tilbake til parkeringsplassen vil ha kuperthetsfaktor 1. En kuperthetsfaktor på 2 betyr at antall høydemeter man har gått er to ganger høydeforskjellen mellom laveste punkt og toppen. En kup.faktor mindre en 1 kan forekomme om sluttpunktet på turen er lavere enn startpunktet.			
+			</div>
+			<div id="articlestat">Toppturfaktor</div>
+			<div id="articletekst">
+			Dette er en relativ faktor for å indikere hvor mye av kommunetoppen man faktisk har gjort selv, definert som 1- (Høyde på toppen - Laveste GPS Høyde) / Høyde på toppen i prosent. Starter man fra sjøen og går opp til toppen av en hvilket som helst topp, den være seg 30 eller 2000 meter høy, er det 100 % topptur. Starter man derimot på 900 meter og går 100 høydemeter opp på en 1000 metering, vil dette bli en 10 % topptur.
+			</div>								
+			<div class="fb-comments" data-href="http://www.vingerhagen.com/topp/stat_forklaring.html" data-width="640" data-numposts="5">
+			</div>
+		</div>
+		
+		<div id="pic">
+			<img src='img/{{kommunenr}}.jpg' width='360' onerror="this.src='fig/fjell-error2.png'">
+			<div id="pictekst">
+			----
+			</div>
+		
+			
+		</div>
+	</div>
+
+</body>
+
+<script>
+var kommuner = new Array();
+{{select_kommuneliste}}
+
+
+var kommunelist = document.searchform.textbox_id2;
+var fylkenr = document.getElementById("textbox_id1").selectedIndex;
+updateTextBox2(fylkenr);
+
+function updateTextBox2(selectedfylke) {
+	kommunelist.options.length=0;
+
+	if (selectedfylke>0){
+		for (i=0; i<kommuner[selectedfylke].length; i++)
+			kommunelist.options[kommunelist.options.length] = new Option(kommuner[selectedfylke][i].split("|")[0],kommuner[selectedfylke][i].split("|")[1]);
+    }
+}
+
+</script>
+
+<script>
+function goToNewPage(kommunenummer) {
+	window.open(kommunenummer+".html","_self");
+}
+</script>
+
+</html>

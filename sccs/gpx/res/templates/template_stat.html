@@ -13,14 +13,16 @@
 	
 <div id="fb-root"></div>
 <script>
-/*(function(d, s, id) {
+(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
   if (d.getElementById(id)) return;
   js = d.createElement(s); js.id = id;
   js.src = "//connect.facebook.net/nb_NO/sdk.js#xfbml=1&version=v2.4";
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));
-*/
+
+
+
 </script>
 	<div id="header">
 	<hr>
@@ -72,7 +74,7 @@
 		
 		<div id="pic">
 			<div id="piclistheader">
-			{{stat_overskrift}}
+			{{stat_overskrift}} <a href='stat_forklaring.html'>**</a>
 			</div>
 			{{stat_detaljer}}		
 		</div>
@@ -84,7 +86,7 @@
 </script>
 
 <script>
-/*
+
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -92,9 +94,17 @@
 
   ga('create', 'UA-3916590-3', 'auto');
   ga('send', 'pageview');
-*/
+
 </script>
 <script>
+
+var kommstyle = {
+	    color: 'black',
+		dashArray: '5,5',
+		weight: 2,
+	    fillColor: 'blue',
+	    fillOpacity: 0.7
+	}
 
 var map = L.map('map').setView([65.5,15.7], 5);
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -103,7 +113,10 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 	id: 'gjermv.5ad98fd6',
 	accessToken: 'pk.eyJ1IjoiZ2plcm12IiwiYSI6IjM5N2EwZjkxZDA5MTIxYTI1MjI0MGFiZDJmNzhmMmE4In0.y2ULEYqhR4rXG4x5EbVK-Q'
 }).addTo(map);
-		
+
+{{stat_komm_grenser}}
+
+
 </script>
 
 	
