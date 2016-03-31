@@ -8,7 +8,8 @@
 	<bounds minlat="63.4903867822" minlon="8.4101526998" maxlat="63.5372847877" maxlon="8.5153309163" />
 </metadata>
 <trk>
-	<name>Cycle,Foot,Cycle</name>
+	<name>Cycle,Walk,Cycle</name>
+	<desc>Cycle</desc>
 	<trkseg>
 		<trkpt lat="63.5371339973" lon="8.4101526998">
 			<ele>27.05</ele>
@@ -1267,6 +1268,9 @@
 			<time>2012-08-05T12:33:47Z</time>
 		</trkpt>
 	</trkseg>
+	</trk>
+	<trk>
+	<desc>Walk</desc>
 	<trkseg>
 		<trkpt lat="63.491814388" lon="8.4441818018">
 			<ele>64.55</ele>
@@ -6681,6 +6685,9 @@
 			<time>2012-08-05T15:23:47Z</time>
 		</trkpt>
 	</trkseg>
+	</trk>
+	<trk>
+	<desc>Cycle</desc>
 	<trkseg>
 		<trkpt lat="63.4917646833" lon="8.4441331867">
 			<ele>52.05</ele>

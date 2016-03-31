@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <gpx xmlns="http://www.topografix.com/GPX/1/1" creator="Daniel Schlosser" version="v1.1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
   <trk><name>Cycle,Walk,Cycle</name>
+  <desc>Cycle</desc>
     <trkseg>
       <trkpt lat="63.2503471374512" lon="10.5070714950562">
         <ele>158.34765625</ele>
@@ -2039,6 +2040,8 @@
         <time>2011-06-19T08:14:50Z</time>
       </trkpt>
 	</trkseg>
+	</trk><trk>
+	<desc>Walk</desc>
 	<trkseg>
       <trkpt lat="63.2087936401367" lon="10.6459465026855">
         <ele>411.203125</ele>
@@ -3897,6 +3900,8 @@
         <time>2011-06-19T12:10:37Z</time>
       </trkpt>
 	</trkseg>
+	</trk><trk>
+	<desc>Cycle</desc>
 	<trkseg>
       <trkpt lat="63.2090797424316" lon="10.6455249786377">
         <ele>408.671875</ele>
