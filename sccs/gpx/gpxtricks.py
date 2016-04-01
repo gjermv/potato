@@ -208,7 +208,7 @@ def reducePoints(dataframe):
 def findStopLocations(dataframe):
     stopLoc = []
     
-    ind = dataframe[dataframe['speed']<0.50][['duration']].index
+    ind = dataframe[dataframe['speed']<0.4167][['duration']].index
     dur = (dataframe['duration'].diff()[ind])
     lat = (dataframe['lat'][ind])
     lng = (dataframe['lng'][ind])
@@ -227,12 +227,10 @@ def findStopLocations(dataframe):
             if i - tmp == 1:
                 totdur += dur[i]
             else:
-                if totdur>30:
-                    
+                if totdur>121:
                     stopLoc.append([latS,lngS,totdur])
                 latS = lat[i]
                 lngS = lng[i]
-                totdur += dur[i]
                 totdur = 0
             tmp = i
 
@@ -242,28 +240,69 @@ def findStopLocations(dataframe):
 def exportStopLoc(dataframe):
     stopLoc = findStopLocations(dataframe)
     s = ''
+    
     for loc in stopLoc:
-        s += "toppMarker = L.marker([{},{}],{{icon: myIconStop}});\ntoppMarker.addTo(map);\n".format(loc[0],loc[1])
+        s += "stopMarker = L.marker([{},{}],{{icon: myIconStop}});\nstopMarker.addTo(map);\n".format(loc[0],loc[1])
+        s += 'stopMarker.bindPopup("{} minutter");\n'.format(int(loc[2]//60))
     return s
 
 def exportRedPoints(dataframe):
-    s = ''
-    for p in reducePoints(dataframe):
-        s += '[{0},{1}],'.format(p[1],p[0])
+    geojson = ''
+    groups = dataframe.groupby('desc')
+    movtype = 'NA'
+    
+    for group,items in groups:
+        s = ''
+        for p in reducePoints(items):
+            s += '[{0},{1}],'.format(p[1],p[0])
+            
+        geojson += """var myLines = [{
+        "type": "LineString",
+        "coordinates": ["""
+        geojson += s
+        if group == 'Ski':
+            geojson += getSkiText()
+
+        elif group == 'Cycle':
+            geojson += getCycleText()
         
-    geojson = """var myLines = [{
-    "type": "LineString",
-    "coordinates": ["""
-    geojson += s
-    geojson += """]
+        else:
+            geojson += getWalkText()
+    
+    return  geojson
+
+def getWalkText():
+    txt = """]
 }];
 
 L.geoJson(myLines, {
     style: myWalk
-}).addTo(map);"""     
-    
-    
-    return  geojson
+}).addTo(map);
+
+"""
+    return txt
+
+def getCycleText():
+    txt = """]
+}];
+
+L.geoJson(myLines, {
+    style: myCycle
+}).addTo(map);
+
+"""
+    return txt
+
+def getSkiText():
+    txt = """]
+}];
+
+L.geoJson(myLines, {
+    style: mySki
+}).addTo(map);
+
+"""
+    return txt
 
 def readkommunexml(xml_file):
     """ Reads the Offical kommunedatalist and yields a dictionary with basic information """
@@ -394,7 +433,6 @@ def getKommuneGrense(filename='C:\\python\\kommuner\\kom_grens-mod.json',kommune
                 l.append([pos[1],pos[0]])
     return l
     
-print(parseGPX('C:\\Users\\gjermund.vingerhagen\\Documents\\git\\sccs\\gpx\\res\\gpx\\1001.gpx'))
     
     
         

@@ -84,8 +84,7 @@ var polygon{0} = L.polygon(
 polygon{0}.bindPopup("{2}<br>{3}");""".format(i,gpxtricks.getKommuneGrense(kommune=item[2]),item[1],item[0])
     return txtstr
         
-  
-def func1():
+def createWebpages():
     """ Load the rapport template """
     my_dir = os.path.dirname(__file__)
     template_dir = os.path.join(my_dir, 'res\\templates')
@@ -139,8 +138,21 @@ def func1():
             totstat['tot_elevation'] += mainInfo['climbing']
             totstat['tot_tottid'] += mainInfo['tottime']
         
+        else:
+            gpxfile_ex = my_dir+"\\res\\gpx\\{0}_ex.gpx".format(kom['kommunenr'])
+            if os.path.isfile(gpxfile_ex):
+                gpx_df = gpxtricks.parseGPX(gpxfile_ex)
+                kom['stoplocations'] = gpxtricks.exportStopLoc(gpx_df)
+                kom['tripcoordinates'] = gpxtricks.exportRedPoints(gpx_df)
+                gpxtricks.createElevationProfile(gpx_df, 'C:\\python\\kommuner\\outdata\\profile2\\{}.png'.format(kom['kommunenr']))
+                mainInfo = gpxtricks.getmainInfo(gpx_df)
+                kom.update(mainInfo)
+            
+                stat = updateDetailedStat(stat, mainInfo, kom)    
+        
         komm_data.append(kom)
         print(kom['kommunenavn'])
+        
     
     totstat1 = modTotStat(totstat)
     siste_rapporter = siste_rapporter_HTML(stat['Dato'])
@@ -179,7 +191,7 @@ def func1():
         file = open('C:\\python\\kommuner\\outdata\\stat{:0>2}.html'.format(i),'w',encoding='utf-8')
         file.write(template_stat.render(newStat))
         file.close()
+    
+createWebpages()
 
-        
-func1()
-
+ 
