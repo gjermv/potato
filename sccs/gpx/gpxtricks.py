@@ -32,9 +32,8 @@ def parseGPX(filename):
     point = xml.find(ns+"trk/"+ns+"trkseg/"+ns+"trkpt")
     tmp_lat = float(point.attrib['lat'])
     tmp_lon = float(point.attrib['lon'])
-
-#    startTime = dt.strptime(point.find(ns+'time').text,'%Y-%m-%dT%H:%M:%S.%fZ')
-    startTime = dt.strptime(point.find(ns+'time').text,'%Y-%m-%dT%H:%M:%SZ')
+    
+    startTime = gpxtimeToStr(point.find(ns+'time').text)
     
     trks = xml.iterfind(ns+'trk')
     dist = 0
@@ -61,8 +60,7 @@ def parseGPX(filename):
                     time = point.find(ns+'time').text
                     
                     dist += round(utm.haversine(tmp_lon,tmp_lat,lon,lat),2)
-#                    timez = dt.strptime(time,'%Y-%m-%dT%H:%M:%S.%fZ')
-                    timez = dt.strptime(time,'%Y-%m-%dT%H:%M:%SZ')
+                    timez = gpxtimeToStr(time)
                     duration = (timez - startTime).total_seconds()
                     tmp_lat,tmp_lon = lat,lon
                     gpxinfo.append([name,desc,segc,dist,lat,lon,ele,timez,duration])
@@ -75,6 +73,13 @@ def parseGPX(filename):
     
     return gpxdf
 
+def gpxtimeToStr(timestr):
+    try:
+        t = dt.strptime(timestr,'%Y-%m-%dT%H:%M:%SZ')
+        return t
+    except:
+        t = dt.strptime(timestr,'%Y-%m-%dT%H:%M:%S.%fZ')
+        return t
 def findNamespace(file):
     str = file.read(1000)
     file.seek(0)
