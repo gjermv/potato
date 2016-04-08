@@ -131,6 +131,7 @@ def getmainInfo(dataframe):
     info['topptur_faktor'] = round(topptur_faktor*100,1)
     return info
 
+
 def googleElevation(dataframe):
     lat = dataframe['lat']
     lng = dataframe['lng']
@@ -158,11 +159,13 @@ def googleElevation(dataframe):
     plt.plot(dist1,ele2)
     plt.show()
 
-def reducedElePoints(dataframe):
+def reducedElePoints(df):
+    dataframe = df[df['lat'] != 0]
     dist = dataframe['dist']
     ele = dataframe['ele']
     l = []
-    for i in range(len(dist)):
+    
+    for i in dist.index:
         l.append((dist[i],ele[i]))
     red = pd.DataFrame(algos.ramerdouglas(l,dist=7.5),columns=['dist','ele'])
     red['elediff'] = red['ele'].diff()
@@ -438,6 +441,3 @@ def getKommuneGrense(filename='C:\\python\\kommuner\\kom_grens-mod.json',kommune
                 l.append([pos[1],pos[0]])
     return l
     
-    
-    
-        
