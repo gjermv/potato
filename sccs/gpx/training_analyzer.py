@@ -95,21 +95,34 @@ def getTCXtrainingData(filename):
     mydf =tcxtricks.TCXtoDataFrame(filename)
     #print(tcxtricks.getTCXheartzone(mydf))
     return tcxtricks.getmainInfoTCX(mydf)
-        
-df = checkForNewFiles('C:\\python\\testdata\\gpxx4\\*.*')
- 
-times = pd.DatetimeIndex(df['dateandtime'])
-grouped = df.groupby([times.year,times.month])
- 
-x=[]
-y=[]
 
-for a,b in grouped:
-    x.append((a[0]-2011)*12+a[1])
-    z = b[b['activity']=='Skiing']['walk_time'].sum()
-    y.append(z.total_seconds()/3600)
- 
-plt.bar(x,y,width=1)
-plt.show()
+def plotSomething(dataframe):
+    times = pd.DatetimeIndex(df['dateandtime'])
+    grouped = df.groupby([times.year,times.month])
+     
+    x=[]
+    y=[]
+    
+    for a,b in grouped:
+        x.append((a[0]-2011)*12+a[1])
+        z = b[b['activity']=='Cycling']['walk_time'].sum()
+        y.append(z.total_seconds()/3600)
+     
+    plt.bar(x,y,width=1)
+    plt.show()
+
+def printSomething(dataframe,activity,minlength,maxlength):
+    dfact = dataframe[dataframe['activity']==activity]
+    dfmin = dfact[dfact['length']>minlength]
+    dfmax = dfmin[dfact['length']<maxlength]
+    
+    df =dfmax.sort('avg_speed')
+    df.index = range(1,len(df)+1)
+    print(df[['filename','length','avg_speed']])
+    
+       
+df = checkForNewFiles('C:\\python\\testdata\\gpxx4\\*.*')
+printSomething(df,'Cycling',15,20)
+plotSomething(df)
 
 
