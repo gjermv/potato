@@ -48,18 +48,20 @@ def checkForNewFiles(datafolder):
             print('Avg',indata['avg_speed'])
             
             gpxdict =  pd.DataFrame([indata])
-            gpxdict['activity'] = inputShortCut(input('activity: (C,W,R,S,...) '))
+            activity = inputShortCut(input('activity: (C,W,R,S,...) '))
+            gpxdict['activity'] = activity
             gpxdict['filename'] = filename
-            df = pd.concat([df, gpxdict])
             
+            df = pd.concat([df, gpxdict])
+            printSomething(df,activity,indata['length'],filename)
             
     df = df.sort('dateandtime')
     df.index = range(1,len(df) + 1)
-    df.to_csv('C:\\python\\testdata\\gpxx1\\Activity_Summary2.csv',columns=['filename','dateandtime','activity','tottime','walk_time','length','avg_speed','climbing','comment','health'])
+    df.to_csv('C:\\python\\testdata\\gpxx1\\Activity_Summary2.csv',columns=['filename','dateandtime','activity','tottime','walk_time','length','avg_speed','climbing','comment','health','sone1','sone2','sone3','sone4','sone5'])
     return df
     
 def trainingdata_to_csv(df):
-    df.to_csv('C:\\python\\testdata\\gpxx1\\Activity_Summary2.csv',columns=['filename','dateandtime','activity','tottime','walk_time','length','avg_speed','climbing','comment','health'])
+    df.to_csv('C:\\python\\testdata\\gpxx1\\Activity_Summary2.csv',columns=['filename','dateandtime','activity','tottime','walk_time','length','avg_speed','climbing','comment','health','sone1','sone2','sone3','sone4','sone5'])
 
 def inputShortCut(txt):
     if txt == 'C':
@@ -88,41 +90,91 @@ def getGPXtrainingData(filename):
     gpxdict['comment'] = ''
     gpxdict['health'] = ''
     gpxdict['activity'] = ''
+    gpxdict['sone1'] = ''
+    gpxdict['sone2'] = ''
+    gpxdict['sone3'] = ''
+    gpxdict['sone4'] = ''
+    gpxdict['sone5'] = ''
     return gpxdict
     
     
 def getTCXtrainingData(filename):
-    mydf =tcxtricks.TCXtoDataFrame(filename)
+    mydf = tcxtricks.TCXtoDataFrame(filename)
     #print(tcxtricks.getTCXheartzone(mydf))
     return tcxtricks.getmainInfoTCX(mydf)
 
 def plotSomething(dataframe):
     times = pd.DatetimeIndex(df['dateandtime'])
-    grouped = df.groupby([times.year,times.month])
+    grouped = df.groupby([times.year,times.week])
      
     x=[]
-    y=[]
+    y1=[]
+    y2=[]
+    y3=[]
+    y4=[]
+    y5=[]
+    y2b=[]
+    y3b=[]
+    y4b=[]
+    y5b=[]
     
     for a,b in grouped:
         x.append((a[0]-2011)*12+a[1])
-        z = b[b['activity']=='Cycling']['walk_time'].sum()
-        y.append(z.total_seconds()/3600)
-     
-    plt.bar(x,y,width=1)
+        z1 = b['sone1'].sum()/3600
+        z2 = b['sone2'].sum()/3600
+        z3 = b['sone3'].sum()/3600
+        z4 = b['sone4'].sum()/3600
+        z5 = b['sone5'].sum()/3600
+        y1.append(z1)#.total_seconds()/3600)
+        y2.append(z2)
+        y3.append(z3)
+        y4.append(z4)
+        y5.append(z5)
+        y2b.append(z1)
+        y3b.append(z1+z2)
+        y4b.append(z1+z2+z3)
+        y5b.append(z1+z2+z3+z4)
+        
+        
+    plt.bar(x,y1,width=1,color='#fef0d9')
+    plt.bar(x,y2,width=1,bottom=y2b,color='#fdcc8a')
+    plt.bar(x,y3,width=1,bottom=y3b,color='#fc8d59')
+    plt.bar(x,y4,width=1,bottom=y4b,color='#e34a33')
+    plt.bar(x,y5,width=1,bottom=y5b,color='#b30000')
     plt.show()
 
-def printSomething(dataframe,activity,minlength,maxlength):
-    dfact = dataframe[dataframe['activity']==activity]
-    dfmin = dfact[dfact['length']>minlength]
-    dfmax = dfmin[dfact['length']<maxlength]
+def printSomething(da,activity,triplength,filename):
+    print("printsomthing input data",len(da),type(activity),triplength)
+    
+    dfact = da[da['activity']==activity].sort('length')
+    
+    dfact.index = range(len(dfact))
+    ind = dfact[dfact['filename']== filename].index
+    if len(ind>0):
+        print('Length',len(dfact)-ind[0],'/',len(dfact))
+
+             
+    dfmin = dfact[dfact['length']>triplength*0.8]
+    dfmax = dfmin[dfact['length']<triplength*1.2]
     
     df =dfmax.sort('avg_speed')
-    df.index = range(1,len(df)+1)
-    print(df[['filename','length','avg_speed']])
+    df.index = range(len(df))
+    
+    ind = df[df['filename']== filename].index
+    if len(ind>0):
+        print('Average',len(df)-ind[0],'/',len(df))
+    
+    df =df.sort('climbing')
+    df.index = range(len(df))
+    
+    ind = df[df['filename']== filename].index
+    if len(ind>0):
+        print('Climbing',len(df)-ind[0],'/',len(df))
+    
+    return df
     
        
 df = checkForNewFiles('C:\\python\\testdata\\gpxx4\\*.*')
-printSomething(df,'Cycling',15,20)
 plotSomething(df)
 
 

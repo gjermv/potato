@@ -80,6 +80,7 @@ def gpxtimeToStr(timestr):
     except:
         t = dt.strptime(timestr,'%Y-%m-%dT%H:%M:%S.%fZ')
         return t
+    
 def findNamespace(file):
     str = file.read(1000)
     file.seek(0)
