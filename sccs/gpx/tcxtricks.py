@@ -54,6 +54,7 @@ def TCXtoDataFrame(filename):
         TCXlist.append(trkpoint)
     
     df = pd.DataFrame(TCXlist)
+    
     df['time'] = pd.to_datetime(df['time'])
     df['lat'] = df['lat'].astype(float)
     df['lon'] = df['lon'].astype(float)
@@ -74,7 +75,6 @@ def getTCXheartzone(df):
     #===========================================================================
     
     df['timediff'] = df['time'].diff()
-    #print(df['timediff'])
     
     df1 = df[(df['heartrate']<135) & (df['heartrate']>=0)]
     df2 = df[(df['heartrate']<155) & (df['heartrate']>=135)]
@@ -121,3 +121,6 @@ def findNamespace(file):
     ind2 = str[ind1+1:].find('"')
     s = '{'+str[ind1:ind1+ind2+1]+'}'
     return s
+
+df = TCXtoDataFrame('C:\\python\\testdata\\gpxx4\\2016-02-20 1333 Rotherwick-HS.tcz')
+print(getTCXheartzone(df))

@@ -63,16 +63,34 @@ def parseGPX(filename):
                     timez = gpxtimeToStr(time)
                     duration = (timez - startTime).total_seconds()
                     tmp_lat,tmp_lon = lat,lon
-                    gpxinfo.append([name,desc,segc,dist,lat,lon,ele,timez,duration])
+                    
+                    print(time)
+                    hr = getHeartRate(point,ns,filename)
+                    gpxinfo.append([name,desc,segc,dist,lat,lon,ele,timez,duration,hr])
+                    ## Test function
+                    
                 except:
                     print("Points does not have all information needed, or namespace is wrong")
     
-    gpxdf = pd.DataFrame(gpxinfo,columns=['name','desc','segno','dist','lat','lng','ele','time','duration'])
+    gpxdf = pd.DataFrame(gpxinfo,columns=['name','desc','segno','dist','lat','lng','ele','time','duration','heartrate'])
     gpxdf['speed'] = (gpxdf['dist'].shift(-1)-gpxdf['dist'])/(gpxdf['duration'].shift(-1)-gpxdf['duration'])
     gpxdf['speed'] = gpxdf['speed'].shift(1)
     
     return gpxdf
 
+def getHeartRate(point,ns,filename):
+    # Returns heartrate from a xml track point exported from Garmin Connect gpx. 
+    try:
+        hr = point.find(ns+'extensions')
+        trkhr = hr.find('{http://www.garmin.com/xmlschemas/TrackPointExtension/v1}TrackPointExtension')
+        heartrate = int(trkhr.find('{http://www.garmin.com/xmlschemas/TrackPointExtension/v1}hr').text)
+        # print(heartrate)
+        print(filename)
+        return heartrate
+    except:
+        # print("Point does not have heartrate / Namespace wrong")
+        return 'NA'
+    
 def gpxtimeToStr(timestr):
     try:
         t = dt.strptime(timestr,'%Y-%m-%dT%H:%M:%SZ')
@@ -131,7 +149,6 @@ def getmainInfo(dataframe):
     info['kupert_faktor'] = round(kupert_faktor,2)
     info['topptur_faktor'] = round(topptur_faktor*100,1)
     return info
-
 
 def googleElevation(dataframe):
     lat = dataframe['lat']
@@ -441,4 +458,36 @@ def getKommuneGrense(filename='C:\\python\\kommuner\\kom_grens-mod.json',kommune
             for pos in item['geometry']['coordinates'][0]:
                 l.append([pos[1],pos[0]])
     return l
+
+def getGPXheartzone(df):
+   
+    #===========================================================================
+    # plt.plot(df['time'],df['heartrate'])
+    # plt.show()
+    # plt.close()
+    #===========================================================================
+    if df['heartrate'][0] == 'NA':
+        return (0,0,0,0,0)
     
+    print(df['heartrate'])
+    df['timediff'] = df['time'].diff()
+    
+    df1 = df[(df['heartrate']<135) & (df['heartrate']>=0)]
+    df2 = df[(df['heartrate']<155) & (df['heartrate']>=135)]
+    df3 = df[(df['heartrate']<165) & (df['heartrate']>=155)]
+    df4 = df[(df['heartrate']<175) & (df['heartrate']>=165)]
+    df5 = df[df['heartrate']>=175]
+    
+    hr5zone = sum(df5['timediff'].dt.seconds[1:])
+    hr4zone = sum(df4['timediff'].dt.seconds[1:])
+    hr3zone = sum(df3['timediff'].dt.seconds[1:])
+    hr2zone = sum(df2['timediff'].dt.seconds[1:])
+    hr1zone = sum(df1['timediff'].dt.seconds[1:])
+
+    return (hr1zone,hr2zone,hr3zone,hr4zone,hr5zone)
+
+#===============================================================================
+# for filename in glob.glob('C:\\python\\testdata\\gpxx4\\2016-02-03 2043 Impington.gpx'):
+#     df = parseGPX(filename)
+#     print(getGPXheartzone(df))
+#===============================================================================

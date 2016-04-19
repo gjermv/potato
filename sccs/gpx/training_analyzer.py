@@ -141,6 +141,7 @@ def plotSomething(dataframe):
     plt.bar(x,y3,width=1,bottom=y3b,color='#fc8d59')
     plt.bar(x,y4,width=1,bottom=y4b,color='#e34a33')
     plt.bar(x,y5,width=1,bottom=y5b,color='#b30000')
+
     plt.show()
 
 def printSomething(da,activity,triplength,filename):
