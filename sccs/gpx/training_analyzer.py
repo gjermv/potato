@@ -103,7 +103,7 @@ def getTCXtrainingData(filename):
     #print(tcxtricks.getTCXheartzone(mydf))
     return tcxtricks.getmainInfoTCX(mydf)
 
-def plotSomething(dataframe):
+def plotHeartrate(dataframe):
     times = pd.DatetimeIndex(df['dateandtime'])
     grouped = df.groupby([times.year,times.week])
      
@@ -119,12 +119,17 @@ def plotSomething(dataframe):
     y5b=[]
     
     for a,b in grouped:
-        x.append((a[0]-2011)*12+a[1])
+        
+        x.append((a[0]-2016)*52+a[1])
+        
         z1 = b['sone1'].sum()/3600
         z2 = b['sone2'].sum()/3600
         z3 = b['sone3'].sum()/3600
         z4 = b['sone4'].sum()/3600
         z5 = b['sone5'].sum()/3600
+        
+        print(a,(a[0]-2016)*365+a[1]-1)
+        
         y1.append(z1)#.total_seconds()/3600)
         y2.append(z2)
         y3.append(z3)
@@ -143,6 +148,60 @@ def plotSomething(dataframe):
     plt.bar(x,y5,width=1,bottom=y5b,color='#b30000')
 
     plt.show()
+
+def plotWalkLength(dataframe,period='day'):
+     
+    p = 365
+    
+    times = pd.DatetimeIndex(df['dateandtime'])
+    grouped = df.groupby([times.year,times.dayofyear])
+    if period == 'week':
+        grouped = df.groupby([times.year,times.weekofyear])
+        p = 52
+    if period == 'month':
+        grouped = df.groupby([times.year,times.month])
+        p = 12
+    
+    x=[]
+    y1=[]
+    y2=[]
+    y3=[]
+    y4=[]
+    y5=[]
+    y2b=[]
+    y3b=[]
+    y4b=[]
+    y5b=[]
+    
+    
+    
+    for a,b in grouped:
+        x.append((a[0]-2016)*p+a[1])
+        
+        z1 = b[b['activity'] == 'Walking']['length'].sum()
+        z2 = b[b['activity']=='Running']['length'].sum()
+        z3 = b[b['activity']=='Rollerskiing']['length'].sum()
+
+        
+        
+        y1.append(z1)#.total_seconds()/3600)
+        y2.append(z2)
+        y3.append(z3)
+
+        y2b.append(z1)
+        y3b.append(z1+z2)
+
+
+        
+        
+    plt.bar(x,y1,width=1,color='#fef0d9')
+    plt.bar(x,y2,width=1,bottom=y2b,color='#fdcc8a')
+    plt.bar(x,y3,width=1,bottom=y3b,color='#fc8d59')
+
+
+    plt.show()
+
+
 
 def printSomething(da,activity,triplength,filename):
     print("printsomthing input data",len(da),type(activity),triplength)
@@ -176,6 +235,6 @@ def printSomething(da,activity,triplength,filename):
     
        
 df = checkForNewFiles('C:\\python\\testdata\\gpxx4\\*.*')
-plotSomething(df)
+plotWalkLength(df,'day')
 
 

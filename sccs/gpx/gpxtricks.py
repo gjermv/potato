@@ -64,7 +64,6 @@ def parseGPX(filename):
                     duration = (timez - startTime).total_seconds()
                     tmp_lat,tmp_lon = lat,lon
                     
-                    print(time)
                     hr = getHeartRate(point,ns,filename)
                     gpxinfo.append([name,desc,segc,dist,lat,lon,ele,timez,duration,hr])
                     ## Test function
@@ -85,11 +84,10 @@ def getHeartRate(point,ns,filename):
         trkhr = hr.find('{http://www.garmin.com/xmlschemas/TrackPointExtension/v1}TrackPointExtension')
         heartrate = int(trkhr.find('{http://www.garmin.com/xmlschemas/TrackPointExtension/v1}hr').text)
         # print(heartrate)
-        print(filename)
         return heartrate
     except:
         # print("Point does not have heartrate / Namespace wrong")
-        return 'NA'
+        return -1
     
 def gpxtimeToStr(timestr):
     try:
@@ -466,10 +464,10 @@ def getGPXheartzone(df):
     # plt.show()
     # plt.close()
     #===========================================================================
-    if df['heartrate'][0] == 'NA':
+    if df['heartrate'][0] == -1:
         return (0,0,0,0,0)
     
-    print(df['heartrate'])
+    print(df[df['heartrate']==-1])
     df['timediff'] = df['time'].diff()
     
     df1 = df[(df['heartrate']<135) & (df['heartrate']>=0)]
@@ -487,7 +485,10 @@ def getGPXheartzone(df):
     return (hr1zone,hr2zone,hr3zone,hr4zone,hr5zone)
 
 #===============================================================================
-# for filename in glob.glob('C:\\python\\testdata\\gpxx4\\2016-02-03 2043 Impington.gpx'):
+# for filename in glob.glob('C:\\python\\testdata\\gpxx4\\2016*.gpx'):
 #     df = parseGPX(filename)
-#     print(getGPXheartzone(df))
+#     print(filename)
+#     a= getGPXheartzone(df)
+#     if sum(a) > 0:
+#         print(a)
 #===============================================================================
