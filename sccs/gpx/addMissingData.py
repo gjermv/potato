@@ -57,10 +57,10 @@ def GPXaddTimes(filename,startTime,avgSpeed=5):
                     tmp_lat,tmp_lon = lat,lon
                 
     print(etree.tostring(xml,pretty_print= True))
-    f = open('C:\\python\\testdata\\Svanetind-export.gpx','wb')
+    f = open('C:\\python\\testdata\\outgpx.gpx','wb')
     f.write(etree.tostring(xml,pretty_print= True))
     f.close()
 
 
   
-GPXaddTimes('C:\\python\\testdata\\Svanetind-c.gpx','2011-08-28T08:30:00Z',4.5/3.6)
+GPXaddTimes('C:\\python\\testdata\\outgpx2.xml','2016-04-21T18:42:26Z',3.786/3.6)

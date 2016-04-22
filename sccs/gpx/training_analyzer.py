@@ -54,6 +54,7 @@ def checkForNewFiles(datafolder):
             
             df = pd.concat([df, gpxdict])
             printSomething(df,activity,indata['length'],filename)
+            #plotAverage(df,activity,indata['length'],filename)
             
     df = df.sort('dateandtime')
     df.index = range(1,len(df) + 1)
@@ -105,7 +106,7 @@ def getTCXtrainingData(filename):
 
 def plotHeartrate(dataframe):
     times = pd.DatetimeIndex(df['dateandtime'])
-    grouped = df.groupby([times.year,times.week])
+    grouped = df.groupby([times.year,times.month])
      
     x=[]
     y1=[]
@@ -120,15 +121,13 @@ def plotHeartrate(dataframe):
     
     for a,b in grouped:
         
-        x.append((a[0]-2016)*52+a[1])
+        x.append((a[0]-2016)*12+a[1])
         
         z1 = b['sone1'].sum()/3600
         z2 = b['sone2'].sum()/3600
         z3 = b['sone3'].sum()/3600
         z4 = b['sone4'].sum()/3600
         z5 = b['sone5'].sum()/3600
-        
-        print(a,(a[0]-2016)*365+a[1]-1)
         
         y1.append(z1)#.total_seconds()/3600)
         y2.append(z2)
@@ -149,7 +148,7 @@ def plotHeartrate(dataframe):
 
     plt.show()
 
-def plotWalkLength(dataframe,period='day'):
+def plotLength(dataframe,actList,period='day'):
      
     p = 365
     
@@ -162,46 +161,119 @@ def plotWalkLength(dataframe,period='day'):
         grouped = df.groupby([times.year,times.month])
         p = 12
     
-    x=[]
-    y1=[]
-    y2=[]
-    y3=[]
-    y4=[]
-    y5=[]
-    y2b=[]
-    y3b=[]
-    y4b=[]
-    y5b=[]
+    lenList = []
+    lenBList = []
+    x = []
     
-    
+    for act in actList:
+        lenList.append([])
+        lenBList.append([])
     
     for a,b in grouped:
         x.append((a[0]-2016)*p+a[1])
+        z = []
+        for act in actList:
+            z.append(b[b['activity'] == act]['length'].sum())
         
-        z1 = b[b['activity'] == 'Walking']['length'].sum()
-        z2 = b[b['activity']=='Running']['length'].sum()
-        z3 = b[b['activity']=='Rollerskiing']['length'].sum()
+        lenList.append([])
+        lenBList.append([])
+        
+        for i,l in enumerate(z):
+            lenList[i].append(l)
+            lenBList[i].append(sum(z[:i]))
 
-        
-        
-        y1.append(z1)#.total_seconds()/3600)
-        y2.append(z2)
-        y3.append(z3)
+    
+    
+    for i,li in enumerate(actList):
 
-        y2b.append(z1)
-        y3b.append(z1+z2)
-
-
-        
-        
-    plt.bar(x,y1,width=1,color='#fef0d9')
-    plt.bar(x,y2,width=1,bottom=y2b,color='#fdcc8a')
-    plt.bar(x,y3,width=1,bottom=y3b,color='#fc8d59')
+        plt.bar(x,lenList[i],bottom=lenBList[i],width=1,color=getActivityColor(li))
 
 
     plt.show()
 
+def plotDuration(dataframe,actList,period='day'):
+     
+    p = 365
+    
+    times = pd.DatetimeIndex(df['dateandtime'])
+    grouped = df.groupby([times.year,times.dayofyear])
+    if period == 'week':
+        grouped = df.groupby([times.year,times.weekofyear])
+        p = 52
+    if period == 'month':
+        grouped = df.groupby([times.year,times.month])
+        p = 12
+    
+    lenList = []
+    lenBList = []
+    x = []
+    
+    for act in actList:
+        lenList.append([])
+        lenBList.append([])
+    
+    for a,b in grouped:
+        x.append((a[0]-2016)*p+a[1])
+        z = []
+        for act in actList:
+            z.append(b[b['activity'] == act]['walk_time'].sum())
+        
+        lenList.append([])
+        lenBList.append([])
+        
+        totsec = 0
+        for i,l in enumerate(z):
+            lenList[i].append(l.total_seconds()/3600)
+            lenBList[i].append(totsec)
+            totsec += l.total_seconds()/3600
+            
 
+    
+    
+    for i,li in enumerate(actList):
+
+        plt.bar(x,lenList[i],bottom=lenBList[i],width=1,color=getActivityColor(li))
+
+
+    plt.show()
+
+def getActivityColor(activity):
+    print('ActColor',activity)
+    if activity == "Walking":
+        return '#b3e6ff'
+    elif activity == "Running":
+        return '#0099e6'
+    elif activity == "Rollerskiing":
+        return '#ffff99'
+    elif activity == "Skiing":
+        return '#e6e600'
+    elif activity == "Cycling":
+        return '#66ff99'
+    else:
+        return  '#66ff99'
+def plotAverage(da,activity,triplength,filename=None):
+    
+    fig, ax = plt.subplots()
+    
+    dfact = da[da['activity']==activity].sort('length')
+    dfact.index = range(len(dfact))
+    
+    dfmin = dfact[dfact['length']>triplength*0.75]
+    dfmax = dfmin[dfact['length']<triplength*1.25]
+    
+    df =dfmax.sort('avg_speed',ascending=False)
+    df.index = range(len(df))
+    
+    ax.bar(df.index,df['avg_speed'],width=1,color='yellow')
+    
+    if filename!= None:
+        df2 = df[df['filename']==filename]
+        ax.bar(df2.index,df2['avg_speed'],width=1,color='red')
+    
+    ax.set_xticks(df.index + 0.5)
+    ax.set_xticklabels(df['filename'],rotation=90)
+    plt.show()
+    
 
 def printSomething(da,activity,triplength,filename):
     print("printsomthing input data",len(da),type(activity),triplength)
@@ -217,10 +289,11 @@ def printSomething(da,activity,triplength,filename):
     dfmin = dfact[dfact['length']>triplength*0.8]
     dfmax = dfmin[dfact['length']<triplength*1.2]
     
-    df =dfmax.sort('avg_speed')
+    df = dfmax.sort('avg_speed')
     df.index = range(len(df))
     
     ind = df[df['filename']== filename].index
+    
     if len(ind>0):
         print('Average',len(df)-ind[0],'/',len(df))
     
@@ -232,9 +305,8 @@ def printSomething(da,activity,triplength,filename):
         print('Climbing',len(df)-ind[0],'/',len(df))
     
     return df
-    
        
 df = checkForNewFiles('C:\\python\\testdata\\gpxx4\\*.*')
-plotWalkLength(df,'day')
-
-
+plotLength(df, ['Running','Rollerskiing','Skiing'],'month')
+plotDuration(df, ['Running','Rollerskiing','Skiing','Cycling'],'month')
+plotHeartrate(df)

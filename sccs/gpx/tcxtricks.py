@@ -122,5 +122,3 @@ def findNamespace(file):
     s = '{'+str[ind1:ind1+ind2+1]+'}'
     return s
 
-df = TCXtoDataFrame('C:\\python\\testdata\\gpxx4\\2016-02-20 1333 Rotherwick-HS.tcz')
-print(getTCXheartzone(df))
