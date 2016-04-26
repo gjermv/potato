@@ -147,7 +147,6 @@ def plotHeartrate(dataframe):
     plt.show()
 
 def plotLength(dataframe,actList,period='day'):
-     
     p = 365
     
     times = pd.DatetimeIndex(df['dateandtime'])
@@ -157,6 +156,7 @@ def plotLength(dataframe,actList,period='day'):
         p = 52
     if period == 'month':
         grouped = df.groupby([times.year,times.month])
+        p = 12
     if period == 'year':
         grouped = df.groupby([times.year])
         p=1
