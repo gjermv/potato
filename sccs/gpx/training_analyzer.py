@@ -98,7 +98,6 @@ def getGPXtrainingData(filename):
     gpxdict['sone5'] = ''
     return gpxdict
     
-    
 def getTCXtrainingData(filename):
     mydf = tcxtricks.TCXtoDataFrame(filename)
     #print(tcxtricks.getTCXheartzone(mydf))
@@ -106,7 +105,7 @@ def getTCXtrainingData(filename):
 
 def plotHeartrate(dataframe):
     times = pd.DatetimeIndex(df['dateandtime'])
-    grouped = df.groupby([times.year,times.month])
+    grouped = df.groupby([times.year,times.week])
      
     x=[]
     y1=[]
@@ -121,7 +120,7 @@ def plotHeartrate(dataframe):
     
     for a,b in grouped:
         
-        x.append((a[0]-2016)*12+a[1])
+        x.append((a[0]-2016)*52+a[1])
         
         z1 = b['sone1'].sum()/3600
         z2 = b['sone2'].sum()/3600
@@ -138,8 +137,7 @@ def plotHeartrate(dataframe):
         y3b.append(z1+z2)
         y4b.append(z1+z2+z3)
         y5b.append(z1+z2+z3+z4)
-        
-        
+                
     plt.bar(x,y1,width=1,color='#fef0d9')
     plt.bar(x,y2,width=1,bottom=y2b,color='#fdcc8a')
     plt.bar(x,y3,width=1,bottom=y3b,color='#fc8d59')
@@ -159,7 +157,9 @@ def plotLength(dataframe,actList,period='day'):
         p = 52
     if period == 'month':
         grouped = df.groupby([times.year,times.month])
-        p = 12
+    if period == 'year':
+        grouped = df.groupby([times.year])
+        p=1
     
     lenList = []
     lenBList = []
@@ -170,7 +170,10 @@ def plotLength(dataframe,actList,period='day'):
         lenBList.append([])
     
     for a,b in grouped:
-        x.append((a[0]-2016)*p+a[1])
+        if period == 'year':
+            x.append((a-2016)*p)#+a[1])
+        else:
+            x.append((a[0]-2016)*p+a[1])
         z = []
         for act in actList:
             z.append(b[b['activity'] == act]['length'].sum())
@@ -181,18 +184,13 @@ def plotLength(dataframe,actList,period='day'):
         for i,l in enumerate(z):
             lenList[i].append(l)
             lenBList[i].append(sum(z[:i]))
-
-    
     
     for i,li in enumerate(actList):
-
         plt.bar(x,lenList[i],bottom=lenBList[i],width=1,color=getActivityColor(li))
-
 
     plt.show()
 
 def plotDuration(dataframe,actList,period='day'):
-     
     p = 365
     
     times = pd.DatetimeIndex(df['dateandtime'])
@@ -203,6 +201,9 @@ def plotDuration(dataframe,actList,period='day'):
     if period == 'month':
         grouped = df.groupby([times.year,times.month])
         p = 12
+    if period == 'year':
+        grouped = df.groupby([times.year])
+        p=1
     
     lenList = []
     lenBList = []
@@ -213,7 +214,10 @@ def plotDuration(dataframe,actList,period='day'):
         lenBList.append([])
     
     for a,b in grouped:
-        x.append((a[0]-2016)*p+a[1])
+        if period == 'year':
+            x.append((a-2016))
+        else:
+            x.append((a[0]-2016)*p+a[1])
         z = []
         for act in actList:
             z.append(b[b['activity'] == act]['walk_time'].sum())
@@ -227,9 +231,6 @@ def plotDuration(dataframe,actList,period='day'):
             lenBList[i].append(totsec)
             totsec += l.total_seconds()/3600
             
-
-    
-    
     for i,li in enumerate(actList):
 
         plt.bar(x,lenList[i],bottom=lenBList[i],width=1,color=getActivityColor(li))
@@ -307,6 +308,6 @@ def printSomething(da,activity,triplength,filename):
     return df
        
 df = checkForNewFiles('C:\\python\\testdata\\gpxx4\\*.*')
-plotLength(df, ['Running','Rollerskiing','Skiing'],'month')
+plotLength(df, ['Running','Walking','Rollerskiing','Skiing'],'month')
 plotDuration(df, ['Running','Rollerskiing','Skiing','Cycling'],'month')
 plotHeartrate(df)
