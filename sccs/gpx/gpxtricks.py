@@ -7,17 +7,21 @@ Created on Thu Nov 19 15:38:35 2015
 from lxml import etree as etree
 from gpx import utmconverter as utm
 from gpx import algos as algos
+from gpx import dtmdata as dtm
 import pandas as pd
 from datetime import datetime as dt
 from datetime import timedelta as dtt
 from matplotlib import pyplot as plt
 import time
 import googlemaps
-import glob 
+import glob
 import json
+import numpy as np
+import urllib.request
+import xml.etree.ElementTree as ET
+import matplotlib.cm as cm
 
-
-def parseGPX(filename):
+def GPXtoDataFrame(filename):
     """ Reads a gpx file and returns a dataframe with the important parameters.
     'name','desc','segno','dist','lat','lng','ele','time','duration','speed' """
     
@@ -64,20 +68,79 @@ def parseGPX(filename):
                     duration = (timez - startTime).total_seconds()
                     tmp_lat,tmp_lon = lat,lon
                     
-                    hr = getHeartRate(point,ns,filename)
+                    hr = getHeartRate(point,ns)
                     gpxinfo.append([name,desc,segc,dist,lat,lon,ele,timez,duration,hr])
                     ## Test function
                     
                 except:
                     print("Points does not have all information needed, or namespace is wrong")
     
-    gpxdf = pd.DataFrame(gpxinfo,columns=['name','desc','segno','dist','lat','lng','ele','time','duration','heartrate'])
+    gpxdf = pd.DataFrame(gpxinfo,columns=['name','desc','segno','dist','lat','lon','ele','time','duration','heartrate'])
     gpxdf['speed'] = (gpxdf['dist'].shift(-1)-gpxdf['dist'])/(gpxdf['duration'].shift(-1)-gpxdf['duration'])
     gpxdf['speed'] = gpxdf['speed'].shift(1)
     
     return gpxdf
 
-def getHeartRate(point,ns,filename):
+def TCXtoDataFrame(filename):
+    f = open(filename,encoding='utf-8')
+    ns = findNamespace(f)
+    xml = etree.parse(f)
+    f.close()
+    
+    TCXlist = list()
+    stime = xml.iter(ns+"Time")
+    segno = 0
+    name =  xml.find(ns+"Activities/"+ns+"Activity/"+ns+"Id").text
+    desc = xml.find(ns+"Activities/"+ns+"Activity").attrib['Sport']
+    
+    for item in stime:
+        startTime = gpxtimeToStr(item.text)
+        break
+    
+    
+    for lap in xml.iter(ns+"Lap"):
+        segno += 1
+        for trkPoint in lap.iter(ns+"Trackpoint"):
+            trkpoint = dict()
+            trkpoint['name'] = name
+            trkpoint['desc'] = desc
+            trkpoint['segno'] = segno
+            trkpoint['time'] = trkPoint.find(ns+"Time").text
+            trkpoint['duration'] = (gpxtimeToStr(trkpoint['time'])-startTime).total_seconds()
+            
+            try:
+                trkpoint['lat'] = trkPoint.find(ns+"Position/"+ns+"LatitudeDegrees").text
+                trkpoint['lon'] = trkPoint.find(ns+"Position/"+ns+"LongitudeDegrees").text
+                trkpoint['ele'] = trkPoint.find(ns+"AltitudeMeters").text
+                trkpoint['dist'] = trkPoint.find(ns+"DistanceMeters").text
+            
+            except:
+                trkpoint['lat'] = np.NAN
+                trkpoint['lon'] = np.NAN
+                trkpoint['ele'] = np.NAN
+                trkpoint['dist'] = np.NAN
+                
+            try:
+                trkpoint['heartrate']= int(trkPoint.find(ns+"HeartRateBpm/"+ns+"Value").text)
+            except:
+                trkpoint['heartrate']= np.NAN
+            
+            TCXlist.append(trkpoint)
+    
+    df = pd.DataFrame(TCXlist)
+    
+    df['time'] = pd.to_datetime(df['time'])
+    df['lat'] = df['lat'].astype(float)
+    df['lon'] = df['lon'].astype(float)
+    df['ele'] = df['ele'].astype(float)
+    df['dist'] = df['dist'].astype(float)
+    
+    df['speed'] = (df['dist'].shift(-1)-df['dist'])/(df['duration'].shift(-1)-df['duration'])
+    df['speed'] = df['speed'].shift(1)
+    
+    return df
+
+def getHeartRate(point,ns):
     # Returns heartrate from a xml track point exported from Garmin Connect gpx. 
     try:
         hr = point.find(ns+'extensions')
@@ -113,7 +176,7 @@ def calcEleDiff(elemin,elemax):
         return elediff
 
 def getmainInfo(dataframe):
-    length = max(dataframe['dist'])
+    length = dataframe['dist'].max()
     tottime = max(dataframe['duration'])
     dateandtime = dataframe['time'][0] 
     
@@ -122,10 +185,10 @@ def getmainInfo(dataframe):
     walktime = tottime - stoptime
     average_speed = length/walktime
     pausefaktor = stoptime/tottime
-    ele_min = min(dataframe['ele'])
-    ele_max = max(dataframe['ele'])
+    ele_min = dataframe['ele'].min()
+    ele_max = dataframe['ele'].max()
     elediff = calcEleDiff(ele_min,ele_max)
-    climbing = reducedElePoints(dataframe)
+    climbing = getClimbingHeight(dataframe)
     steepness = climbing/(length/2)
     climbingrate = climbing/(walktime/2)
     kupert_faktor = climbing/elediff
@@ -148,11 +211,7 @@ def getmainInfo(dataframe):
     info['topptur_faktor'] = round(topptur_faktor*100,1)
     return info
 
-def googleElevation(dataframe):
-    lat = dataframe['lat']
-    lng = dataframe['lng']
-    dist = dataframe['dist']
-    ele = dataframe['ele']
+def googleElevation(dataframe,df2=None):
     
     dist1 = []
     ele1 = []
@@ -160,59 +219,113 @@ def googleElevation(dataframe):
     
     gmaps = googlemaps.Client(key='AIzaSyC2F01wKnb0vmW8qxF5KvGIe2pbJgmm7HY')
     
-    for i in range(0,len(lat),10):
-        reverse_geocode_result = gmaps.elevation([(lat[i],lng[i])])
+    for df in dataframe.iterrows():
+        tub = {'lat':df[1]['lat'],'lng':df[1]['lon']}
+        reverse_geocode_result = gmaps.elevation(tub)
         tmp_ele = reverse_geocode_result[0]['elevation']
        
-        print(lat[i],lng[i],dist[i],ele[i],tmp_ele)
-        time.sleep(0.4)    
-        dist1.append(dist[i])
-        ele1.append(ele[i])
+        print(df[1]['duration'],df[1]['lat'],df[1]['lon'],df[1]['dist'],df[1]['ele'],tmp_ele)
+        time.sleep(0.15)    
+        dist1.append(df[1]['dist'])
+        ele1.append(df[1]['ele'])
         ele2.append(tmp_ele)
     
-    
-    plt.plot(dist1,ele1)    
-    plt.plot(dist1,ele2)
-    plt.show()
+    dataframe['googleele'] = ele2
+    return dataframe
 
-def reducedElePoints(df):
+def kartverketElevation(lat=52.14363,lon=-1.24902):
+    with urllib.request.urlopen('http://openwps.statkart.no/skwms1/wps.elevation?request=Execute&service=WPS&version=1.0.0&identifier=elevation&datainputs=%5blat={0};lon={1};epsg=4326%5d'.format(lat,lon)) as response:
+        html = response.read()
+    
+    root = ET.fromstring(html)
+    for child in root:
+        print(child.tag, child.attrib,child.text)
+        for child2 in child:
+            
+    
+            print('-',child2.tag, child2.attrib, child2.text)
+            for child3 in child2:
+                print('--',child3.tag, child3.attrib, child3.text)
+                for child4 in child3:
+                    print('---',child4.tag, child4.attrib, child4.text)
+    
+    elevation = root[2][2][2][0].text
+    return elevation
+
+def kartverketElevation2(dataframe):
+    kartele = []
+    for df in dataframe.iterrows():
+        easting, northing, zone_number, zone_letter = utm.from_latlon(df[1]['lat'],df[1]['lon'],force_zone_number=32)
+        
+        ele = dtm.calculateEle(easting,northing)
+        kartele.append(ele)
+        
+    dataframe['kartele'] = kartele
+    
+    return dataframe
+            
+def getClimbingHeight(df):
     dataframe = df[df['lat'] != 0]
     dist = dataframe['dist']
     ele = dataframe['ele']
     l = []
     
     for i in dist.index:
-        l.append((dist[i],ele[i]))
+        l.append((float(dist[i]),float(ele[i])))
+    
     red = pd.DataFrame(algos.ramerdouglas(l,dist=7.5),columns=['dist','ele'])
     red['elediff'] = red['ele'].diff()
-    
-    #===========================================================================
-    # print(sum(red[red['elediff']>0]['elediff']))
-    # print(sum(red[red['elediff']<0]['elediff']))
-    #===========================================================================
  
-    return sum(red[red['elediff']>0]['elediff'])
+    return round(sum(red[red['elediff']>0]['elediff']),2)
 
-def createElevationProfile(dataframe,filename):
+def reduceElevationPoints(df):
+    dataframe = df[df['lat'] != 0]
+    dist = dataframe['dist']
+    ele = dataframe['ele']
+    l = []
+    
+    for i in dist.index:
+        l.append((float(dist[i]),float(ele[i])))
+    
+    red = pd.DataFrame(algos.ramerdouglas(l,dist=7.5),columns=['dist','ele'])
+    
+    l2 = list()
+    for item in red['dist']:
+        l2.append(df[df['dist']==item])
+        
+    df_red = pd.concat(l2)
+    df_red['speed'] = (df_red['dist'].shift(-1)-df_red['dist'])/(df_red['duration'].shift(-1)-df_red['duration'])
+    df_red['speed'] = df_red['speed'].shift(1)
+    return df_red
+
+def createElevationProfile(dataframe,filename=None):
     dist = list(dataframe['dist'])
     ele = list(dataframe['ele'])
     
     dist = [0] +dist+ [max(dist)]
     ele = [0] +ele+ [0]
+    
+
 
     plt.figure(figsize=(15, 4), dpi=80)
     plt.plot(dist,ele,'#666666',linewidth=2)
+    
     plt.axis([0, max(dist), 0, max(ele)*1.1])
     ax = plt.axes()
     ax.yaxis.grid(True)
     ax.set_axisbelow(True)
     plt.fill(dist,ele,'#838fd7')
-    plt.savefig(filename, bbox_inches='tight')
-    plt.close()
     
+    if filename:
+        plt.savefig(filename, bbox_inches='tight')
+        plt.close()
+        print("file saved" , filename)
+    else:
+        plt.show()
+           
 def reducePoints(dataframe):
     lat = dataframe['lat']
-    lng = dataframe['lng']
+    lon = dataframe['lon']
     desc = dataframe['desc']
     
     #===========================================================================
@@ -226,7 +339,7 @@ def reducePoints(dataframe):
     #plt.plot(*zip(*l))
     #plt.plot(red['lat'],red['lng'])
     #plt.show()
-    pos = zip(lat,lng,desc)
+    pos = zip(lat,lon,desc)
     return pos
     
 def findStopLocations(dataframe):
@@ -235,7 +348,7 @@ def findStopLocations(dataframe):
     ind = dataframe[dataframe['speed']<0.4167][['duration']].index
     dur = (dataframe['duration'].diff()[ind])
     lat = (dataframe['lat'][ind])
-    lng = (dataframe['lng'][ind])
+    lon = (dataframe['lon'][ind])
     
     tmp = None
     totdur = 0
@@ -243,7 +356,7 @@ def findStopLocations(dataframe):
     for i in ind:
         if tmp == None:        
             latS = lat[i]
-            lngS = lng[i]
+            lonS = lon[i]
             totdur += dur[i]
             tmp = i
         
@@ -252,9 +365,9 @@ def findStopLocations(dataframe):
                 totdur += dur[i]
             else:
                 if totdur>121:
-                    stopLoc.append([latS,lngS,totdur])
+                    stopLoc.append([latS,lonS,totdur])
                 latS = lat[i]
-                lngS = lng[i]
+                lonS = lon[i]
                 totdur = 0
             tmp = i
 
@@ -294,6 +407,20 @@ def exportRedPoints(dataframe):
             geojson += getWalkText()
     
     return  geojson
+
+def getTrackBounds(dataframe):
+    minlat= dataframe['lat'].min()
+    maxlat= dataframe['lat'].max()
+    
+    minlon= dataframe['lon'].min()
+    maxlon= dataframe['lon'].max()
+    
+    jstxt = """map.fitBounds([
+    [{0}, {1}],
+    [{2}, {3}]
+]);""".format(minlat,minlon,maxlat,maxlon)
+    print(minlat,maxlat,minlon,maxlon)
+    return jstxt
 
 def getWalkText():
     txt = """]
@@ -345,7 +472,7 @@ def readkommunexml(xml_file):
         d['kommunenavn'] = kommune.find('kommunenavn').text
         d['kommunenr'] = kommune.find('kommunenr').text
         d['lat'] = kommune.find('lat').text
-        d['lng'] = kommune.find('lng').text
+        d['lon'] = kommune.find('lng').text
         d['topp'] = kommune.find('topp').text
         
         if d['beskrivelse'] == None:
@@ -457,17 +584,14 @@ def getKommuneGrense(filename='C:\\python\\kommuner\\kom_grens-mod.json',kommune
                 l.append([pos[1],pos[0]])
     return l
 
-def getGPXheartzone(df):
+def getHeartZone(df):
    
     #===========================================================================
     # plt.plot(df['time'],df['heartrate'])
     # plt.show()
     # plt.close()
     #===========================================================================
-    if df['heartrate'][0] == -1:
-        return (0,0,0,0,0)
-    
-    print(df[df['heartrate']==-1])
+    df = df[df['heartrate'].notnull()][:]
     df['timediff'] = df['time'].diff()
     
     df1 = df[(df['heartrate']<135) & (df['heartrate']>=0)]
@@ -482,13 +606,101 @@ def getGPXheartzone(df):
     hr2zone = sum(df2['timediff'].dt.seconds[1:])
     hr1zone = sum(df1['timediff'].dt.seconds[1:])
 
-    return (hr1zone,hr2zone,hr3zone,hr4zone,hr5zone)
+    if hr1zone+hr2zone+hr3zone+hr4zone+hr5zone == 0:
+        return -1
+    else:
+        return (hr1zone,hr2zone,hr3zone,hr4zone,hr5zone)
 
-#===============================================================================
-# for filename in glob.glob('C:\\python\\testdata\\gpxx4\\2016*.gpx'):
-#     df = parseGPX(filename)
-#     print(filename)
-#     a= getGPXheartzone(df)
-#     if sum(a) > 0:
-#         print(a)
-#===============================================================================
+def getExtrapolatedInterpolatedValue(dataGrid,x):
+    
+    if x not in dataGrid['dist'].values:
+        dg2 = dataGrid.append({'dist':x},ignore_index=True)
+        dataGrid = dg2.sort(['dist'])
+        dataGrid.index = dataGrid['dist']
+        df = dataGrid.interpolate(method='index')
+        dataGrid = df
+    else:
+        dataGrid.index = dataGrid['dist']
+    return [dataGrid[dataGrid['dist']==x]['duration']]
+
+def findBestTempo(dataframe,avgdist):
+    avg_dist = avgdist
+    speedlist = []
+    
+    for dist2 in dataframe[dataframe['dist']>avg_dist]['dist']:
+        v1 = getExtrapolatedInterpolatedValue(dataframe,dist2-avg_dist)
+        v2 = getExtrapolatedInterpolatedValue(dataframe,dist2)
+        
+        t1 = 1
+        t2 = 1
+        
+        for item1 in v1[0]:
+            t1 = item1
+        for item2 in v2[0]:
+            t2 = item2
+        
+        sec = t2-t1
+        
+        speed = avg_dist/sec
+        speedlist.append([speed*3.6,dist2-avg_dist,dist2])
+    
+    if len(speedlist) > 0:   
+        return max(speedlist)
+    return 'Not found'
+
+def showEleMap(file = 'C:\\python\\testdata\\gpxx4\\files\\2014-01-30 1254 Fredrikstadmarka.gpx'):
+    df = GPXtoDataFrame(file)
+    df = kartverketElevation2(df)[:]
+    eastings = []
+    northings = []
+    
+    for row in df.iterrows():
+        east, north, zone_number, zone_letter = utm.from_latlon(row[1]['lat'],row[1]['lon'],force_zone_number=32)
+        eastings.append(east)
+        northings.append(north)
+    
+    print(min(eastings),min(northings))
+    
+    p1 = dtm.findClosestPoint(min(eastings)-100,min(northings)-100)
+    p2 = dtm.findClosestPoint(max(eastings)+100,max(northings)+100)
+    print(p1)
+    print(p2)
+    c1east = 599800+(p1[0])*10
+    c1north = 6549800+(p1[1])*10
+    print(min(eastings)-c1east)
+    print(min(northings)-c1north)
+    
+    ns = p2[1]-p1[1]
+    print(ns)
+      
+    df['easting'] = eastings
+    df['northing'] = northings
+    df['easting2'] =(df['easting']-c1east)/10
+    print(df['easting2'].min())
+    df['northing2'] = (-(df['northing']-c1north)/10)+ns
+
+    a = dtm.getElevationArea(p1[0], p1[1], p2[0], p2[1]+1,p1[2])
+    a = np.rot90(a)
+    
+    plt.imshow(a,cmap=cm.gist_earth)
+    CS  = plt.contour(a,colors=['yellow','red','black'],levels=[df['kartele'].min()*10+100,df['kartele'].max()*10-100,(df['kartele'].max()+df['kartele'].min())/2*10],linewidths=[0.7,0.7,0.7])
+    #plt.clabel(CS, fontsize=8, inline=1)
+    plt.plot(df['easting2'],df['northing2'],linewidth=2)
+    plt.show()
+    plt.close()
+    
+    fig, (ax,ax1) = plt.subplots(nrows=2, ncols=1)
+    ax.axhline(df['kartele'].min()+10, linestyle='-', color='green')
+    ax.axhline(df['kartele'].max()-10, linestyle='-', color='red')
+    ax.axhline((df['kartele'].max()+df['kartele'].min())/2, linestyle='--', color='black')
+    ax.plot(df['dist'],df['kartele'],linewidth=2)
+    ax.plot(df['dist'],df['kartele'],linewidth=1.5)
+
+    ax1.plot(df['dist'],pd.rolling_mean(df['speed'],window=10,center=True),linewidth=1)
+    plt.gca().xaxis.grid(True)
+    ax.xaxis.grid(True)
+    ax1.xaxis.grid(True)
+    plt.show()
+
+    
+#showEleMap()
