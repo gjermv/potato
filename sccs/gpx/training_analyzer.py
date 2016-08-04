@@ -10,7 +10,6 @@ import matplotlib
 import numpy as np
 from timeit import default_timer as timer
 
-
 def training_analyzer(datafolder):
     trips = list()
     for file in glob.glob(datafolder):
@@ -361,7 +360,7 @@ def getTrackData(filename):
     
     if 'gpx' in extension:
         df = gpxtricks.GPXtoDataFrame(filename)
-        return gpxtricks.exportRedPoints(df)
+        return gpxtricks.exportRRedPoints(df)
     elif 'tcx' in extension:
         df = gpxtricks.TCXtoDataFrame(filename)
         return gpxtricks.exportRedPoints(df)
@@ -377,9 +376,11 @@ def getTrackBounds(filename):
         df = gpxtricks.TCXtoDataFrame(filename)
         return gpxtricks.getTrackBounds(df)
 
-start = timer()
-df = checkForNewFiles('C:\\python\\testdata\\gpxx4\\files\\*.*')
-end = timer()
-print(end-start)
-plotLength(df,['Running','Rollerskiing','Skiing-X','Cycling'], period='year')
-plotHeartrate(df,'month')
+
+if __name__ == "__main__":
+    start = timer()
+    df = checkForNewFiles('C:\\python\\testdata\\gpxx4\\files\\*.*')
+    end = timer()
+    print(end-start)
+    plotLength(df,['Running','Rollerskiing','Skiing-X','Cycling'], period='day')
+    plotHeartrate(df,'month')

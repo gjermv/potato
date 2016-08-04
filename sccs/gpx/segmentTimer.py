@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import gpxtricks
 import utmconverter
 import xml.etree.ElementTree as ET
+import glob
 
 
 class TrackSegment():
@@ -17,7 +18,42 @@ class TrackSegment():
         self.crosslines = []
         self.laps = []
         self.runs = []
-        
+        self.counter = 0
+        self.starttime = 0
+        self.besttime = 99999999
+        self.bestrun = 'NA'
+        self.distance = [0]
+
+    def createSegmentfromKML(self,filename):
+        tree = ET.parse(filename)
+        root = tree.getroot()
+        ns = '{http://www.opengis.net/kml/2.2}'
+        # Reads throught the file, but breaks after the first linestring. 
+        for placemark in root.iter(ns+'Placemark'):
+            lstring = placemark.find(ns+'LineString')
+            kmlcoord = lstring.find(ns+'coordinates').text.strip()
+            kmlcoordlist = kmlcoord.split(' ')
+            LL = []
+            
+            for item in kmlcoordlist:
+                kmlcoorditem = item.split(',')
+                lat = float(kmlcoorditem[1])
+                lon = float(kmlcoorditem[0])
+                LL.append([lat,lon])
+            
+                
+            p1 = perpLine((LL[0][0],LL[0][1]),(LL[0][0],LL[0][1]),(LL[1][0],LL[1][1]))
+            self.addCrossLine(CrossLine(p1[0],p1[1],p1[2],p1[3],'StartLine'))
+            
+            for i,p in enumerate(LL[1:-1]):
+                p = (perpLine((LL[i+1][0],LL[i+1][1]),(LL[i][0],LL[i][1]),(LL[i+2][0],LL[i+2][1])))
+                self.addCrossLine(CrossLine(p[0],p[1],p[2],p[3],'Split{}'.format(i+1)))
+            
+            g = len(LL)-1
+            ps = perpLine((LL[g][0],LL[g][1]),(LL[g-1][0],LL[g-1][1]),(LL[g][0],LL[g][1]))
+            self.addCrossLine(CrossLine(ps[0],ps[1],ps[2],ps[3],'Goalline'))
+            break
+
     def plotSegments(self):
         fig,ax = plt.subplots()
         for l in self.crosslines:
@@ -29,8 +65,93 @@ class TrackSegment():
         
     def printkmlPlacemarks(self):
         for cl in self.crosslines:
-            print(cl.kmlPlacemark())
-            
+            cl.kmlPlacemark()
+
+    def getCurrentCrossline(self):
+        cl = self.crosslines[self.counter]
+        return cl.getLatLonPoint1(),cl.getLatLonPoint2()
+
+    def getStartLine(self):
+        cl = self.crosslines[0]
+        return cl.getLatLonPoint1(),cl.getLatLonPoint2()
+    
+    def nextCrossline(self):
+        self.counter += 1
+        
+        if self.counter == len(self.crosslines):
+            self.counter = 0
+            run = SegmentResult(str(self.starttime),self.laps)
+            self.runs.append(run)
+        return True  
+        
+    def resetCounter(self):
+        self.counter = 0
+        self.laps = []
+        
+    def reverse(self):
+        """ Creates a new TrackSegment in the reverse direction. """
+        revTrk = TrackSegment(self.name+'-reverse')
+        for cl in self.crosslines[::-1]:
+            revTrk.addCrossLine(cl.reverse())
+        return revTrk
+
+    def runNewPoint(self,filename,gps1,gps2):
+        startpoint1,startpoint2 = self.getStartLine()
+        
+        
+        a0 = lineIntersection(gps1, gps2, startpoint1, startpoint2)
+        
+        if a0:
+            a1 = checkIntersection(gps1, gps2, startpoint1, startpoint2, a0)
+            if a1:
+                self.resetCounter()
+                self.nextCrossline()
+                self.starttime = calculateCrossingTime(gps1, gps2, a1)
+                self.laps.append(self.starttime-self.starttime)
+                print("StartTime",self.starttime)
+                
+                while self.runNewPoint2(filename,gps1,gps2):
+                    continue
+                
+                return True
+        
+        self.runNewPoint2(filename,gps1,gps2)
+        return False
+    
+    def runNewPoint2(self,filename,gps1,gps2):
+        currpoint1,currpoint2 = self.getCurrentCrossline()
+        ac = lineIntersection(gps1, gps2, currpoint1, currpoint2)
+        if ac:
+            a1 = checkIntersection(gps1, gps2, currpoint1, currpoint2, ac)
+            if a1:
+                self.nextCrossline()
+                time = calculateCrossingTime(gps1, gps2, a1)
+                self.laps.append(time-self.starttime)
+                
+                while self.runNewPoint2(filename,gps1,gps2):
+                    continue
+                
+                return True
+        
+        return False
+                    
+    def prettyPrintResults(self):
+        
+        
+        for run in self.runs:
+            run.prettyPrint()
+
+    def prettyPlotResults(self):
+        sortRun = sorted(self.runs, key=lambda x: max(x.laptimes))
+        fastestRun = sortRun[0]
+        fig,ax = plt.subplots()
+        
+        for run in sortRun:
+            run.prettyPlot(ax,fastestRun)
+        
+        plt.legend(loc=2,fontsize=11)   
+        plt.show()
+          
 class CrossLine():
     def __init__(self,lat1,lon1,lat2,lon2,name='Unnamed',t=1):
         self.name = name
@@ -76,21 +197,54 @@ class CrossLine():
     
     def plotLine(self,ax):
         ax.plot([self.x1,self.x2],[self.y1,self.y2],color='red')
-                
-def CrossLineTest():
-    start = CrossLine(52.24218411324058,0.1097876536601494,52.24266968323019,0.1102606518221272,'Start')
-    end = CrossLine(52.25397752248957,0.09120675374372222,52.25435007803385,0.09190319070889963,'End')
-    trkSeg = TrackSegment('Guided1',[start,end])
     
-    print(trkSeg.crosslines[1])
+    def reverse(self):
+        return CrossLine(self.y2,self.x2,self.y1,self.x1,self.name+'-rev')          
 
+
+class SegmentResult():
+    def __init__(self,name,laps=[]):
+        self.name =  name.split('.')[0]
+        self.laptimes = laps
+    
+        
+    def prettyPrint(self):
+        s = '{}: '.format(self.name.split('.')[0])
+        dt  = []
+        for laptime in self.laptimes:
+            dt = laptime#.components
+            #z = dt[0]*3600*24+ dt[1]*3600+dt[2]*60 + dt[3]+dt[4]/1000
+            s += '- {} '.format(str(dt).replace('0 days ',''))
+        print(s)
+
+    def prettyPlot(self,ax,fst):
+        dt  = []
+        DT1 = []
+        DT2 = []
+        for i,laptime in enumerate(self.laptimes):
+            dt = laptime.components
+            dt2 = fst.laptimes[i].components
+            DT1.append(dt[0]*3600*24+ dt[1]*3600+dt[2]*60 + dt[3]+dt[4]/1000)
+            DT2.append(dt2[0]*3600*24+ dt2[1]*3600+dt2[2]*60 + dt2[3]+dt2[4]/1000)
+            
+        ltSec = np.array(DT1)-np.array(DT2)
+        ax.plot(DT2,ltSec,label=self.name)
+        return ax
+    
+    def addLap(self,laptime):
+        self.laptimes.append(laptime)
+    
+    def getFinishTime(self):
+        self.prettyPrint()
+        return max(self.laptimes)
+       
 def lineIntersection(s1,s2,u1,u2):
-    """ calculates Line intersection where Line 1 is defined by point s1,s2 and line 2 by u1,u2"""
+    """ calculates Line intersection where Line 1 is defined by point s1,s2 and line 2 by u1,u2 """
     S = np.array(s2[:2])-np.array(s1[:2])
     U = np.array(u2)-np.array(u1)
     
     if S[0] == 0 or U[0] == 0:
-        print('Error: Lines are vertical. No solution found (yet)')
+        print('Error: Lines are vertical. No solution found (yet)',s1,s2,u1,u2)
         return False        
     
     Sa = S[1]/S[0]
@@ -98,7 +252,8 @@ def lineIntersection(s1,s2,u1,u2):
     
     Sb = s1[1]-Sa*s1[0] 
     Ub = u1[1]-Ua*u1[0]
-
+    
+    
     if Sa == Ua:
         print('Error: Lines are parallelle. No solution found')
         return False
@@ -116,11 +271,23 @@ def checkIntersection(s1,s2,u1,u2,cx):
     
     if cx[0]>x1min and cx[0]<x1max:
         if cx[0]>x2min and cx[0]<x2max:
-            return cx
+            if checkDirection(s1, s2, u1, u2):
+                return cx
         
     return False
 
-def plotCrossingPoint(p1,p2,q1,q2, a):
+def checkDirection(s1,s2,u1,u2):
+    S = np.array(s2[:2])-np.array(s1[:2])
+    U = np.array(u2)-np.array(u1)   
+    
+    cross = np.cross(S,U)
+
+    if cross < 0:
+        return False
+    else:
+        return True
+
+def plotCrossingPoint(p1,p2,q1,q2,a):
     plt.plot([p1[0],p2[0]],[p1[1],p2[1]])
     plt.plot([q1[0],q2[0]],[q1[1],q2[1]])
     plt.scatter(a[0],a[1])
@@ -137,85 +304,7 @@ def calculateCrossingTime(p1,p2,cx):
     tdiff = (t2-t1)*delta
     tn = t1+tdiff
     return tn
-
-def segmentAnalyzer(filename,trkseg):
-    try:
-        df = gpxtricks.GPXtoDataFrame(filename)
-    except:
-        df = gpxtricks.TCXtoDataFrame(filename)
-    p1 = list(df.iloc[0][['lat','lon','time']])
-    
-    
-    seg = 0
-    times = list()
-    dtimes = [0]
-    
-    for row in df.iterrows():
-        p2 = [row[1]['lat'],row[1]['lon'],row[1]['time']]
-        q1 = trkseg.crosslines[seg].getLatLonPoint1()
-        q2 = trkseg.crosslines[seg].getLatLonPoint2()
-        
-        a = lineIntersection(p1,p2,q1,q2)
-        
-        if a:
-            a = checkIntersection(p1,p2,q1,q2, a)
-        if a:
-            times.append(calculateCrossingTime(p1, p2, a))
-            #plotCrossingPoint(p1, p2, q1, q2, a)
-            seg += 1
-            if len(trkseg.crosslines) == seg:
-                break
-        
-        p1 = p2
-    if len(times) != len(trkseg.crosslines):
-        print('Error: All points not passed.')
-    else:
-        for i in range(len(times)-1):
-            #print((times[i+1]-times[0]))
-            dtimes.append((times[i+1]-times[0]).seconds)
-        
-        trkseg.runs.append([max(dtimes),filename,dtimes])
-    
-        r = sorted(trkSeg.runs)
-        a= r[0][2]
-        print(a)
-    
-    
-        for runs in r:
-            plt.plot(np.array(a)/60,(np.array(runs[2])-np.array(r[0][2])),color='blue')
-        
-        plt.plot(np.array(a)/60,(np.array(r[0][2])-np.array(r[0][2])),'-.',color='yellow',lw=2)
-        plt.plot(np.array(a)/60,(np.array(dtimes)-np.array(r[0][2])),color='red',lw=2)
-        plt.show()
-    
-def createSegmentfromKML(filename):
-    tree = ET.parse(filename)
-    root = tree.getroot()
-    ns = '{http://www.opengis.net/kml/2.2}'
-    trkSeg = TrackSegment('Heimdalbakken')
-    for placemark in root.iter(ns+'Placemark'):
-        lstring = placemark.find(ns+'LineString')
-        kmlcoord = lstring.find(ns+'coordinates').text.strip()
-        kmlcoordlist = kmlcoord.split(' ')
-        LL = []
-        for item in kmlcoordlist:
-            kmlcoorditem = item.split(',')
-            lat = float(kmlcoorditem[1])
-            lon = float(kmlcoorditem[0])
-            LL.append([lat,lon])
-            
-        p1 = perpLine((LL[0][0],LL[0][1]),(LL[0][0],LL[0][1]),(LL[1][0],LL[1][1]))
-        trkSeg.addCrossLine(CrossLine(p1[0],p1[1],p1[2],p1[3],'StartLine'))
-        
-        for i,p in enumerate(LL[1:-1]):
-            p = (perpLine((LL[i+1][0],LL[i+1][1]),(LL[i][0],LL[i][1]),(LL[i+2][0],LL[i+2][1])))
-            trkSeg.addCrossLine(CrossLine(p[0],p[1],p[2],p[3],'Split{}'.format(i+1)))
-        g = len(LL)-1
-        ps = perpLine((LL[g][0],LL[g][1]),(LL[g-1][0],LL[g-1][1]),(LL[g][0],LL[g][1]))
-        trkSeg.addCrossLine(CrossLine(ps[0],ps[1],ps[2],ps[3],'Goalline'))
-        break
-    return trkSeg
-
+ 
 def perpLine(pointx,point1,point2,):
     px =np.array((float(pointx[0]),float(pointx[1])))
     p1 =np.array((float(point1[0]),float(point1[1])))
@@ -237,26 +326,101 @@ def perpLine(pointx,point1,point2,):
     lat1,lon1 = utmconverter.to_latlon(p_left[0],p_left[1],zone_number,northern=True)
     lat2,lon2 = utmconverter.to_latlon(p_right[0],p_right[1],zone_number,northern=True)
     return (lat1,lon1,lat2,lon2)
+  
+def segmentAnalyzer(filename,trkseg):
+    try:
+        df = gpxtricks.GPXtoDataFrame(filename)
+    except:
+        df = gpxtricks.TCXtoDataFrame(filename)
     
-
-trkSeg = createSegmentfromKML('C:\\python\\testdata\\gpxx4\\segments\\cambourne.kml')
+    p1 = list(df.iloc[0][['lat','lon','time']])
+    
+    for row in df.iterrows():
+        p2 = [row[1]['lat'],row[1]['lon'],row[1]['time']]
+        trkseg.runNewPoint('testfile',p1,p2)
+        p1 = p2
+        
+    #===========================================================================
+    # trkseg.resetCounter()
+    # seg = 0
+    # times = list()
+    # dtimes = [0]
+    #===========================================================================
+    #===========================================================================
+    # for row in df.iterrows():
+    #     p2 = [row[1]['lat'],row[1]['lon'],row[1]['time']]
+    #     
+    #     q1,q2 = trkseg.getCurrentCrossline()
+    #     
+    #     a = lineIntersection(p1,p2,q1,q2)
+    #     
+    #     if a:
+    #         a = checkIntersection(p1,p2,q1,q2, a)
+    #     
+    #     if a:
+    #         times.append(calculateCrossingTime(p1, p2, a))
+    #         #plotCrossingPoint(p1, p2, q1, q2, a)
+    #         seg += 1
+    #         
+    #         if not trkseg.nextCrossline():
+    #             break
+    #     
+    #     p1 = p2
+    # 
+    # if len(times) != len(trkseg.crosslines):
+    #     print('Error: All points not passed.')
+    # 
+    # else:
+    #     for i in range(len(times)-1):
+    #         #print((times[i+1]-times[0]))
+    #         dt = (times[i+1]-times[0]).components
+    #         T = dt[0]*3600*24+ dt[1]*3600+dt[2]*60+dt[3]+dt[4]/1000
+    #         
+    #         dtimes.append(T)
+    #     
+    #     trkseg.runs.append([max(dtimes),filename,dtimes])
+    # 
+    #     r = sorted(trkSeg.runs)
+    #     a= r[0][2]
+    #     print(a)
+    # 
+    # 
+    #     for runs in r:
+    #         plt.plot(np.array(a)/60,(np.array(runs[2])-np.array(r[0][2])),color='blue')
+    #     
+    #     plt.plot(np.array(a)/60,(np.array(r[0][2])-np.array(r[0][2])),'-.',color='yellow',lw=2)
+    #     plt.plot(np.array(a)/60,(np.array(dtimes)-np.array(r[0][2])),color='red',lw=2)
+    #     plt.show()
+    #===========================================================================
+  
+trkSeg = TrackSegment('recground')
+trkSeg.createSegmentfromKML('C:\\python\\testdata\\gpxx4\\segments\\parkrunup.kml')
 trkSeg.printkmlPlacemarks()
 
-filelist = ['activity_1279747668.tcx',
-                '2016-07-30 1032 1010 Cambourne.tcx']
+#filelist = ['2015-11-15 1001 The Coppice.gpx',]
+                 
  
- 
-for item in filelist:
+for item in glob.glob('C:\\python\\testdata\\gpxx4\\files\\2014-04-26*ParkRun*'):
     print('****',item,'****')    
-    segmentAnalyzer('C:\\python\\testdata\\gpxx4\\files\\{}'.format(item),trkSeg)   
- 
-r = sorted(trkSeg.runs)
- 
-a= r[0][2]
-print(a)
- 
- 
-for runs in r:
-    plt.plot(np.array(a)/60,(np.array(runs[2])-np.array(r[0][2])),'.-',)
-     
-plt.show()
+    #segmentAnalyzer('C:\\python\\testdata\\gpxx4\\files\\{}'.format(item),trkSeg)   
+    segmentAnalyzer('{}'.format(item),trkSeg)
+
+
+
+
+#trkSeg.prettyPlotResults()
+trkSeg.prettyPrintResults()
+trkSeg.prettyPlotResults()
+
+#===============================================================================
+# r = sorted(trkSeg.runs)
+#  
+# a= r[0][2]
+# print(a)
+#  
+#  
+# for runs in r:
+#     plt.plot(np.array(a)/60,(np.array(runs[2])-np.array(r[0][2])),'.-',)
+#      
+# plt.show()
+#===============================================================================
