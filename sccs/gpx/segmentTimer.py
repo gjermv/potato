@@ -8,6 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import gpxtricks
 import utmconverter
+import pandas as pd
 import xml.etree.ElementTree as ET
 import glob
 
@@ -22,7 +23,7 @@ class TrackSegment():
         self.starttime = 0
         self.besttime = 99999999
         self.bestrun = 'NA'
-        self.distance = [0]
+        self.trkdistance = [0]
 
     def createSegmentfromKML(self,filename):
         tree = ET.parse(filename)
@@ -41,7 +42,7 @@ class TrackSegment():
                 lon = float(kmlcoorditem[0])
                 LL.append([lat,lon])
             
-                
+            self.trackSegDistance(LL)    
             p1 = perpLine((LL[0][0],LL[0][1]),(LL[0][0],LL[0][1]),(LL[1][0],LL[1][1]))
             self.addCrossLine(CrossLine(p1[0],p1[1],p1[2],p1[3],'StartLine'))
             
@@ -53,6 +54,18 @@ class TrackSegment():
             ps = perpLine((LL[g][0],LL[g][1]),(LL[g-1][0],LL[g-1][1]),(LL[g][0],LL[g][1]))
             self.addCrossLine(CrossLine(ps[0],ps[1],ps[2],ps[3],'Goalline'))
             break
+
+    def trackSegDistance(self,latlonList):
+        p1 = latlonList[0]
+        d =[0]
+        dm = 0
+        for p2 in latlonList[1:]:
+            dm += utmconverter.haversine(p1[1],p1[0],p2[1],p2[0])
+            d.append(round(dm,2))
+            p1 = p2
+        self.trkdistance = d  
+        print('TrackDist',d)
+        
 
     def plotSegments(self):
         fig,ax = plt.subplots()
@@ -91,14 +104,21 @@ class TrackSegment():
     def reverse(self):
         """ Creates a new TrackSegment in the reverse direction. """
         revTrk = TrackSegment(self.name+'-reverse')
+        revTrk.trkdistance = []
+        m = max(self.trkdistance)
+        for d in self.trkdistance[::-1]:
+            print(round(m-d,2))
+            revTrk.trkdistance.append(round(m-d,2))
+        
         for cl in self.crosslines[::-1]:
             revTrk.addCrossLine(cl.reverse())
         return revTrk
+    
+        
 
     def runNewPoint(self,filename,gps1,gps2):
         startpoint1,startpoint2 = self.getStartLine()
-        
-        
+
         a0 = lineIntersection(gps1, gps2, startpoint1, startpoint2)
         
         if a0:
@@ -111,6 +131,7 @@ class TrackSegment():
                 print("StartTime",self.starttime)
                 
                 while self.runNewPoint2(filename,gps1,gps2):
+                    
                     continue
                 
                 return True
@@ -127,7 +148,6 @@ class TrackSegment():
                 self.nextCrossline()
                 time = calculateCrossingTime(gps1, gps2, a1)
                 self.laps.append(time-self.starttime)
-                
                 while self.runNewPoint2(filename,gps1,gps2):
                     continue
                 
@@ -136,10 +156,8 @@ class TrackSegment():
         return False
                     
     def prettyPrintResults(self):
-        
-        
         for run in self.runs:
-            run.prettyPrint()
+            run.prettyPrint(max(self.trkdistance))
 
     def prettyPlotResults(self):
         sortRun = sorted(self.runs, key=lambda x: max(x.laptimes))
@@ -147,7 +165,7 @@ class TrackSegment():
         fig,ax = plt.subplots()
         
         for run in sortRun:
-            run.prettyPlot(ax,fastestRun)
+            run.prettyPlot(ax,fastestRun,self.trkdistance)
         
         plt.legend(loc=2,fontsize=11)   
         plt.show()
@@ -201,15 +219,16 @@ class CrossLine():
     def reverse(self):
         return CrossLine(self.y2,self.x2,self.y1,self.x1,self.name+'-rev')          
 
-
 class SegmentResult():
     def __init__(self,name,laps=[]):
         self.name =  name.split('.')[0]
         self.laptimes = laps
     
-        
-    def prettyPrint(self):
-        s = '{}: '.format(self.name.split('.')[0])
+    def prettyPrint(self,distance):
+        dt = max(self.laptimes).components
+        timesec = dt[0]*3600*24+ dt[1]*3600+dt[2]*60 + dt[3]+dt[4]/1000
+        avg = distance/timesec*3.6
+        s = '{} Avg: {:.2f} '.format(self.name.split('.')[0],avg)
         dt  = []
         for laptime in self.laptimes:
             dt = laptime#.components
@@ -217,7 +236,7 @@ class SegmentResult():
             s += '- {} '.format(str(dt).replace('0 days ',''))
         print(s)
 
-    def prettyPlot(self,ax,fst):
+    def prettyPlot(self,ax,fst,trkdist):
         dt  = []
         DT1 = []
         DT2 = []
@@ -228,7 +247,7 @@ class SegmentResult():
             DT2.append(dt2[0]*3600*24+ dt2[1]*3600+dt2[2]*60 + dt2[3]+dt2[4]/1000)
             
         ltSec = np.array(DT1)-np.array(DT2)
-        ax.plot(DT2,ltSec,label=self.name)
+        ax.plot(trkdist,ltSec,label=self.name)
         return ax
     
     def addLap(self,laptime):
@@ -337,80 +356,29 @@ def segmentAnalyzer(filename,trkseg):
     
     for row in df.iterrows():
         p2 = [row[1]['lat'],row[1]['lon'],row[1]['time']]
-        trkseg.runNewPoint('testfile',p1,p2)
-        p1 = p2
+        if p2[0] > 0 and p2[1]> 0:
+            trkseg.runNewPoint('testfile',p1,p2)
+            p1 = p2
         
-    #===========================================================================
-    # trkseg.resetCounter()
-    # seg = 0
-    # times = list()
-    # dtimes = [0]
-    #===========================================================================
-    #===========================================================================
-    # for row in df.iterrows():
-    #     p2 = [row[1]['lat'],row[1]['lon'],row[1]['time']]
-    #     
-    #     q1,q2 = trkseg.getCurrentCrossline()
-    #     
-    #     a = lineIntersection(p1,p2,q1,q2)
-    #     
-    #     if a:
-    #         a = checkIntersection(p1,p2,q1,q2, a)
-    #     
-    #     if a:
-    #         times.append(calculateCrossingTime(p1, p2, a))
-    #         #plotCrossingPoint(p1, p2, q1, q2, a)
-    #         seg += 1
-    #         
-    #         if not trkseg.nextCrossline():
-    #             break
-    #     
-    #     p1 = p2
-    # 
-    # if len(times) != len(trkseg.crosslines):
-    #     print('Error: All points not passed.')
-    # 
-    # else:
-    #     for i in range(len(times)-1):
-    #         #print((times[i+1]-times[0]))
-    #         dt = (times[i+1]-times[0]).components
-    #         T = dt[0]*3600*24+ dt[1]*3600+dt[2]*60+dt[3]+dt[4]/1000
-    #         
-    #         dtimes.append(T)
-    #     
-    #     trkseg.runs.append([max(dtimes),filename,dtimes])
-    # 
-    #     r = sorted(trkSeg.runs)
-    #     a= r[0][2]
-    #     print(a)
-    # 
-    # 
-    #     for runs in r:
-    #         plt.plot(np.array(a)/60,(np.array(runs[2])-np.array(r[0][2])),color='blue')
-    #     
-    #     plt.plot(np.array(a)/60,(np.array(r[0][2])-np.array(r[0][2])),'-.',color='yellow',lw=2)
-    #     plt.plot(np.array(a)/60,(np.array(dtimes)-np.array(r[0][2])),color='red',lw=2)
-    #     plt.show()
-    #===========================================================================
-  
-trkSeg = TrackSegment('recground')
-trkSeg.createSegmentfromKML('C:\\python\\testdata\\gpxx4\\segments\\parkrunup.kml')
-trkSeg.printkmlPlacemarks()
-
-#filelist = ['2015-11-15 1001 The Coppice.gpx',]
-                 
- 
-for item in glob.glob('C:\\python\\testdata\\gpxx4\\files\\2014-04-26*ParkRun*'):
-    print('****',item,'****')    
-    #segmentAnalyzer('C:\\python\\testdata\\gpxx4\\files\\{}'.format(item),trkSeg)   
-    segmentAnalyzer('{}'.format(item),trkSeg)
-
-
-
-
-#trkSeg.prettyPlotResults()
-trkSeg.prettyPrintResults()
-trkSeg.prettyPlotResults()
+if __name__ == "__main__":
+    # Create a tracksegment  
+    trkSeg = TrackSegment('recground')
+    trkSeg.createSegmentfromKML('C:\\python\\testdata\\gpxx4\\segments\\GuidedBusway.kml')
+    #trkSeg = trkSeg.reverse()
+    
+    df = pd.read_csv('C:\\python\\testdata\\gpxx4\\Activity_Summary2.csv',parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
+    df_time = df[df['dateandtime']>'2016-01-01']
+    df_act = df_time[df_time['activity']=='Rollerskiing']
+    filelist = list(df_act['filename'])
+    
+    for item in filelist:
+        print('****',item,'****')      
+        segmentAnalyzer('C:\\python\\testdata\\gpxx4\\files\\{}'.format(item),trkSeg)
+     
+     
+    #trkSeg.prettyPlotResults()
+    trkSeg.prettyPrintResults()
+    trkSeg.prettyPlotResults()
 
 #===============================================================================
 # r = sorted(trkSeg.runs)
