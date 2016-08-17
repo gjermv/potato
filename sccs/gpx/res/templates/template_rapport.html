@@ -194,7 +194,7 @@ var myIconStop = L.icon({
 });
 
 
-var map = L.map('map').setView([{{lat}},{{lng}}], 13);
+var map = L.map('map').setView([{{lat}},{{lon}}], 13);
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
 	attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
 	maxZoom: 18,
@@ -202,7 +202,7 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 	accessToken: 'pk.eyJ1IjoiZ2plcm12IiwiYSI6IjM5N2EwZjkxZDA5MTIxYTI1MjI0MGFiZDJmNzhmMmE4In0.y2ULEYqhR4rXG4x5EbVK-Q'
 }).addTo(map);
 
-toppMarker = L.marker([{{lat}},{{lng}}],{icon: IconTop});
+toppMarker = L.marker([{{lat}},{{lon}}],{icon: IconTop});
 toppMarker.addTo(map);
 
 {{stoplocations}}
