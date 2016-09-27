@@ -11,20 +11,20 @@ import utmconverter
 import pandas as pd
 import xml.etree.ElementTree as ET
 import glob
-
+import pickle
 
 class TrackSegment():
     def __init__(self,name):
         self.name = name
         self.crosslines = []
-        self.laps = []
-        self.runs = []
+        self.laps = [] # Seems like a temporary timedelta thing used in segmentResults...
+        self.segmentResults = []
         self.counter = 0
         self.starttime = 0
         self.besttime = 99999999
         self.bestrun = 'NA'
         self.trkdistance = [0]
-
+    
     def createSegmentfromKML(self,filename):
         tree = ET.parse(filename)
         root = tree.getroot()
@@ -94,7 +94,7 @@ class TrackSegment():
         if self.counter == len(self.crosslines):
             self.counter = 0
             run = SegmentResult(str(self.starttime),self.laps)
-            self.runs.append(run)
+            self.segmentResults.append(run)
         return True  
         
     def resetCounter(self):
@@ -114,11 +114,8 @@ class TrackSegment():
             revTrk.addCrossLine(cl.reverse())
         return revTrk
     
-        
-
     def runNewPoint(self,filename,gps1,gps2):
         startpoint1,startpoint2 = self.getStartLine()
-
         a0 = lineIntersection(gps1, gps2, startpoint1, startpoint2)
         
         if a0:
@@ -131,9 +128,7 @@ class TrackSegment():
                 print("StartTime",self.starttime)
                 
                 while self.runNewPoint2(filename,gps1,gps2):
-                    
                     continue
-                
                 return True
         
         self.runNewPoint2(filename,gps1,gps2)
@@ -150,17 +145,26 @@ class TrackSegment():
                 self.laps.append(time-self.starttime)
                 while self.runNewPoint2(filename,gps1,gps2):
                     continue
-                
                 return True
         
         return False
                     
     def prettyPrintResults(self):
-        for run in self.runs:
+        for run in self.segmentResults:
             run.prettyPrint(max(self.trkdistance))
 
+    def prettyPrintBestResult(self):
+        bestrun = self.segmentResults[0]
+        for run in self.segmentResults[1:]:
+            if run.getFinishTime() <bestrun.getFinishTime():
+                bestrun = run
+        
+        print(bestrun.name,bestrun.getFinishTime())
+            
+
     def prettyPlotResults(self):
-        sortRun = sorted(self.runs, key=lambda x: max(x.laptimes))
+        sortRun = sorted(self.segmentResults, key=lambda x: max(x.laptimes))
+        print(sortRun)
         fastestRun = sortRun[0]
         fig,ax = plt.subplots()
         
@@ -254,7 +258,7 @@ class SegmentResult():
         self.laptimes.append(laptime)
     
     def getFinishTime(self):
-        self.prettyPrint()
+        #self.prettyPrint(100)
         return max(self.laptimes)
        
 def lineIntersection(s1,s2,u1,u2):
@@ -337,7 +341,7 @@ def perpLine(pointx,point1,point2,):
     perpVect = np.array((-vect[1],vect[0]))
     l = np.sqrt(perpVect[0]**2+perpVect[1]**2)
     
-    perpVect = perpVect/l*25
+    perpVect = perpVect/l*40
     
     p_left = [ex,nx]+perpVect
     p_right = [ex,nx]+perpVect*(-1)
@@ -346,7 +350,7 @@ def perpLine(pointx,point1,point2,):
     lat2,lon2 = utmconverter.to_latlon(p_right[0],p_right[1],zone_number,northern=True)
     return (lat1,lon1,lat2,lon2)
   
-def segmentAnalyzer(filename,trkseg):
+def segmentAnalyzer(filename,segList):
     try:
         df = gpxtricks.GPXtoDataFrame(filename)
     except:
@@ -357,38 +361,35 @@ def segmentAnalyzer(filename,trkseg):
     for row in df.iterrows():
         p2 = [row[1]['lat'],row[1]['lon'],row[1]['time']]
         if p2[0] > 0 and p2[1]> 0:
-            trkseg.runNewPoint('testfile',p1,p2)
+            for seg in segList:
+                seg.runNewPoint('testfile',p1,p2)
             p1 = p2
         
 if __name__ == "__main__":
     # Create a tracksegment  
-    trkSeg = TrackSegment('recground')
-    trkSeg.createSegmentfromKML('C:\\python\\testdata\\gpxx4\\segments\\GuidedBusway.kml')
-    #trkSeg = trkSeg.reverse()
     
+    trkSeg1 = TrackSegment('HiRunner')
+    trkSeg1.createSegmentfromKML('C:\\python\\testdata\\gpxx4\\segments\\hirunner.kml')
+    trkSeg2 = TrackSegment('HiRunnerRest')
+    trkSeg2.createSegmentfromKML('C:\\python\\testdata\\gpxx4\\segments\\hirunnerrest.kml')   
+    seglist = []
+    seglist.append(trkSeg1)
+    seglist.append(trkSeg2)
+
+         
     df = pd.read_csv('C:\\python\\testdata\\gpxx4\\Activity_Summary2.csv',parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
-    df_time = df[df['dateandtime']>'2016-01-01']
-    df_act = df_time[df_time['activity']=='Rollerskiing']
+    df_time = df[df['dateandtime']>'2016-07-01']
+    df_act = df_time[df_time['activity']=='Running']
     filelist = list(df_act['filename'])
-    
+
     for item in filelist:
         print('****',item,'****')      
-        segmentAnalyzer('C:\\python\\testdata\\gpxx4\\files\\{}'.format(item),trkSeg)
-     
-     
-    #trkSeg.prettyPlotResults()
-    trkSeg.prettyPrintResults()
-    trkSeg.prettyPlotResults()
+        segmentAnalyzer('C:\\python\\testdata\\gpxx4\\files\\{}'.format(item),seglist)
 
-#===============================================================================
-# r = sorted(trkSeg.runs)
-#  
-# a= r[0][2]
-# print(a)
-#  
-#  
-# for runs in r:
-#     plt.plot(np.array(a)/60,(np.array(runs[2])-np.array(r[0][2])),'.-',)
-#      
-# plt.show()
-#===============================================================================
+    
+    for result in seglist:
+        result.prettyPrintResults()
+        result.prettyPlotResults()
+    
+
+

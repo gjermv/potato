@@ -99,7 +99,7 @@ def getmainInfoTCX(dataframe):
     length = max(dataframe['dist'])
     tottime = dataframe['time'].max()-dataframe['time'].min()
     dateandtime = dataframe['time'][0] 
-    climbing = gpxtricks.getClimbingHeight(dataframe)
+    climbing = gpxtricks.getClimbingHeightGPS(dataframe)
     
     stopframe = (dataframe[dataframe['speed']<0.4167][['duration']].index)
     stoptime = sum(dataframe['duration'].diff()[stopframe])

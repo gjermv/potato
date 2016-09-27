@@ -125,7 +125,7 @@ def createWebpages():
         gpxfile = my_dir+"\\res\\gpx\\{0}.gpx".format(kom['kommunenr'])
         if os.path.isfile(gpxfile):
             
-            gpx_df = gpxtricks.parseGPX(gpxfile)
+            gpx_df = gpxtricks.GPXtoDataFrame(gpxfile)
             kom['stoplocations'] = gpxtricks.exportStopLoc(gpx_df)
             kom['tripcoordinates'] = gpxtricks.exportRedPoints(gpx_df)
             gpxtricks.createElevationProfile(gpx_df, 'C:\\python\\kommuner\\outdata\\profile2\\{}.png'.format(kom['kommunenr']))
@@ -141,7 +141,7 @@ def createWebpages():
         else:
             gpxfile_ex = my_dir+"\\res\\gpx\\{0}_ex.gpx".format(kom['kommunenr'])
             if os.path.isfile(gpxfile_ex):
-                gpx_df = gpxtricks.parseGPX(gpxfile_ex)
+                gpx_df = gpxtricks.GPXtoDataFrame(gpxfile_ex)
                 kom['stoplocations'] = gpxtricks.exportStopLoc(gpx_df)
                 kom['tripcoordinates'] = gpxtricks.exportRedPoints(gpx_df)
                 gpxtricks.createElevationProfile(gpx_df, 'C:\\python\\kommuner\\outdata\\profile2\\{}.png'.format(kom['kommunenr']))

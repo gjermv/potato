@@ -17,18 +17,19 @@ def lineToArr(l1):
     
     for i in range(1,30):
         arra = np.append(arra,np.fromstring(l1[1024*i:1024*(i+1)],dtype=int,sep=' '))
-    
-    
     return arra
 
 def findClosestPoint(east,north):
-    dtminfo = getDTMFile(east,north)
-    eastLine = round((east-dtminfo[1])//10)
-    northLine = round((north-dtminfo[2])//10)
-    east_delta = (east-dtminfo[1])%10
-    north_delta = (north-dtminfo[1])%10
-
-    return [eastLine,northLine,dtminfo[0],east_delta,north_delta]
+    try:
+        dtminfo = getDTMFile(east,north)
+        eastLine = round((east-dtminfo[1])//10)
+        northLine = round((north-dtminfo[2])//10)
+        east_delta = (east-dtminfo[1])%10
+        north_delta = (north-dtminfo[1])%10
+    
+        return [eastLine,northLine,dtminfo[0],east_delta,north_delta,dtminfo[1],dtminfo[2]]
+    except: 
+        raise Exception("Closest point has no DTM file ")
 
 def readFile(filename):  
     line1 = open("C:\\python\\dtms\\{}".format(filename), 'r').read(500000)
@@ -57,7 +58,7 @@ def readFile(filename):
     
     minEast = float(line1[546:570])
     minNorth = float(line1[570:594])
-    print(line1[1024+30720*3:1024+144+30720*3])
+    print(line1[1024+30720*0:1024+144+30720*0])
 #===============================================================================
 # print(line1[1168:2048])
 # print(line1[1024*2:1024*3])
@@ -122,22 +123,23 @@ def calculateEle(x,y,coordsys='utm'):
         east, north, zone_number, zone_letter = utm.from_latlon(x, y)
     else:
         east,north = x,y
+    try:
+        p = findClosestPoint(east, north)
+        dpx = p[3]
+        dpy = p[4]
+        
+        ele1 = getElevation(p[0], p[1],p[2])
+        ele2 = getElevation(p[0]+1, p[1],p[2])
+        ele3 = getElevation(p[0], p[1]+1,p[2])
+        ele4 = getElevation(p[0]+1, p[1]+1,p[2])
+        #c_ele = getInterpolatedEle(ele1,ele2,ele3,ele4,[dpx,dpy])[2]
+        d_ele = interpolateEle2(ele1,ele2,ele3,ele4,[dpx,dpy])
     
-    p = findClosestPoint(east, north)
-    dpx = p[3]
-    dpy = p[4]
-    
-    ele1 = getElevation(p[0], p[1],p[2])
-    ele2 = getElevation(p[0]+1, p[1],p[2])
-    ele3 = getElevation(p[0], p[1]+1,p[2])
-    ele4 = getElevation(p[0]+1, p[1]+1,p[2])
-    #c_ele = getInterpolatedEle(ele1,ele2,ele3,ele4,[dpx,dpy])[2]
-    d_ele = interpolateEle2(ele1,ele2,ele3,ele4,[dpx,dpy])
-
-    return d_ele
-
+        return d_ele
+    except Exception:
+        raise Exception("Something went wrong")
+        
 def getInterpolatedEle(p1e=10,p2e=5,p3e=5,p4e=0,pxc=[5,5]):
-    
     if sum(pxc)>10:
         p1 = np.array([10,10,p4e])
     else:
@@ -175,25 +177,37 @@ def interpolateEle2(p1e=10,p2e=5,p3e=5,p4e=0,pxc=[5,5]):
     
 
 def getDTMFile(east,north):
-    dtmfile = getDTMdict()
-
-    for key in dtmfile:
-        if north>=dtmfile[key][1] and north<=dtmfile[key][1]+50000:
-            if east>=dtmfile[key][0] and east<=dtmfile[key][0]+50000:
-                return [key,int(dtmfile[key][0]),int(dtmfile[key][1])]
+    try:
+        dtmfile = getDTMdict()
     
-    return -1
+        for key in dtmfile:
+            if north>=dtmfile[key][1] and north<=dtmfile[key][1]+50000:
+                if east>=dtmfile[key][0] and east<=dtmfile[key][0]+50000:
+                    return [key,int(dtmfile[key][0]),int(dtmfile[key][1])]
+    except: 
+        raise Exception('DTM file not available')
 
 def getDTMdict():
     dtmfile = dict()
     dtmfile['6404_3_10m_z32.dem'] = [399800,6399900]
     dtmfile['6404_4_10m_z32.dem'] = [399800,6449800]
-    dtmfile['6506_4_10m_z32.dem'] = [599800,6549800]
+    
     dtmfile['7005_2_10m_z32.dem'] = [549800,6999800]
     
     dtmfile['6503_3_10m_z32.dem'] = [299800,6499800]
     dtmfile['6903_1_10m_z32.dem'] = [349800,6949800]
     dtmfile['6904_4_10m_z32.dem'] = [399795,6949795]
+    
+    dtmfile['6505_4_10m_z32.dem'] = [499800,6549800]
+    dtmfile['6504_1_10m_z32.dem'] = [449800,6549800]
+    dtmfile['6604_2_10m_z32.dem'] = [449800,6599800]
+    dtmfile['6605_3_10m_z32.dem'] = [499800,6599800]
+    dtmfile['6603_2_10m_z32.dem'] = [349800,6599800]
+    
+    dtmfile['6506_1_10m_z32.dem'] = [649800,6549800]
+    dtmfile['6506_2_10m_z32.dem'] = [649800,6503000]
+    dtmfile['6506_3_10m_z32.dem'] = [599800,6503000]
+    dtmfile['6506_4_10m_z32.dem'] = [599800,6549800]
     return dtmfile
 
 def hasDTMFile(minEast, minNorth,maxEast,maxNorth):
@@ -205,11 +219,8 @@ def hasDTMFile(minEast, minNorth,maxEast,maxNorth):
         if (maxEast-50000)< dtm[1] and (maxNorth-50000)<dtm[2]:
             return True
     return False
-        
-#===============================================================================
-# dtm = getDTMFile(415160.0898,6970096.666)
-#  
-# ele = calculateEle(415159.0898,6970096.666)
-# print(ele)
-#===============================================================================
+ 
+if __name__ == "__main__":
+    readFile('6506_3_10m_z32.dem')       
+
 

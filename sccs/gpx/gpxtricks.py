@@ -188,7 +188,7 @@ def getmainInfo(dataframe):
     ele_min = dataframe['ele'].min()
     ele_max = dataframe['ele'].max()
     elediff = calcEleDiff(ele_min,ele_max)
-    climbing = getClimbingHeight(dataframe)
+    climbing = getClimbingHeightGPS(dataframe)
     steepness = climbing/(length/2)
     climbingrate = climbing/(walktime/2)
     kupert_faktor = climbing/elediff
@@ -264,7 +264,7 @@ def kartverketElevation2(dataframe):
     
     return dataframe
             
-def getClimbingHeight(df):
+def getClimbingHeightGPS(df):
     dataframe = df[df['lat'] != 0]
     dist = dataframe['dist']
     ele = dataframe['ele']
@@ -278,6 +278,23 @@ def getClimbingHeight(df):
  
     return round(sum(red[red['elediff']>0]['elediff']),2)
 
+def getClimbingHeightDTM(df):
+    dataframe = df[df['lat'] != 0]
+    dist = dataframe['dist']
+    try:
+        ele = kartverketElevation2(df)['kartele']
+        l = []
+    
+        for i in dist.index:
+            l.append((float(dist[i]),float(ele[i])))
+        
+        red = pd.DataFrame(algos.ramerdouglas(l,dist=7.5),columns=['dist','ele'])
+        red['elediff'] = red['ele'].diff()
+     
+        return round(sum(red[red['elediff']>0]['elediff']),2)
+    except:
+        return -1
+    
 def reduceElevationPoints(df):
     dataframe = df[df['lat'] != 0]
     dist = dataframe['dist']
@@ -298,15 +315,14 @@ def reduceElevationPoints(df):
     df_red['speed'] = df_red['speed'].shift(1)
     return df_red
 
-def createElevationProfile(dataframe,filename=None):
-    dist = list(dataframe['dist'])
-    ele = list(dataframe['ele'])
+def plotElevationProfile(dataframe,filename=None):
+    ""
+    dist = list(dataframe[dataframe['ele'] != np.nan]['dist'])
+    ele = list(dataframe[dataframe['ele'] != np.nan]['ele'])
     
     dist = [0] +dist+ [max(dist)]
     ele = [0] +ele+ [0]
     
-
-
     plt.figure(figsize=(15, 4), dpi=80)
     plt.plot(dist,ele,'#666666',linewidth=2)
     
@@ -322,7 +338,100 @@ def createElevationProfile(dataframe,filename=None):
         print("file saved" , filename)
     else:
         plt.show()
-           
+
+
+def plotElevationProfile2(dataframe,filename=None):
+    ""
+    dist = list(dataframe[dataframe['ele'] != np.nan]['dist'])
+    ele = list(dataframe[dataframe['ele'] != np.nan]['ele'])
+    
+    dist = [0] +dist+ [max(dist)]
+    ele = [0] +ele+ [0]
+    
+    plt.figure(figsize=(15, 8), dpi=80)
+    plt.plot(dist,ele,'#666666',linewidth=2)
+    
+    plt.axis([0, max(dist), 0, max(ele)*1.1])
+    ax = plt.axes()
+    ax.yaxis.grid(True)
+    ax.set_axisbelow(True)
+    
+    if filename:
+        plt.savefig(filename, bbox_inches='tight')
+        plt.close()
+        print("file saved" , filename)
+    else:
+        plt.show()
+
+
+def plotSpeedProfile(dataframe,filename=None):
+    
+    dist = list(dataframe['duration'])[1:]
+    y_val = np.array(list(dataframe['speed'])[1:])*3.6
+    
+    plt.figure(figsize=(15, 8), dpi=80)
+    plt.axis([0, max(dist), 0, max(y_val)*1.1])
+    ax = plt.axes()
+    ax.yaxis.grid(True)
+    ax.set_axisbelow(True)
+    plt.plot(dist,y_val,'#838fd7')
+    
+    if filename:
+        plt.savefig(filename, bbox_inches='tight')
+        plt.close()
+        print("file saved" , filename)
+    else:
+        plt.show()
+
+def plotHeartrateProfile(dataframe,filename=None):
+    
+    dist = list(dataframe['duration'])
+    y_val = list(dataframe['heartrate'])
+    
+    plt.figure(figsize=(15, 8), dpi=80)
+    plt.axis([0, max(dist), 80, 200])
+    ax = plt.axes()
+    ax.yaxis.grid(True)
+    ax.set_axisbelow(True)
+    plt.plot(dist,y_val,'#b30000',linewidth=3)
+    
+    if filename:
+        plt.savefig(filename, bbox_inches='tight')
+        plt.close()
+        print("file saved" , filename)
+    else:
+        plt.show()
+
+def plotHeartZone(dataframe,filename=None):
+    
+    hrzone = heartZone(dataframe)
+    print('hr',hrzone)
+    
+    if hrzone == -1: 
+        yax = np.array([0,0,0,0,0])
+    if hrzone != -1:
+        tot = sum(hrzone)
+        yax = np.array([hrzone[0],hrzone[1],hrzone[2],hrzone[3],hrzone[4]])/tot*100
+    
+    xax = np.array([1,2,3,4,5])
+    cax = ['#fef0d9','#fdcc8a','#fc8d59','#e34a33','#b30000']
+    
+    fig, ax = plt.subplots(figsize=(6.2,3.2))
+    ax.yaxis.grid(True)
+    rects1 = ax.bar(xax, yax, width = 1, color=cax)
+    ax.set_xticks(xax + 0.5)
+    ax.set_xticklabels(('Sone1', 'Sone2', 'Sone3', 'Sone4', 'Sone5'))
+    ax.axis([1,6,0,100])
+
+
+    if filename:
+        plt.savefig(filename, bbox_inches='tight')
+        plt.close()
+        print("file saved" , filename)
+    else:
+        plt.show()
+    
+         
 def reducePoints(dataframe):
     lat = dataframe['lat']
     lon = dataframe['lon']
@@ -391,18 +500,19 @@ def exportRedPoints(dataframe):
     for group,items in groups:
         s = ''
         for p in reducePoints(items):
-            s += '[{0},{1}],'.format(p[1],p[0])
+            if not np.isnan(p[0]):
+                s += '[{0},{1}],'.format(p[1],p[0])
             
         geojson += """var myLines = [{
         "type": "LineString",
         "coordinates": ["""
         geojson += s
+        
         if group == 'Ski':
             geojson += getSkiText()
 
         elif group == 'Cycle':
             geojson += getCycleText()
-        
         else:
             geojson += getWalkText()
     
@@ -584,32 +694,50 @@ def getKommuneGrense(filename='C:\\python\\kommuner\\kom_grens-mod.json',kommune
                 l.append([pos[1],pos[0]])
     return l
 
-def getHeartZone(df):
-   
-    #===========================================================================
-    # plt.plot(df['time'],df['heartrate'])
-    # plt.show()
-    # plt.close()
-    #===========================================================================
+def heartZone(df):
     df = df[df['heartrate'].notnull()][:]
-    df['timediff'] = df['time'].diff()
+    df['timediff'] = df['duration'].diff()
+    df['heartrate2'] = (df['heartrate'].shift()+df['heartrate'])/2
     
-    df1 = df[(df['heartrate']<135) & (df['heartrate']>=0)]
-    df2 = df[(df['heartrate']<155) & (df['heartrate']>=135)]
-    df3 = df[(df['heartrate']<165) & (df['heartrate']>=155)]
-    df4 = df[(df['heartrate']<175) & (df['heartrate']>=165)]
-    df5 = df[df['heartrate']>=175]
+    hz =  dict()
+    hz[1] = 0
+    hz[2] = 0
+    hz[3] = 0
+    hz[4] = 0
+    hz[5] = 0
     
-    hr5zone = sum(df5['timediff'].dt.seconds[1:])
-    hr4zone = sum(df4['timediff'].dt.seconds[1:])
-    hr3zone = sum(df3['timediff'].dt.seconds[1:])
-    hr2zone = sum(df2['timediff'].dt.seconds[1:])
-    hr1zone = sum(df1['timediff'].dt.seconds[1:])
-
-    if hr1zone+hr2zone+hr3zone+hr4zone+hr5zone == 0:
+    for row in df.iterrows():
+        if row[1]['heartrate2'] > 0:
+            if row[1]['heartrate2'] < 135:
+                hz[1] += row[1]['timediff']
+            elif row[1]['heartrate2'] < 155:
+                hz[2] += row[1]['timediff']
+            elif row[1]['heartrate2'] < 165:
+                hz[3] += row[1]['timediff']
+            elif row[1]['heartrate2'] < 175:
+                hz[4] += row[1]['timediff']
+            elif row[1]['heartrate2'] > 175: 
+                hz[5] += row[1]['timediff']
+    
+    if hz[1]+hz[2]+hz[3]+hz[4]+hz[5] == 0:
         return -1
+    return (hz[1],hz[2],hz[3],hz[4],hz[5])
+
+def heartAverage(df):
+    df = df[df['heartrate']>0][:]
+    df['timediff'] = df['duration'].diff()
+    df['heartrate2'] = (df['heartrate'].shift()+df['heartrate'])/2
+    
+    if len(df)>0:
+        hr = dict()
+        hr['max'] = df['heartrate'].max()
+        hr['mean'] = (df['heartrate2']*df['timediff']).sum()/df['timediff'].sum()
+        hr['avg'] =df['heartrate'].mean()
+        hr['total'] =(df['heartrate2']*df['timediff']).sum()/60
+        
+        return hr
     else:
-        return (hr1zone,hr2zone,hr3zone,hr4zone,hr5zone)
+        return False
 
 def getExtrapolatedInterpolatedValue(dataGrid,x):
     
@@ -648,9 +776,45 @@ def findBestTempo(dataframe,avgdist):
         return max(speedlist)
     return 'Not found'
 
-def showEleMap(file = 'C:\\python\\testdata\\gpxx4\\files\\2014-01-30 1254 Fredrikstadmarka.gpx'):
-    df = GPXtoDataFrame(file)
-    df = kartverketElevation2(df)[:]
+def findBestTempo2(dataframe):
+    df =  dataframe.copy()
+    distances =  [60,100,200,400,800,1000,1500,3000,5000,10000,15000,20000,25000,30000,35000,40000]
+    rbest = dict()
+    for item in distances:
+        rbest[item] = [0,-1]
+    #print(df['dist'].head())
+    
+    for i,line in enumerate(df.iterrows()):
+        currpos = line[1]['dist']
+        #print(i,currpos)
+        A = np.array(df['dist'])
+        
+        for dist in distances:
+            ind = A.searchsorted(dist+currpos,side='right')
+            if ind < len(df)-1:
+                d = df.iloc[ind]['dist']-df.iloc[i]['dist']
+                t = df.iloc[ind]['duration']-df.iloc[i]['duration']
+                if d/t > rbest[dist][0]:
+                    rbest[dist][0] = d/t
+                    rbest[dist][1] = currpos
+            else:
+                break
+    return rbest
+            
+def updateBestTimes(dists,ditimes,distart,dist,ti,startdist):
+    for i in range(len(dists)):        
+        if dist > dists[i]:
+            if (dist / ti) > ditimes[i]:
+                ditimes[i] = dist / ti
+                distart[i] = startdist
+                
+    return ditimes,distart
+
+def showEleMap(dataframe,filename='None'):
+    df = dataframe.copy()
+    
+    df = kartverketElevation2(df)
+    
     eastings = []
     northings = []
     
@@ -663,44 +827,76 @@ def showEleMap(file = 'C:\\python\\testdata\\gpxx4\\files\\2014-01-30 1254 Fredr
     
     p1 = dtm.findClosestPoint(min(eastings)-100,min(northings)-100)
     p2 = dtm.findClosestPoint(max(eastings)+100,max(northings)+100)
-    print(p1)
-    print(p2)
-    c1east = 599800+(p1[0])*10
-    c1north = 6549800+(p1[1])*10
-    print(min(eastings)-c1east)
-    print(min(northings)-c1north)
+
+    c1east = p1[5]+(p1[0])*10
+    c1north = p1[6]+(p1[1])*10
+
     
     ns = p2[1]-p1[1]
-    print(ns)
-      
     df['easting'] = eastings
     df['northing'] = northings
-    df['easting2'] =(df['easting']-c1east)/10
-    print(df['easting2'].min())
+    df['easting2'] = (df['easting']-c1east)/10
     df['northing2'] = (-(df['northing']-c1north)/10)+ns
+    
+    try:
+        a = dtm.getElevationArea(p1[0], p1[1], p2[0], p2[1]+1,p1[2])
+        a = np.rot90(a)
+         
+        plt.imshow(a,cmap=cm.gist_earth)
+        CS  = plt.contour(a,colors=['yellow','red','black'],levels=[df['kartele'].min()*10+100,df['kartele'].max()*10-100,(df['kartele'].max()+df['kartele'].min())/2*10],linewidths=[0.7,0.7,0.7])
+        #plt.clabel(CS, fontsize=8, inline=1)
+        plt.plot(df['easting2'],df['northing2'],linewidth=2)
+        plt.show()
+        plt.close()
+    except:
+        print("Something went wrong with creating the map. ")
 
-    a = dtm.getElevationArea(p1[0], p1[1], p2[0], p2[1]+1,p1[2])
-    a = np.rot90(a)
-    
-    plt.imshow(a,cmap=cm.gist_earth)
-    CS  = plt.contour(a,colors=['yellow','red','black'],levels=[df['kartele'].min()*10+100,df['kartele'].max()*10-100,(df['kartele'].max()+df['kartele'].min())/2*10],linewidths=[0.7,0.7,0.7])
-    #plt.clabel(CS, fontsize=8, inline=1)
-    plt.plot(df['easting2'],df['northing2'],linewidth=2)
-    plt.show()
-    plt.close()
-    
     fig, (ax,ax1) = plt.subplots(nrows=2, ncols=1)
+    ax.set_xlim([0,df['dist'].max()])
+    ax1.set_xlim([0,df['dist'].max()])
     ax.axhline(df['kartele'].min()+10, linestyle='-', color='green')
     ax.axhline(df['kartele'].max()-10, linestyle='-', color='red')
     ax.axhline((df['kartele'].max()+df['kartele'].min())/2, linestyle='--', color='black')
     ax.plot(df['dist'],df['kartele'],linewidth=2)
-    ax.plot(df['dist'],df['kartele'],linewidth=1.5)
+    ax.plot(df['dist'],df['ele'],'--',linewidth=1,color='blue')
+    
 
-    ax1.plot(df['dist'],pd.rolling_mean(df['speed'],window=10,center=True),linewidth=1)
+    ax1.plot(df['dist'],pd.rolling_mean(df['speed']*3.6,window=5,center=True),linewidth=1.2)
     plt.gca().xaxis.grid(True)
+
     ax.xaxis.grid(True)
     ax1.xaxis.grid(True)
     plt.show()
-
     
-#showEleMap()
+
+if __name__ == "__main__":
+    df = pd.read_csv('C:\\python\\testdata\\gpxx4\\Activity_Summary2.csv',parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
+    df_time = df[df['dateandtime']>'2016-09-01']
+    df_act = df_time[df_time['activity']=='Running']
+    filelist = list(df_act['filename'])
+    
+    for item in filelist:  
+        filename = 'C:\\python\\testdata\\gpxx4\\files\\{}'.format(item)
+        #print(filename)
+        try:
+            trk=GPXtoDataFrame(filename)
+        except:
+            trk=TCXtoDataFrame(filename)
+        #print('Number of points: ',len(trk))
+        
+        if heartAverage(trk):
+            print('{:8.1f};{};{:8.1f};{}'.format(trk['dist'].max(),trk['duration'].max(),heartAverage(trk)['total'],item))
+        
+        #Print best times
+         
+        t = findBestTempo2(trk)
+        for item2 in sorted(t):
+            if t[item2][0]> 0:
+                print('{:5}m; {:>4.2f} km/h; {:>.1f}'.format(item2,t[item2][0]*3.6,t[item2][1]))
+          
+        gpsh = getClimbingHeightGPS(trk)
+        dtmh = getClimbingHeightDTM(trk)
+  
+        if dtmh>0:
+            print('{};{};{}'.format(item,gpsh,dtmh))
+            showEleMap(trk)

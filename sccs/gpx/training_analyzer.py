@@ -13,7 +13,7 @@ from timeit import default_timer as timer
 def training_analyzer(datafolder):
     trips = list()
     for file in glob.glob(datafolder):
-        gpxdict =  getGPXtrainingData(file)
+        gpxdict = getTrainingData(file)
         trips.append(gpxdict)
     outdata = pd.DataFrame(trips)
     trainingdata_to_csv(outdata)
@@ -31,12 +31,9 @@ def checkForNewFiles(datafolder):
             pass
         else:
             print('**** New file',filename,' ****')
-            indata = dict()
-            
-            if 'gpx' in filename:
-                indata = getGPXtrainingData(file)
-            elif 'tcx' in filename:
-                indata = getTCXtrainingData(file)
+            if '.gpx' in filename or '.tcx' in filename: 
+                indata = getTrainingData(file)
+
             else:
                 print('Unknow file format: SKIP')
                 continue
@@ -45,6 +42,7 @@ def checkForNewFiles(datafolder):
             print('Walktime',indata['walk_time'])
             print('Length',indata['length'])
             print('Avg',indata['avg_speed'])
+            print('Climbing',indata['climbing'])
             
             gpxdict =  pd.DataFrame([indata])
             activity = inputShortCut(input('activity: (C,W,R,S,...) '))
@@ -52,8 +50,7 @@ def checkForNewFiles(datafolder):
             gpxdict['filename'] = filename
             
             df = pd.concat([df, gpxdict])
-            printSomething(df,activity,indata['length'],filename)
-            #plotAverage(df,activity,indata['length'],filename)
+            printSomething(df,filename)
             
     df = df.sort('dateandtime')
     df.index = range(1,len(df) + 1)
@@ -80,31 +77,28 @@ def trainingdata_to_csv(df):
     df.to_csv('C:\\python\\testdata\\gpxx4\\Activity_Summary2.csv',columns=col)
 
 def inputShortCut(txt):
-    if txt == 'C':
-        return 'Cycling'
-    elif txt == 'W':
-        return 'Walking'
-    elif txt == 'R':
-        return 'Running'
-    elif txt == 'S':
-        return 'Skiing'
+    """ Shortcuts for different types of activity"""
+    
+    appr = {'W':'Walking','R':'Running','C':'Cycling','RS':'Rollerskiing','S':'Skiing-X' }
+    if txt in appr:
+        return appr[txt]
     else:
         return txt
 
 def getTrainingData(filename):
+    """ Returns dict with summary of training data """
     extension = os.path.splitext(filename)[1]
-    print("at -getTrainingData-",extension)
-    if 'gpx' in extension:
-        data = getGPXtrainingData(filename)
-    elif 'tcx' in extension:
-        data = getTCXtrainingData(filename)
-    return data
     
-def getGPXtrainingData(filename):
-    df = gpxtricks.GPXtoDataFrame(filename)
+    if 'gpx' in extension:
+        df = gpxtricks.GPXtoDataFrame(filename)
+    elif 'tcx' in extension:
+        df = gpxtricks.TCXtoDataFrame(filename)
+    
     gpxdict = gpxtricks.getmainInfo(df)
     gpxdict['filename'] = os.path.basename(filename)
     gpxdict['activity'] = 'NA'
+    
+    # Remove some kommunetopp specific details.
     del gpxdict['elediff']
     del gpxdict['climbingrate']
     del gpxdict['steepness']
@@ -112,30 +106,30 @@ def getGPXtrainingData(filename):
     del gpxdict['kupert_faktor']
     del gpxdict['pause_faktor']
     del gpxdict['topptur_faktor']
+    
+    # Add some empty columns for spreadsheet
     gpxdict['comment'] = ''
     gpxdict['health'] = ''
     gpxdict['activity'] = ''
     
-    hrdata = gpxtricks.getHeartZone(df)
+    # Add hr data if any
+    zonelist = ['sone1','sone2','sone3','sone4','sone5']
+    hrdata = gpxtricks.heartZone(df)
     if hrdata != -1:
-        gpxdict['sone1'] = hrdata[0]
-        gpxdict['sone2'] = hrdata[1]
-        gpxdict['sone3'] = hrdata[2]
-        gpxdict['sone4'] = hrdata[3]
-        gpxdict['sone5'] = hrdata[4]
+        for i,item in enumerate(zonelist):
+            gpxdict[item] = hrdata[i]        
     else:
-        gpxdict['sone1'] = ''
-        gpxdict['sone2'] = ''
-        gpxdict['sone3'] = ''
-        gpxdict['sone4'] = ''
-        gpxdict['sone5'] = ''      
-    return gpxdict
-    
-def getTCXtrainingData(filename):
-    mydf = tcxtricks.TCXtoDataFrame(filename)
-    #print(tcxtricks.getTCXheartzone(mydf))
-    return tcxtricks.getmainInfoTCX(mydf)
+        for item in zonelist:
+            gpxdict[item] = ''  
 
+    gpxtricks.plotHeartZone(df, 'C:/python/image/pRect2.png')
+    gpxtricks.plotElevationProfile2(df, 'C:/python/image/elevationProfile.png')
+    gpxtricks.plotSpeedProfile(df, 'C:/python/image/speedProfile.png')
+    gpxtricks.plotHeartrateProfile(df, 'C:/python/image/hrProfile.png')
+    
+    return gpxdict
+
+  
 def plotHeartrate(dataframe,period='day'):
     p = 365
     times = pd.DatetimeIndex(df['dateandtime'])
@@ -283,24 +277,6 @@ def plotDuration(dataframe,actList,period='day'):
 
     plt.show()
 
-def getActivityColor(activity):
-    if activity == "Walking":
-        return '#b3e6ff'
-    elif activity == "Running":
-        return '#0099e6'
-    elif activity == "Skiing": 
-        return '#ffffb3'
-    elif activity == "Skiing-X": #CrossCountry skiing / Trening
-        return '#ffff66'
-    elif activity == "Rollerskiing":
-        return '#e6e600'
-    elif activity == "Alpin": 
-        return '#fdcc8a'
-    elif activity == "Cycling":
-        return '#66ff99'
-    else:
-        return  '#b30000'
-
 def plotAverage(da,activity,triplength,filename=None):
     
     fig, ax = plt.subplots()
@@ -324,46 +300,65 @@ def plotAverage(da,activity,triplength,filename=None):
     ax.set_xticklabels(df['filename'],rotation=90)
     plt.show()
     
-def printSomething(da,activity,triplength,filename):
+def printSomething(da,filename):
+    print('*** Statistic ***\n',filename)
+    ex = da[da['filename']==filename]
+    idx = ex.index[0]
+    activity = ex['activity'].iloc[0]
+    triplength = ex['length'].iloc[0]
     
-    dfact = da[da['activity']==activity].sort('length')
     
-    dfact.index = range(len(dfact))
-    ind = dfact[dfact['filename']== filename].index
-    if len(ind>0):
-        print('Length',len(dfact)-ind[0],'/',len(dfact))
+    dfact = da[da['activity']==activity]
+    pos0 = np.argsort(np.argsort(dfact['length'])).loc[idx]
+    len0 = len(dfact)
+    
+    dfmin = dfact[dfact['length']>triplength*0.8 ]
+    dfmax = dfmin[dfmin['length']<triplength*1.3]
+    
+    lenx = len(dfmax)
+    pos1 = np.argsort(np.argsort(dfmax['avg_speed'])).loc[idx]
+    pos2 = np.argsort(np.argsort(dfmax['climbing'])).loc[idx]
+    avg_best = dfmax['avg_speed'].max()
+    avg_avg =dfmax['avg_speed'].mean()
+    
+    clb_best = dfmax['climbing'].max()
+    clb_avg =dfmax['climbing'].mean()
+    
+    print("Length {}/{}".format(len0-pos0+1,len0))
+    print("Avg speed {}/{} - Best: {:.2f} Avg: {:.2f}".format(lenx-pos1+1,lenx,avg_best,avg_avg))
+    print("Climbing {}/{}  - Max: {:.1f} Avg: {:.1f}".format(lenx-pos2+1,lenx,clb_best,clb_avg))
 
-             
-    dfmin = dfact[dfact['length']>triplength*0.8]
-    dfmax = dfmin[dfact['length']<triplength*1.2]
-    
-    df = dfmax.sort('avg_speed')
-    df.index = range(len(df))
-    
-    ind = df[df['filename']== filename].index
-    
-    if len(ind>0):
-        print('Average',len(df)-ind[0],'/',len(df))
-    
-    df =df.sort('climbing')
-    df.index = range(len(df))
-    
-    ind = df[df['filename']== filename].index
-    if len(ind>0):
-        print('Climbing',len(df)-ind[0],'/',len(df))
-    
-    return df
+def getActivityColor(activity):
+    if activity == "Walking":
+        return '#b3e6ff'
+    elif activity == "Running":
+        return '#0099e6'
+    elif activity == "Skiing": 
+        return '#ffffb3'
+    elif activity == "Skiing-X": #CrossCountry skiing / Trening
+        return '#ffff66'
+    elif activity == "Rollerskiing":
+        return '#e6e600'
+    elif activity == "Alpin": 
+        return '#fdcc8a'
+    elif activity == "Cycling":
+        return '#66ff99'
+    else:
+        return  '#b30000'
 
+   
 def getTrackData(filename):
     extension = os.path.splitext(filename)[1]
     print("at -getTrackData-",extension)
     
     if 'gpx' in extension:
         df = gpxtricks.GPXtoDataFrame(filename)
-        return gpxtricks.exportRRedPoints(df)
     elif 'tcx' in extension:
         df = gpxtricks.TCXtoDataFrame(filename)
-        return gpxtricks.exportRedPoints(df)
+    
+    df_dat = gpxtricks.exportRedPoints(df)
+    print(df_dat)
+    return df_dat
     
 def getTrackBounds(filename):
     extension = os.path.splitext(filename)[1]
@@ -371,10 +366,10 @@ def getTrackBounds(filename):
     
     if 'gpx' in extension:
         df = gpxtricks.GPXtoDataFrame(filename)
-        return gpxtricks.getTrackBounds(df)
     elif 'tcx' in extension:
         df = gpxtricks.TCXtoDataFrame(filename)
-        return gpxtricks.getTrackBounds(df)
+    
+    return gpxtricks.getTrackBounds(df)
 
 
 if __name__ == "__main__":
@@ -382,5 +377,6 @@ if __name__ == "__main__":
     df = checkForNewFiles('C:\\python\\testdata\\gpxx4\\files\\*.*')
     end = timer()
     print(end-start)
-    plotLength(df,['Running','Rollerskiing','Skiing-X','Cycling'], period='day')
-    plotHeartrate(df,'month')
+    
+    plotLength(df,['Running','Rollerskiing','Skiing-X','Cycling'], period='year')
+    #plotHeartrate(df,'year')
