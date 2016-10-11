@@ -369,9 +369,9 @@ if __name__ == "__main__":
     # Create a tracksegment  
     
     trkSeg1 = TrackSegment('HiRunner')
-    trkSeg1.createSegmentfromKML('C:\\python\\testdata\\gpxx4\\segments\\hirunner.kml')
+    trkSeg1.createSegmentfromKML('C:\\python\\testdata\\gpxx4\\segments\\CambridgeRoadLong.kml')
     trkSeg2 = TrackSegment('HiRunnerRest')
-    trkSeg2.createSegmentfromKML('C:\\python\\testdata\\gpxx4\\segments\\hirunnerrest.kml')   
+    trkSeg2.createSegmentfromKML('C:\\python\\testdata\\gpxx4\\segments\\CambridgeRoadShort.kml')   
     seglist = []
     seglist.append(trkSeg1)
     seglist.append(trkSeg2)

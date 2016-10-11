@@ -128,7 +128,7 @@ def createWebpages():
             gpx_df = gpxtricks.GPXtoDataFrame(gpxfile)
             kom['stoplocations'] = gpxtricks.exportStopLoc(gpx_df)
             kom['tripcoordinates'] = gpxtricks.exportRedPoints(gpx_df)
-            gpxtricks.createElevationProfile(gpx_df, 'C:\\python\\kommuner\\outdata\\profile2\\{}.png'.format(kom['kommunenr']))
+            gpxtricks.plotElevationProfile(gpx_df, 'C:\\python\\kommuner\\outdata\\profile2\\{}.png'.format(kom['kommunenr']))
             mainInfo = gpxtricks.getmainInfo(gpx_df)
             kom.update(mainInfo)
         
@@ -144,7 +144,7 @@ def createWebpages():
                 gpx_df = gpxtricks.GPXtoDataFrame(gpxfile_ex)
                 kom['stoplocations'] = gpxtricks.exportStopLoc(gpx_df)
                 kom['tripcoordinates'] = gpxtricks.exportRedPoints(gpx_df)
-                gpxtricks.createElevationProfile(gpx_df, 'C:\\python\\kommuner\\outdata\\profile2\\{}.png'.format(kom['kommunenr']))
+                gpxtricks.plotElevationProfile(gpx_df, 'C:\\python\\kommuner\\outdata\\profile2\\{}.png'.format(kom['kommunenr']))
                 mainInfo = gpxtricks.getmainInfo(gpx_df)
                 kom.update(mainInfo)
             

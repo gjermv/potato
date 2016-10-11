@@ -104,16 +104,19 @@ def copyGPX2(originalFile,saveFilepath,newFilename):
     startlon = float(point.attrib['lon'])
     starttime = normalizetimedata(point.find(ns+'time').text)
     timezone = googleTimezone(startlat, startlon, starttime)
-    trkname = xml.find(ns+"trk/"+ns+"name")
-    trkname.text = str(starttime+dtt(seconds=timezone))[:16]
-         
+    try:
+        trkname = xml.find(ns+"trk/"+ns+"name")
+        trkname.text = str(starttime+dtt(seconds=timezone))[:16]
+    except:
+        pass       
+    
     fullFilePath = saveFilepath+'\\'+newFilename
-
+  
     f = open(fullFilePath,'wb')
     f.write(etree.tostring(xml))
     f.close()
     
-    return fullFilePath
+    return 0#fullFilePath
 
 def copyGPSFile(originalFile,saveFilepath,newFilename):
     extension = os.path.splitext(originalFile)[1]

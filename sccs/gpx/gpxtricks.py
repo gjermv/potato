@@ -778,7 +778,7 @@ def findBestTempo(dataframe,avgdist):
 
 def findBestTempo2(dataframe):
     df =  dataframe.copy()
-    distances =  [60,100,200,400,800,1000,1500,3000,5000,10000,15000,20000,25000,30000,35000,40000]
+    distances =  [100,200,400,800,1000,1500,3000,5000,10000,20000,50000]
     rbest = dict()
     for item in distances:
         rbest[item] = [0,-1]
@@ -799,6 +799,7 @@ def findBestTempo2(dataframe):
                     rbest[dist][1] = currpos
             else:
                 break
+    
     return rbest
             
 def updateBestTimes(dists,ditimes,distart,dist,ti,startdist):
@@ -871,10 +872,10 @@ def showEleMap(dataframe,filename='None'):
 
 if __name__ == "__main__":
     df = pd.read_csv('C:\\python\\testdata\\gpxx4\\Activity_Summary2.csv',parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
-    df_time = df[df['dateandtime']>'2016-09-01']
+    df_time = df[df['dateandtime']>'2010-09-01']
     df_act = df_time[df_time['activity']=='Running']
     filelist = list(df_act['filename'])
-    
+    filelist = ['2016-10-08 1128 Ely City Race.gpx']
     for item in filelist:  
         filename = 'C:\\python\\testdata\\gpxx4\\files\\{}'.format(item)
         #print(filename)
@@ -887,8 +888,9 @@ if __name__ == "__main__":
         if heartAverage(trk):
             print('{:8.1f};{};{:8.1f};{}'.format(trk['dist'].max(),trk['duration'].max(),heartAverage(trk)['total'],item))
         
+        plotHeartZone(trk)
         #Print best times
-         
+          
         t = findBestTempo2(trk)
         for item2 in sorted(t):
             if t[item2][0]> 0:

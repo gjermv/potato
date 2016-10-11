@@ -17,24 +17,25 @@ class MyMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.pushButton.clicked.connect(self.openfiledialog)
         self.pushButton_3.clicked.connect(self.opendirdialog)
         self.pushButton_2.clicked.connect(self.savefile)
+        self.comboBox.activated.connect(self.activityButtonChanged)
         
         self.webView.setUrl(QtCore.QUrl("C:\\python\\testdata\\map.html"))
         
         self.webView.loadFinished.connect(self.onLoadFinished)
         self.label.setStyleSheet("image: url(C:/python/image/pRect.png);")
-        self.label_speed.setStyleSheet("image: url(C:/python/image/pRect.png);")
-        self.label_hr.setStyleSheet("image: url(C:/python/image/pRect.png);")
-        
+
     def openfiledialog(self):
-        self.fname = QtGui.QFileDialog.getOpenFileName(self, 'Open file','C:\\Users\\gjermund.vingerhagen\\Downloads\\',("GPS files (*.tcx *.gpx)"))
+        self.fname = QtGui.QFileDialog.getOpenFileName(self, 'Open file','C:\\python\\testdata\\gpxx4\\files',("GPS files (*.tcx *.gpx)"))
+        #'C:\\Users\\gjermund.vingerhagen\\Downloads\\'
         if self.fname:
             self.lineEdit_file_name.setText(self.fname)
             self.lineEdit_file_newname.setText('Please wait')
             newname = gpx_file_formater.getNewFileName(self.fname)
             self.lineEdit_file_newname.setText(newname)
             self.onReadFileFinished()
-            
-            data = training_analyzer.getTrainingData(self.fname)
+
+            self.data = training_analyzer.getTrainingData(self.fname)
+            data = self.data
             
             self.lab_date.setText(data['dateandtime'].strftime('%Y-%m-%d %H:%M:%S'))
             self.lab_length.setText(str(data['length']))
@@ -43,7 +44,6 @@ class MyMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.lab_walktime.setText(str(data['walk_time']))
             self.lab_avgspeed.setText(str(data['avg_speed']))
         
-                
             self.label.setStyleSheet("image: url(C:/python/image/pRect2.png);")
             self.label_elevation.setStyleSheet("image: url(C:/python/image/elevationProfile.png);")
             self.label_speed.setStyleSheet("image: url(C:/python/image/speedProfile.png);")
@@ -51,7 +51,7 @@ class MyMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             
     def opendirdialog(self):
         print("openfiledialog")
-        fname = QtGui.QFileDialog.getExistingDirectory(None, 'Select a folder:', 'C:\\python\\', QtGui.QFileDialog.ShowDirsOnly)
+        fname = QtGui.QFileDialog.getExistingDirectory(None, 'Select a folder:', 'C:\\python\\testdata\\gpxx4\\files', QtGui.QFileDialog.ShowDirsOnly)
         if fname:
             self.lineEdit_file_saveto.setText(fname)
     
@@ -79,7 +79,16 @@ class MyMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             frame = self.webView.page().mainFrame()
             frame.evaluateJavaScript(training_analyzer.getTrackData(self.fname))
             frame.evaluateJavaScript(training_analyzer.getTrackBounds(self.fname))
-    
+
+    def activityButtonChanged(self):
+        actbox_txt = self.comboBox.currentText()
+        comment_txt = self.textEdit.toPlainText()
+        originalfile = self.lineEdit_file_name.text()
+        filename = self.lineEdit_file_newname.text()
+        print(filename)
+        df = training_analyzer.insertToGPXDatabase(originalfile,filename, actbox_txt, comment_txt,self.data)
+        self.textEdit_2.setPlainText(training_analyzer.printSomething(df, filename))
+
 if __name__ == '__main__':
     app = QtGui.QApplication([])
     win = MyMainWindow()

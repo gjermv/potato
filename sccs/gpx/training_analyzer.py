@@ -56,6 +56,42 @@ def checkForNewFiles(datafolder):
     df.index = range(1,len(df) + 1)
     trainingdata_to_csv(df)
     return df
+
+def insertToGPXDatabase(originalfile,filename,activity,comment,indata):
+    df = pd.read_csv('C:\\python\\testdata\\gpxx4\\Activity_Summary2.csv',parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
+    df['tottime'] = pd.to_timedelta(df['tottime'])
+    df['walk_time'] = pd.to_timedelta(df['walk_time'])
+    df['speed_00100'] = df['speed_00100'].convert_objects(convert_numeric=True)
+    existing_files =  list(df['filename'])
+    
+    if filename in existing_files:
+        return df
+    
+    print('**** New file',filename,' ****')
+    #indata = getTrainingData(originalfile,skip=False)
+
+    print('Tottime',indata['tottime'])
+    print('Walktime',indata['walk_time'])
+    print('Length',indata['length'])
+    print('Avg',indata['avg_speed'])
+    print('Climbing',indata['climbing'])
+
+    gpxdict =  pd.DataFrame([indata])
+    gpxdict['filename'] = filename
+    gpxdict['activity'] = activity
+    gpxdict['comment'] = comment
+    df = pd.concat([df, gpxdict])
+    
+    printSomething(df,filename)
+            
+    df = df.sort('dateandtime')
+    df.index = range(1,len(df) + 1)
+    #trainingdata_to_csv(df)
+    
+    
+    return df
+    
+    
     
 def trainingdata_to_csv(df):
     col = ['filename',
@@ -72,7 +108,19 @@ def trainingdata_to_csv(df):
            'sone2',
            'sone3',
            'sone4',
-           'sone5']
+           'sone5',
+           'speed_00100',
+           'speed_00200',
+           'speed_00400',
+           'speed_00800',
+           'speed_01000',
+           'speed_01500',
+           'speed_03000',
+           'speed_05000',
+           'speed_10000',
+           'speed_20000',
+           'speed_50000',
+           'segments']
     
     df.to_csv('C:\\python\\testdata\\gpxx4\\Activity_Summary2.csv',columns=col)
 
@@ -85,7 +133,7 @@ def inputShortCut(txt):
     else:
         return txt
 
-def getTrainingData(filename):
+def getTrainingData(filename,skip=False):
     """ Returns dict with summary of training data """
     extension = os.path.splitext(filename)[1]
     
@@ -96,7 +144,6 @@ def getTrainingData(filename):
     
     gpxdict = gpxtricks.getmainInfo(df)
     gpxdict['filename'] = os.path.basename(filename)
-    gpxdict['activity'] = 'NA'
     
     # Remove some kommunetopp specific details.
     del gpxdict['elediff']
@@ -121,15 +168,25 @@ def getTrainingData(filename):
     else:
         for item in zonelist:
             gpxdict[item] = ''  
+    
+    # Add best speed data
+    bt = gpxtricks.findBestTempo2(df)
+    bt2 = dict()
 
-    gpxtricks.plotHeartZone(df, 'C:/python/image/pRect2.png')
-    gpxtricks.plotElevationProfile2(df, 'C:/python/image/elevationProfile.png')
-    gpxtricks.plotSpeedProfile(df, 'C:/python/image/speedProfile.png')
-    gpxtricks.plotHeartrateProfile(df, 'C:/python/image/hrProfile.png')
+    for itm in bt:
+        bt2['speed_{:0>5}'.format(itm)] = float('{:.2f}'.format(bt[itm][0]*3.6))
+
+    gpxdict.update(bt2)
+    print(gpxdict)
+    
+    if not skip:
+        gpxtricks.plotHeartZone(df, 'C:/python/image/pRect2.png')
+        gpxtricks.plotElevationProfile2(df, 'C:/python/image/elevationProfile.png')
+        gpxtricks.plotSpeedProfile(df, 'C:/python/image/speedProfile.png')
+        gpxtricks.plotHeartrateProfile(df, 'C:/python/image/hrProfile.png')
     
     return gpxdict
 
-  
 def plotHeartrate(dataframe,period='day'):
     p = 365
     times = pd.DatetimeIndex(df['dateandtime'])
@@ -300,15 +357,25 @@ def plotAverage(da,activity,triplength,filename=None):
     ax.set_xticklabels(df['filename'],rotation=90)
     plt.show()
     
-def printSomething(da,filename):
+def printSomething(df,filename):
     print('*** Statistic ***\n',filename)
-    ex = da[da['filename']==filename]
+    ex = df[df['filename']==filename]
     idx = ex.index[0]
     activity = ex['activity'].iloc[0]
     triplength = ex['length'].iloc[0]
+    s_00100 = ex['speed_00100'].iloc[0]
+    s_00200 = ex['speed_00200'].iloc[0]
+    s_00400 = ex['speed_00400'].iloc[0]
+    s_00800 = ex['speed_00800'].iloc[0]
+    s_01000 = ex['speed_01000'].iloc[0]
+    s_01500 = ex['speed_01500'].iloc[0]
+    s_03000 = ex['speed_03000'].iloc[0]
+    s_05000 = ex['speed_05000'].iloc[0]
+    s_10000 = ex['speed_10000'].iloc[0]
+    s_20000 = ex['speed_20000'].iloc[0]
     
-    
-    dfact = da[da['activity']==activity]
+
+    dfact = df[df['activity']==activity]
     pos0 = np.argsort(np.argsort(dfact['length'])).loc[idx]
     len0 = len(dfact)
     
@@ -318,33 +385,57 @@ def printSomething(da,filename):
     lenx = len(dfmax)
     pos1 = np.argsort(np.argsort(dfmax['avg_speed'])).loc[idx]
     pos2 = np.argsort(np.argsort(dfmax['climbing'])).loc[idx]
+    pos_00100 = lenx-np.argsort(np.argsort(dfmax['speed_00100'])).loc[idx]
+    pos_00200 = lenx-np.argsort(np.argsort(dfmax['speed_00200'])).loc[idx]
+    pos_00400 = lenx-np.argsort(np.argsort(dfmax['speed_00400'])).loc[idx]
+    pos_00800 = lenx-np.argsort(np.argsort(dfmax['speed_00800'])).loc[idx]
+    pos_01000 = lenx-np.argsort(np.argsort(dfmax['speed_01000'])).loc[idx]
+    pos_01500 = lenx-np.argsort(np.argsort(dfmax['speed_01500'])).loc[idx]
+    pos_03000 = lenx-np.argsort(np.argsort(dfmax['speed_03000'])).loc[idx]
+    pos_05000 = lenx-np.argsort(np.argsort(dfmax['speed_05000'])).loc[idx]
+    pos_10000 = lenx-np.argsort(np.argsort(dfmax['speed_10000'])).loc[idx]
+    pos_20000 = lenx-np.argsort(np.argsort(dfmax['speed_20000'])).loc[idx]
+    
     avg_best = dfmax['avg_speed'].max()
-    avg_avg =dfmax['avg_speed'].mean()
+    avg_avg = dfmax['avg_speed'].mean()
     
     clb_best = dfmax['climbing'].max()
     clb_avg =dfmax['climbing'].mean()
     
-    print("Length {}/{}".format(len0-pos0+1,len0))
-    print("Avg speed {}/{} - Best: {:.2f} Avg: {:.2f}".format(lenx-pos1+1,lenx,avg_best,avg_avg))
-    print("Climbing {}/{}  - Max: {:.1f} Avg: {:.1f}".format(lenx-pos2+1,lenx,clb_best,clb_avg))
+    print("Length {}/{}".format(len0-pos0,len0))
+    print("Avg speed {}/{} - Best: {:.2f} Avg: {:.2f}".format(lenx-pos1,lenx,avg_best,avg_avg))
+    print("Climbing {}/{}  - Max: {:.1f} Avg: {:.1f}".format(lenx-pos2,lenx,clb_best,clb_avg))
+    txt = "Length {}/{}\n".format(len0-pos0,len0)
+    txt += "{} from {:.2f} - {:.2f} kilometers\n".format(activity,triplength*0.8,triplength*1.3)
+    txt +="Avg speed {}/{} - Best: {:.2f} - Avg: {:.2f}\n".format(lenx-pos1,lenx,avg_best,avg_avg)
+    txt += "Climbing {}/{}  - Max: {:.1f} - Avg: {:.1f}\n\n".format(lenx-pos2,lenx,clb_best,clb_avg)
 
+    txt += "00100m - {: >2} - {:>4.2f} km/h\n".format(pos_00100,s_00100)
+    txt += "00200m - {: >2} - {:>4.2f} km/h\n".format(pos_00200,s_00200)
+    txt += "00400m - {: >2} - {:>4.2f} km/h\n".format(pos_00400,s_00400)
+    txt += "00800m - {: >2} - {:>4.2f} km/h\n".format(pos_00800,s_00800)
+    txt += "01000m - {: >2} - {:>4.2f} km/h\n".format(pos_01000,s_01000)
+    txt += "01500m - {: >2} - {:>4.2f} km/h\n".format(pos_01500,s_01500)
+    txt += "03000m - {: >2} - {:>4.2f} km/h\n".format(pos_03000,s_03000)
+    txt += "05000m - {: >2} - {:>4.2f} km/h\n".format(pos_05000,s_05000)
+    txt += "10000m - {: >2} - {:>4.2f} km/h\n".format(pos_10000,s_10000)
+    txt += "20000m - {: >2} - {:>4.2f} km/h\n".format(pos_20000,s_20000)
+    return txt
+    
 def getActivityColor(activity):
-    if activity == "Walking":
-        return '#b3e6ff'
-    elif activity == "Running":
-        return '#0099e6'
-    elif activity == "Skiing": 
-        return '#ffffb3'
-    elif activity == "Skiing-X": #CrossCountry skiing / Trening
-        return '#ffff66'
-    elif activity == "Rollerskiing":
-        return '#e6e600'
-    elif activity == "Alpin": 
-        return '#fdcc8a'
-    elif activity == "Cycling":
-        return '#66ff99'
+    actdict = dict()
+    actdict['Walking'] = '#b3e6ff'
+    actdict['Running'] = '#0099e6'
+    actdict['Skiing'] = '#ffffb3'
+    actdict['Skiing-X'] = '#ffff66'
+    actdict['Rollerskiing'] = '#e6e600'
+    actdict['Alpin'] = '#fdcc8a'
+    actdict['Cycling'] = '#66ff99'
+    
+    if activity in actdict:
+        return actdict[activity]
     else:
-        return  '#b30000'
+        return '#b30000'
 
    
 def getTrackData(filename):
@@ -378,5 +469,5 @@ if __name__ == "__main__":
     end = timer()
     print(end-start)
     
-    plotLength(df,['Running','Rollerskiing','Skiing-X','Cycling'], period='year')
-    #plotHeartrate(df,'year')
+    plotLength(df,['Running','Rollerskiing','Skiing-X','Cycling'], period='month')
+    #plotHeartrate(df,'month')
