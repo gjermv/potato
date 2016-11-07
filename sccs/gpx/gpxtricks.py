@@ -604,7 +604,6 @@ def get_besteget_kommuner(xml_file):
     return kommunelist
 
 def get_selected_fylke(kommunenr):
-    
     fylke_to_line = {0:0,
                      2:1,
                      9:2,
@@ -872,10 +871,10 @@ def showEleMap(dataframe,filename='None'):
 
 if __name__ == "__main__":
     df = pd.read_csv('C:\\python\\testdata\\gpxx4\\Activity_Summary2.csv',parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
-    df_time = df[df['dateandtime']>'2010-09-01']
-    df_act = df_time[df_time['activity']=='Running']
+    df_time = df[df['dateandtime']>'2016-10-10']
+    df_act = df_time[df_time['activity']=='Rollerskiing']
     filelist = list(df_act['filename'])
-    filelist = ['2016-10-08 1128 Ely City Race.gpx']
+    
     for item in filelist:  
         filename = 'C:\\python\\testdata\\gpxx4\\files\\{}'.format(item)
         #print(filename)
@@ -885,20 +884,25 @@ if __name__ == "__main__":
             trk=TCXtoDataFrame(filename)
         #print('Number of points: ',len(trk))
         
-        if heartAverage(trk):
-            print('{:8.1f};{};{:8.1f};{}'.format(trk['dist'].max(),trk['duration'].max(),heartAverage(trk)['total'],item))
-        
-        plotHeartZone(trk)
+        #=======================================================================
+        # if heartAverage(trk):
+        #     print('{:8.1f};{};{:8.1f};{}'.format(trk['dist'].max(),trk['duration'].max(),heartAverage(trk)['total'],item))
+        # 
+        # plotHeartZone(trk)
+        #=======================================================================
         #Print best times
-          
+        
         t = findBestTempo2(trk)
+        print(item)
         for item2 in sorted(t):
             if t[item2][0]> 0:
                 print('{:5}m; {:>4.2f} km/h; {:>.1f}'.format(item2,t[item2][0]*3.6,t[item2][1]))
-          
-        gpsh = getClimbingHeightGPS(trk)
-        dtmh = getClimbingHeightDTM(trk)
-  
-        if dtmh>0:
-            print('{};{};{}'.format(item,gpsh,dtmh))
-            showEleMap(trk)
+        print(getClimbingHeightGPS(trk))
+  #=============================================================================
+  #       gpsh = showEleMap(trk)
+  #       dtmh = getClimbingHeightDTM(trk)
+  # 
+  #       if dtmh>0:
+  #           print('{};{};{}'.format(item,gpsh,dtmh))
+  #           showEleMap(trk)
+  #=============================================================================

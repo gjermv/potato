@@ -11,7 +11,10 @@ import utmconverter
 import pandas as pd
 import xml.etree.ElementTree as ET
 import glob
+import os.path
 import pickle
+import datetime as dt
+
 
 class TrackSegment():
     def __init__(self,name):
@@ -92,12 +95,13 @@ class TrackSegment():
         self.counter += 1
         
         if self.counter == len(self.crosslines):
-            self.counter = 0
             run = SegmentResult(str(self.starttime),self.laps)
             self.segmentResults.append(run)
+            self.resetCounter()
         return True  
         
     def resetCounter(self):
+        self.starttime = 0
         self.counter = 0
         self.laps = []
         
@@ -114,40 +118,67 @@ class TrackSegment():
             revTrk.addCrossLine(cl.reverse())
         return revTrk
     
-    def runNewPoint(self,filename,gps1,gps2):
+    def runNewPoint(self,filename,gps1,gps2,hasStarted=False):
         startpoint1,startpoint2 = self.getStartLine()
+        currpoint1,currpoint2 = self.getCurrentCrossline()
         a0 = lineIntersection(gps1, gps2, startpoint1, startpoint2)
+        c0 = lineIntersection(gps1, gps2, currpoint1, currpoint2)
+        a1 = False
+        c1 = False
+        
         
         if a0:
             a1 = checkIntersection(gps1, gps2, startpoint1, startpoint2, a0)
-            if a1:
-                self.resetCounter()
-                self.nextCrossline()
+            
+        if c0:
+            c1 = checkIntersection(gps1, gps2, currpoint1, currpoint2, c0)
+        
+        if not hasStarted:
+            if (a1 and c1 and self.counter == 0):
                 self.starttime = calculateCrossingTime(gps1, gps2, a1)
                 self.laps.append(self.starttime-self.starttime)
-                print("StartTime",self.starttime)
-                
-                while self.runNewPoint2(filename,gps1,gps2):
-                    continue
-                return True
-        
-        self.runNewPoint2(filename,gps1,gps2)
-        return False
-    
-    def runNewPoint2(self,filename,gps1,gps2):
-        currpoint1,currpoint2 = self.getCurrentCrossline()
-        ac = lineIntersection(gps1, gps2, currpoint1, currpoint2)
-        if ac:
-            a1 = checkIntersection(gps1, gps2, currpoint1, currpoint2, ac)
-            if a1:
+                print("a1 and c1 and self.counter == 0",self.starttime,self.name)
                 self.nextCrossline()
-                time = calculateCrossingTime(gps1, gps2, a1)
+                self.runNewPoint(filename,gps1,gps2,True)
+                
+            
+            elif (a1 and c1 and self.counter != 0):
+                time = calculateCrossingTime(gps1, gps2, c1)
                 self.laps.append(time-self.starttime)
-                while self.runNewPoint2(filename,gps1,gps2):
-                    continue
-                return True
+                print("a1 and c1 and self.counter != 0".format(self.counter),time-self.starttime,self.name)
+                self.nextCrossline()
+                self.runNewPoint(filename,gps1,gps2,True)
+                
+
+            elif (c1):
+                time = calculateCrossingTime(gps1, gps2, c1)
+                self.laps.append(time-self.starttime)
+                print("c1".format(self.counter),time-self.starttime,self.name)
+                self.nextCrossline()
+                self.runNewPoint(filename,gps1,gps2,True)
+    
+
+            elif(a1):
+                self.resetCounter()
+                self.starttime = calculateCrossingTime(gps1, gps2, a1)
+                self.laps.append(self.starttime-self.starttime)
+                self.nextCrossline()
+                self.runNewPoint(filename,gps1,gps2,True)
+                                
+            else:
+                return False
+
+        if hasStarted:
+            if c1:
+                time = calculateCrossingTime(gps1, gps2, c1)
+                self.laps.append(time-self.starttime)
+                self.nextCrossline()
+                self.runNewPoint(filename,gps1,gps2,True)
         
         return False
+        
+    
+
                     
     def prettyPrintResults(self):
         for run in self.segmentResults:
@@ -161,19 +192,44 @@ class TrackSegment():
         
         print(bestrun.name,bestrun.getFinishTime())
             
-
     def prettyPlotResults(self):
         sortRun = sorted(self.segmentResults, key=lambda x: max(x.laptimes))
-        print(sortRun)
+        
+        if len(sortRun) < 1:
+            print("Return code 123: No data to display")
+            return 123
+        
         fastestRun = sortRun[0]
         fig,ax = plt.subplots()
-        
+        plt.title(self.name,fontsize=18)
         for run in sortRun:
             run.prettyPlot(ax,fastestRun,self.trkdistance)
         
         plt.legend(loc=2,fontsize=11)   
         plt.show()
-          
+ 
+    def prettyPlotResults2(self):
+        sortRun = self.segmentResults
+        
+        if len(sortRun) < 1:
+            print("Return code 123: No data to display")
+            return 123
+        
+        fastestRun = sortRun[0]
+        fig,ax = plt.subplots()
+        plt.title(self.name,fontsize=18)
+        
+        for run in sortRun:
+            run.prettyPlot2(ax)
+        
+        plt.show()
+ 
+        
+    def save(self,activity):
+        pickle.dump(self, open( "C:\\python\\testdata\\gpxx4\\segments\\{0}\\{1}.p".format(activity,self.name), "wb" ) )
+    
+    
+      
 class CrossLine():
     def __init__(self,lat1,lon1,lat2,lon2,name='Unnamed',t=1):
         self.name = name
@@ -244,6 +300,7 @@ class SegmentResult():
         dt  = []
         DT1 = []
         DT2 = []
+
         for i,laptime in enumerate(self.laptimes):
             dt = laptime.components
             dt2 = fst.laptimes[i].components
@@ -253,6 +310,14 @@ class SegmentResult():
         ltSec = np.array(DT1)-np.array(DT2)
         ax.plot(trkdist,ltSec,label=self.name)
         return ax
+
+    def prettyPlot2(self,ax):
+        x = dt.datetime.strptime(self.name ,"%Y-%m-%d %H:%M:%S")
+        y =self.getFinishTime()
+
+        ax.scatter(x,y.total_seconds())  
+        return ax
+
     
     def addLap(self,laptime):
         self.laptimes.append(laptime)
@@ -260,6 +325,8 @@ class SegmentResult():
     def getFinishTime(self):
         #self.prettyPrint(100)
         return max(self.laptimes)
+
+
        
 def lineIntersection(s1,s2,u1,u2):
     """ calculates Line intersection where Line 1 is defined by point s1,s2 and line 2 by u1,u2 """
@@ -267,7 +334,7 @@ def lineIntersection(s1,s2,u1,u2):
     U = np.array(u2)-np.array(u1)
     
     if S[0] == 0 or U[0] == 0:
-        print('Error: Lines are vertical. No solution found (yet)',s1,s2,u1,u2)
+        #print('Error: Lines are vertical. No solution found (yet)',s1,s2,u1,u2)
         return False        
     
     Sa = S[1]/S[0]
@@ -276,15 +343,18 @@ def lineIntersection(s1,s2,u1,u2):
     Sb = s1[1]-Sa*s1[0] 
     Ub = u1[1]-Ua*u1[0]
     
-    
     if Sa == Ua:
         print('Error: Lines are parallelle. No solution found')
         return False
     
-    if Sa-Ua != 0:
+    elif Sa-Ua != 0:
         x = (Ub-Sb)/(Sa-Ua)
         y = Sa*x+Sb
         return (x,y)
+    
+    else:
+        "Error: Something else went wrong. Possibly precision error "
+        return False
         
 def checkIntersection(s1,s2,u1,u2,cx):  
     x1min = min(s1[0],s2[0])
@@ -351,6 +421,10 @@ def perpLine(pointx,point1,point2,):
     return (lat1,lon1,lat2,lon2)
   
 def segmentAnalyzer(filename,segList):
+    """ Reset for new file"""
+    for seg in segList:
+        seg.resetCounter()
+
     try:
         df = gpxtricks.GPXtoDataFrame(filename)
     except:
@@ -358,38 +432,79 @@ def segmentAnalyzer(filename,segList):
     
     p1 = list(df.iloc[0][['lat','lon','time']])
     
+
     for row in df.iterrows():
         p2 = [row[1]['lat'],row[1]['lon'],row[1]['time']]
-        if p2[0] > 0 and p2[1]> 0:
+        if p2[0] != 0.0 and p2[1] != 0.0:
             for seg in segList:
-                seg.runNewPoint('testfile',p1,p2)
+                seg.runNewPoint(filename,p1,p2)
             p1 = p2
-        
-if __name__ == "__main__":
-    # Create a tracksegment  
-    
-    trkSeg1 = TrackSegment('HiRunner')
-    trkSeg1.createSegmentfromKML('C:\\python\\testdata\\gpxx4\\segments\\CambridgeRoadLong.kml')
-    trkSeg2 = TrackSegment('HiRunnerRest')
-    trkSeg2.createSegmentfromKML('C:\\python\\testdata\\gpxx4\\segments\\CambridgeRoadShort.kml')   
-    seglist = []
-    seglist.append(trkSeg1)
-    seglist.append(trkSeg2)
 
-         
+
+def getkmlSegmentList(activity=None):
+    allSegments = set()
+    
+    activitySegments = set()
+    for kml_file in glob.glob("C:\\python\\testdata\\gpxx4\\segments\\*.kml"):
+        filename = os.path.basename(kml_file).replace('.kml','')
+        allSegments.add(filename)
+    
+    for p_file in glob.glob("C:\\python\\testdata\\gpxx4\\segments\\{}\\*.p".format(activity)):
+        filename = os.path.basename(p_file).replace('.p','')
+        activitySegments.add(filename)
+    
+    newSegs = allSegments.difference(activitySegments)
+
+    return [newSegs,activitySegments]
+    
+    
+     
+if __name__ == "__main__":
+    # Create a tracksegment
+    myActivity = 'Rollerskiing'
+    seglist = []
+    
+    newkmlfiles = getkmlSegmentList(myActivity)[0]
+    
+    for segname in newkmlfiles:
+        print(segname)
+        trkSeg = TrackSegment(segname)
+        trkSeg.createSegmentfromKML('C:\\python\\testdata\\gpxx4\\segments\\{}.kml'.format(segname))
+        seglist.append(trkSeg)
+    
     df = pd.read_csv('C:\\python\\testdata\\gpxx4\\Activity_Summary2.csv',parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
-    df_time = df[df['dateandtime']>'2016-07-01']
-    df_act = df_time[df_time['activity']=='Running']
+    df_time = df[df['dateandtime']>'2010-01-01']
+    df_act = df_time[df_time['activity']==myActivity]
     filelist = list(df_act['filename'])
 
-    for item in filelist:
-        print('****',item,'****')      
-        segmentAnalyzer('C:\\python\\testdata\\gpxx4\\files\\{}'.format(item),seglist)
-
     
-    for result in seglist:
-        result.prettyPrintResults()
-        result.prettyPlotResults()
+    if len(seglist) > 0:
+        for item in filelist:
+            print('****',item,'****')      
+            segmentAnalyzer('C:\\python\\testdata\\gpxx4\\files\\{}'.format(item),seglist)
+    else:
+        print("No new segments to analyse")
+    
+    for segname in seglist:
+        segname.save(activity=myActivity)
+    
+    allactivityFiles = getkmlSegmentList(myActivity)[1] # Reload... 
+    seglist2 = []
+    
+    for segname in allactivityFiles:
+        print(segname)
+        trkSeg = pickle.load( open( "C:\\python\\testdata\\gpxx4\\segments\\{}\\{}.p".format(myActivity,segname), "rb" ) )
+        seglist2.append(trkSeg)
+    
+    #segmentAnalyzer('C:\\python\\testdata\\gpxx4\\files\\2016-11-04 2008 The Coppice.gpx',seglist2)
+    
+    for segname in seglist2:
+        print(segname.name)
+        segname.prettyPrintResults()
+        segname.prettyPlotResults2()
+        segname.prettyPlotResults()
+        
+
     
 
 

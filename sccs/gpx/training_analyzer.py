@@ -10,6 +10,8 @@ import matplotlib
 import numpy as np
 from timeit import default_timer as timer
 
+matplotlib.style.use('ggplot')
+
 def training_analyzer(datafolder):
     trips = list()
     for file in glob.glob(datafolder):
@@ -88,11 +90,8 @@ def insertToGPXDatabase(originalfile,filename,activity,comment,indata):
     df.index = range(1,len(df) + 1)
     #trainingdata_to_csv(df)
     
-    
     return df
-    
-    
-    
+        
 def trainingdata_to_csv(df):
     col = ['filename',
            'dateandtime',
@@ -286,6 +285,49 @@ def plotLength(dataframe,actList,period='day'):
 
     plt.show()
 
+def plotLength2(dataframe,actList,period='day'):
+    pdict = dict()
+    pdict['day'] = [1,'D']
+    pdict['week'] = [7,'W-MON']
+    pdict['month'] = [28,'MS']
+    pdict['year'] = [365,'AS']
+    
+    timeperiod = pdict[period][1]
+    wi = pdict[period][0]
+    print("WI",wi,timeperiod)
+    
+    _summary = pd.DataFrame()
+    fig,ax = plt.subplots()
+    indexed_df = dataframe.set_index(['dateandtime'])
+
+    df1 = pd.DataFrame()
+    for i,act in enumerate(actList):
+        df1[act] = pd.Series(indexed_df[indexed_df['activity'] == act]['length'],index=indexed_df.index)
+        _summary[act] = df1[act].resample(timeperiod,'sum')
+        
+        if i == 0:
+            _summary['sum'] = _summary[act]
+        else:
+            _summary['sum'] += _summary[act]
+        
+        ax.bar(_summary.index,_summary[act], bottom=_summary['sum'] - _summary[act], width=wi,color=getActivityColor(act),lw=1,edgecolor='#bbbbbb')
+    
+    ax.grid(True)
+    plt.show()
+    print(_summary)
+    
+    #===========================================================================
+    # _summary[act] = df1.length.resample(timeperiod,'sum')
+    # colorlist.append(getActivityColor(act))
+    # 
+    # ax.bar(_summary.index,_summary['Rollerskiing'],width=7,color=getActivityColor('Running'))
+    # ax.bar(_summary.index,_summary['Cycling'],width=7,color=getActivityColor('Cycling'))
+    # plt.show()
+    # 
+    # print(plt.style.available)
+    #===========================================================================
+    
+
 def plotDuration(dataframe,actList,period='day'):
     p = 365
     
@@ -356,7 +398,58 @@ def plotAverage(da,activity,triplength,filename=None):
     ax.set_xticks(df.index + 0.5)
     ax.set_xticklabels(df['filename'],rotation=90)
     plt.show()
+
+def plotTrainingDiary(dataframe):
+    area = []
+    color = []
+    x = []
+    y = []
     
+    times = pd.DatetimeIndex(df['dateandtime'])
+    grouped = df.groupby([times.year,times.month,times.weekofyear])
+    for key,val in grouped:
+        if key[1] == 12 and key[2] == 1:
+            m = +52 
+        elif key[1] == 1 and key[2] == 53:
+            m = -52
+        else:
+            m = 0
+        week_no = (key[0]-2016)*52+key[2]+m
+        print(key,week_no)
+        for item in val.iterrows():
+            if item[1]['activity'] not in ['Walking']:
+                x.append(item[1]['dateandtime'].dayofweek)
+                area.append(150)
+                color.append(getActivityColor(item[1]['activity']))
+                y.append(week_no)
+    
+    fig = plt.figure()
+    ax = fig.gca()
+    ax.set_yticks(np.arange(0,7,1))
+    ax.set_xticks(np.arange(0-52*6,1000,52))
+    ax.set_xticks(np.arange(-300,1000,1),minor=True)
+    
+    
+    ax.set_axisbelow(True)
+    ax.set_xlim(-26,52)
+    ax.yaxis.grid(True)    
+    ax.xaxis.grid(True,which='major',linewidth=2)  
+    ax.xaxis.grid(True,which='minor')      
+    plt.scatter(y,x,s=area,c=color,marker='h', lw=0.5,edgecolor='black')
+    
+    plt.show()
+            
+
+def plotAvgImprovement(dataframe,activity,minDist=0,maxDist=1000):
+    df = dataframe[dataframe['activity']==activity]
+    dfmin = df[df['length']>minDist]
+    dfmax = dfmin[dfmin['length']<maxDist]
+    fig, ax = plt.subplots()
+    ax.grid(True)
+    ax.plot(dfmax['dateandtime'],dfmax['avg_speed'],'o',marker='o')
+    plt.show()
+       
+
 def printSomething(df,filename):
     print('*** Statistic ***\n',filename)
     ex = df[df['filename']==filename]
@@ -374,7 +467,6 @@ def printSomething(df,filename):
     s_10000 = ex['speed_10000'].iloc[0]
     s_20000 = ex['speed_20000'].iloc[0]
     
-
     dfact = df[df['activity']==activity]
     pos0 = np.argsort(np.argsort(dfact['length'])).loc[idx]
     len0 = len(dfact)
@@ -437,7 +529,6 @@ def getActivityColor(activity):
     else:
         return '#b30000'
 
-   
 def getTrackData(filename):
     extension = os.path.splitext(filename)[1]
     print("at -getTrackData-",extension)
@@ -469,5 +560,9 @@ if __name__ == "__main__":
     end = timer()
     print(end-start)
     
-    plotLength(df,['Running','Rollerskiing','Skiing-X','Cycling'], period='month')
+    plotLength2(df,['Running'], period='month')
+    #plotAvgImprovement(df,'Running',minDist=7.2,maxDist=20)
+    #plotTrainingDiary(df,)
+    #plotDuration(df,['Running','Rollerskiing','Skiing-X','Cycling'], period='month')
+    #plotAverage(df,'Cycling',20)
     #plotHeartrate(df,'month')
