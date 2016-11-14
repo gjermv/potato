@@ -2,6 +2,7 @@
 
 from gpx import gpxtricks
 from gpx import tcxtricks
+from gpx import segmentTimer
 import glob
 import os
 import pandas as pd
@@ -10,7 +11,7 @@ import matplotlib
 import numpy as np
 from timeit import default_timer as timer
 
-matplotlib.style.use('ggplot')
+
 
 def training_analyzer(datafolder):
     trips = list()
@@ -22,6 +23,7 @@ def training_analyzer(datafolder):
     return outdata
 
 def checkForNewFiles(datafolder):
+    # Next line reads the dateandtime, but skips the seconds...
     df = pd.read_csv('C:\\python\\testdata\\gpxx4\\Activity_Summary2.csv',parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
     df['tottime'] = pd.to_timedelta(df['tottime'])
     df['walk_time'] = pd.to_timedelta(df['walk_time'])
@@ -58,6 +60,35 @@ def checkForNewFiles(datafolder):
     df.index = range(1,len(df) + 1)
     trainingdata_to_csv(df)
     return df
+
+
+def saveGPSFile(gps_file,gps_datafolder='C:\\python\\testdata\\gpxx4\\files\\',csv_file='C:\\python\\testdata\\gpxx4\\Activity_Summary2.csv',additional_info=None):
+    print("SAVEGPSFILE")
+    df = pd.read_csv(csv_file,parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
+    df['tottime'] = pd.to_timedelta(df['tottime'])
+    df['walk_time'] = pd.to_timedelta(df['walk_time'])
+
+    trainingData = additional_info
+
+    dateandtime = trainingData['dateandtime']
+    print(dateandtime)
+    
+    if min(abs(df['dateandtime'] - dateandtime)) < pd.Timedelta(minutes=2):
+        print("saveGPSFile Message: Timestamp already exists +/- 2 min",trainingData['dateandtime'])
+        return 125
+    else:
+        print("saveGPSFile Message: Timestamp OK",trainingData['dateandtime'])
+    
+
+    trainingData.update(additional_info)
+    trainingDF = pd.DataFrame([trainingData])
+    df = pd.concat([df, trainingDF])
+    trainingdata_to_csv(df)
+    
+    print('Successfully updated csv file')
+    
+    
+    
 
 def insertToGPXDatabase(originalfile,filename,activity,comment,indata):
     df = pd.read_csv('C:\\python\\testdata\\gpxx4\\Activity_Summary2.csv',parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
@@ -121,6 +152,8 @@ def trainingdata_to_csv(df):
            'speed_50000',
            'segments']
     
+    df = df.sort('dateandtime')
+    df.index = range(1,len(df) + 1)
     df.to_csv('C:\\python\\testdata\\gpxx4\\Activity_Summary2.csv',columns=col)
 
 def inputShortCut(txt):
@@ -306,9 +339,11 @@ def plotLength2(dataframe,actList,period='day'):
         _summary[act] = df1[act].resample(timeperiod,'sum')
         
         if i == 0:
-            _summary['sum'] = _summary[act]
+           
+            _summary['sum'] = _summary[act].fillna(0)
         else:
-            _summary['sum'] += _summary[act]
+            _summary['sum'] += _summary[act].fillna(0)
+
         
         ax.bar(_summary.index,_summary[act], bottom=_summary['sum'] - _summary[act], width=wi,color=getActivityColor(act),lw=1,edgecolor='#bbbbbb')
     
@@ -553,14 +588,51 @@ def getTrackBounds(filename):
     
     return gpxtricks.getTrackBounds(df)
 
+def getSegmentResults(filename,originalfile,activity):
+    
+    return segmentTimer.getSegmentResults(filename,originalfile,activity)
+
+def sufferScoreCalculator(dataframe,period='month'):
+    koff = [0,12/3600,24/3600,45/3600,100/3600,130/3600]
+    dataframe['sufferscore'] = (dataframe['sone1']*koff[1]+dataframe['sone2']*koff[2]+dataframe['sone3']*koff[3]+dataframe['sone4']*koff[4]+dataframe['sone5']*koff[5])#/(dataframe['sone1']+dataframe['sone2']+dataframe['sone3']+dataframe['sone4']+dataframe['sone5'])*100
+    times = pd.DatetimeIndex(dataframe['dateandtime'])
+    
+    pdict = dict()
+    pdict['day'] = [1,'D']
+    pdict['week'] = [7,'W-MON']
+    pdict['month'] = [28,'MS']
+    pdict['year'] = [365,'AS']
+    
+    timeperiod = pdict[period][1]
+    wi = pdict[period][0]
+    
+    fig,ax = plt.subplots()
+    indexed_df = dataframe.set_index(['dateandtime'])
+
+    _summary = pd.Series(indexed_df['sufferscore'],index=indexed_df.index).resample(timeperiod,'sum')
+    _summary1 = pd.Series(indexed_df['sufferscore'],index=indexed_df.index).resample(timeperiod,lambda x: len(x)-x.isnull().sum())
+    _summ3 = pd.DataFrame()
+    _summ3['suff'] = _summary/_summary1
+    ax.bar(_summ3.index,_summ3['suff'],width=wi)
+    #plt.show()
+    
+    dataframe['sec'] = dataframe['walk_time'].dt.seconds
+    print(dataframe[df['sufferscore']>df['sufferscore'].max()-80][['filename','sufferscore','sec']].sort('sufferscore',ascending=False).head(30))
+    
+    dataframe.to_csv('C:\\python\\testdata\\gpxx4\\test2.csv')
+
 
 if __name__ == "__main__":
-    start = timer()
-    df = checkForNewFiles('C:\\python\\testdata\\gpxx4\\files\\*.*')
-    end = timer()
-    print(end-start)
     
-    plotLength2(df,['Running'], period='month')
+    saveGPSFile('C:\\Users\\gjermund.vingerhagen\\Downloads\\activity_1441272743.gpx')
+    #===========================================================================
+    # start = timer()
+    # df = checkForNewFiles('C:\\python\\testdata\\gpxx4\\files\\*.*')
+    # end = timer()
+    # print(end-start)
+    # #sufferScoreCalculator(df)
+    # plotLength2(df,['Running','Rollerskiing'], period='month')
+    #===========================================================================
     #plotAvgImprovement(df,'Running',minDist=7.2,maxDist=20)
     #plotTrainingDiary(df,)
     #plotDuration(df,['Running','Rollerskiing','Skiing-X','Cycling'], period='month')

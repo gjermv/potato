@@ -5,9 +5,10 @@ from gpx.trainingAnalyzer_Form import Ui_MainWindow
 from PyQt4 import QtCore, QtGui
 from gpx import gpx_file_formater
 from gpx import training_analyzer
+from gpx.segmentTimer import TrackSegment,CrossLine,SegmentResult
 import matplotlib.pyplot as plt
 import numpy as np
-
+import pickle
 
 class MyMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
@@ -59,13 +60,18 @@ class MyMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         origfile = self.lineEdit_file_name.text()
         path = self.lineEdit_file_saveto.text()
         newname = self.lineEdit_file_newname.text()
-        newfileloc = path+'\\'+newname
-        print(newfileloc)
+        
+
+        self.data['filename'] = newname
+        self.data['activity'] = self.comboBox.currentText()
+        self.data['comment'] = self.textEdit.toPlainText()
+        self.data['segments'] = ''
         
         if len(newname)>0 and len(path) > 0:
             try:
+                #training_analyzer.checkForNewFiles('C:\\python\\testdata\\gpxx4\\files\\*.*')
+                training_analyzer.saveGPSFile(origfile,additional_info=self.data)
                 gpx_file_formater.copyGPSFile(origfile,path,newname)
-                training_analyzer.checkForNewFiles('C:\\python\\testdata\\gpxx4\\files\\*.*')
             except:
                 print("Somthing went wrong saving the file")
         
@@ -86,8 +92,10 @@ class MyMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         originalfile = self.lineEdit_file_name.text()
         filename = self.lineEdit_file_newname.text()
         print(filename)
+        
         df = training_analyzer.insertToGPXDatabase(originalfile,filename, actbox_txt, comment_txt,self.data)
         self.textEdit_2.setPlainText(training_analyzer.printSomething(df, filename))
+        self.textEdit_3.setPlainText(training_analyzer.getSegmentResults(filename,originalfile,actbox_txt))
 
 if __name__ == '__main__':
     app = QtGui.QApplication([])

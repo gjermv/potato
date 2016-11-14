@@ -126,7 +126,6 @@ class TrackSegment():
         a1 = False
         c1 = False
         
-        
         if a0:
             a1 = checkIntersection(gps1, gps2, startpoint1, startpoint2, a0)
             
@@ -177,13 +176,29 @@ class TrackSegment():
         
         return False
         
-    
-
-                    
     def prettyPrintResults(self):
         for run in self.segmentResults:
             run.prettyPrint(max(self.trkdistance))
 
+    def prettyPrintInfo(self,filename):
+        sortRun = sorted(self.segmentResults, key=lambda x: max(x.laptimes))
+        date_str = filename.split(' ')[0]
+        flag = False
+        if len(sortRun) < 1:
+            return 123
+        
+        l = len(sortRun)
+        besttime = sortRun[0].getFinishTime()
+        info_str = "{} - {:2}/{:2} Time: {} {: >10.2f} sec\n".format(sortRun[0].name,1,l,sortRun[0].getFinishTime(),(besttime-sortRun[0].getFinishTime()).total_seconds())
+        
+        for i,run in enumerate(sortRun):
+            if date_str in run.name:
+                flag = True
+                info_str += "{} - {:2}/{:2} Time: {} {: >10.2f} sec\n".format(run.name,i+1,l,run.getFinishTime(),(besttime-run.getFinishTime()).total_seconds())
+        if flag:               
+            return info_str              
+        else:
+            return 124
     def prettyPrintBestResult(self):
         bestrun = self.segmentResults[0]
         for run in self.segmentResults[1:]:
@@ -457,11 +472,29 @@ def getkmlSegmentList(activity=None):
 
     return [newSegs,activitySegments]
     
+def getSegmentResults(filename,originalfile,activity):
+    myActivity = activity
+    myInfo = ''
     
+    for segname in getkmlSegmentList(myActivity)[1]:
+        trkSeg = pickle.load( open( "C:\\python\\testdata\\gpxx4\\segments\\{}\\{}.p".format(myActivity,segname), "rb" ) )
+        segmentAnalyzer(originalfile, [trkSeg])
+        seginfo = trkSeg.prettyPrintInfo(filename)
+        if seginfo == 123:
+            pass
+        elif seginfo == 124:
+            pass
+        else:
+            print(trkSeg.name,max(trkSeg.trkdistance))
+            myInfo += '\n****' + trkSeg.name + ' ' + str(max(trkSeg.trkdistance))+'\n'
+            myInfo += seginfo
+    
+    print("MyInfo",myInfo)
+    return myInfo
      
 if __name__ == "__main__":
     # Create a tracksegment
-    myActivity = 'Rollerskiing'
+    myActivity = 'Running'
     seglist = []
     
     newkmlfiles = getkmlSegmentList(myActivity)[0]
@@ -488,21 +521,20 @@ if __name__ == "__main__":
     for segname in seglist:
         segname.save(activity=myActivity)
     
-    allactivityFiles = getkmlSegmentList(myActivity)[1] # Reload... 
-    seglist2 = []
-    
-    for segname in allactivityFiles:
-        print(segname)
+
+    for segname in getkmlSegmentList(myActivity)[1]:
+
         trkSeg = pickle.load( open( "C:\\python\\testdata\\gpxx4\\segments\\{}\\{}.p".format(myActivity,segname), "rb" ) )
-        seglist2.append(trkSeg)
+        
+        seginfo = trkSeg.prettyPrintInfo('2013-10-05 0930 Parkrun.gpx')
+        if seginfo == 123:
+            pass
+        elif seginfo == 124:
+            pass
+        else:
+            print(trkSeg.name,max(trkSeg.trkdistance))
+            print(seginfo)
     
-    #segmentAnalyzer('C:\\python\\testdata\\gpxx4\\files\\2016-11-04 2008 The Coppice.gpx',seglist2)
-    
-    for segname in seglist2:
-        print(segname.name)
-        segname.prettyPrintResults()
-        segname.prettyPlotResults2()
-        segname.prettyPlotResults()
         
 
     

@@ -338,8 +338,6 @@ def plotElevationProfile(dataframe,filename=None):
         print("file saved" , filename)
     else:
         plt.show()
-
-
 def plotElevationProfile2(dataframe,filename=None):
     ""
     dist = list(dataframe[dataframe['ele'] != np.nan]['dist'])
@@ -363,7 +361,6 @@ def plotElevationProfile2(dataframe,filename=None):
     else:
         plt.show()
 
-
 def plotSpeedProfile(dataframe,filename=None):
     
     dist = list(dataframe['duration'])[1:]
@@ -384,7 +381,7 @@ def plotSpeedProfile(dataframe,filename=None):
         plt.show()
 
 def plotHeartrateProfile(dataframe,filename=None):
-    
+    hrz_lim = heartZoneTable()
     dist = list(dataframe['duration'])
     y_val = list(dataframe['heartrate'])
     
@@ -393,6 +390,7 @@ def plotHeartrateProfile(dataframe,filename=None):
     ax = plt.axes()
     ax.yaxis.grid(True)
     ax.set_axisbelow(True)
+    plt.yticks([hrz_lim['sone1'],hrz_lim['sone2'],hrz_lim['sone3'],hrz_lim['sone4']])
     plt.plot(dist,y_val,'#b30000',linewidth=3)
     
     if filename:
@@ -430,8 +428,7 @@ def plotHeartZone(dataframe,filename=None):
         print("file saved" , filename)
     else:
         plt.show()
-    
-         
+             
 def reducePoints(dataframe):
     lat = dataframe['lat']
     lon = dataframe['lon']
@@ -693,11 +690,21 @@ def getKommuneGrense(filename='C:\\python\\kommuner\\kom_grens-mod.json',kommune
                 l.append([pos[1],pos[0]])
     return l
 
+def heartZoneTable():
+    """Defines max values for heartrate zones"""
+    hr_tab = dict()
+    hr_tab['sone1'] = 135
+    hr_tab['sone2'] = 155
+    hr_tab['sone3'] = 165
+    hr_tab['sone4'] = 175
+    return hr_tab
+
+
 def heartZone(df):
     df = df[df['heartrate'].notnull()][:]
     df['timediff'] = df['duration'].diff()
     df['heartrate2'] = (df['heartrate'].shift()+df['heartrate'])/2
-    
+    hrzones = heartZoneTable()
     hz =  dict()
     hz[1] = 0
     hz[2] = 0
@@ -707,15 +714,15 @@ def heartZone(df):
     
     for row in df.iterrows():
         if row[1]['heartrate2'] > 0:
-            if row[1]['heartrate2'] < 135:
+            if row[1]['heartrate2'] < hrzones['sone1']:
                 hz[1] += row[1]['timediff']
-            elif row[1]['heartrate2'] < 155:
+            elif row[1]['heartrate2'] < hrzones['sone2']:
                 hz[2] += row[1]['timediff']
-            elif row[1]['heartrate2'] < 165:
+            elif row[1]['heartrate2'] < hrzones['sone3']:
                 hz[3] += row[1]['timediff']
-            elif row[1]['heartrate2'] < 175:
+            elif row[1]['heartrate2'] < hrzones['sone4']:
                 hz[4] += row[1]['timediff']
-            elif row[1]['heartrate2'] > 175: 
+            elif row[1]['heartrate2'] > hrzones['sone4']: 
                 hz[5] += row[1]['timediff']
     
     if hz[1]+hz[2]+hz[3]+hz[4]+hz[5] == 0:
@@ -867,13 +874,28 @@ def showEleMap(dataframe,filename='None'):
     ax.xaxis.grid(True)
     ax1.xaxis.grid(True)
     plt.show()
-    
 
+def calculateSufferScore(dataframe):
+    if sum(dataframe['heartrate'])<0:
+        return -1
+    
+    a = 0.00002
+    b = 0.0422
+    
+    df = dataframe.copy()
+    df['d_dur'] = df['duration'].diff()
+    df['r_hr'] = (df['heartrate']+df['heartrate'].shift())/2
+
+    df['suffer'] = df['d_dur']*a*np.exp(df['r_hr']*b)
+
+    return df['suffer'].sum()
+    
 if __name__ == "__main__":
     df = pd.read_csv('C:\\python\\testdata\\gpxx4\\Activity_Summary2.csv',parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
-    df_time = df[df['dateandtime']>'2016-10-10']
-    df_act = df_time[df_time['activity']=='Rollerskiing']
+    df_time = df[df['dateandtime']>'2016-01-01']
+    df_act = df_time[df_time['activity']!='Gree']
     filelist = list(df_act['filename'])
+    l = list()
     
     for item in filelist:  
         filename = 'C:\\python\\testdata\\gpxx4\\files\\{}'.format(item)
@@ -883,21 +905,16 @@ if __name__ == "__main__":
         except:
             trk=TCXtoDataFrame(filename)
         #print('Number of points: ',len(trk))
-        
-        #=======================================================================
-        # if heartAverage(trk):
-        #     print('{:8.1f};{};{:8.1f};{}'.format(trk['dist'].max(),trk['duration'].max(),heartAverage(trk)['total'],item))
-        # 
-        # plotHeartZone(trk)
-        #=======================================================================
-        #Print best times
-        
-        t = findBestTempo2(trk)
+        x = calculateSufferScore(trk)
         print(item)
-        for item2 in sorted(t):
-            if t[item2][0]> 0:
-                print('{:5}m; {:>4.2f} km/h; {:>.1f}'.format(item2,t[item2][0]*3.6,t[item2][1]))
-        print(getClimbingHeightGPS(trk))
+        l.append([item,calculateSufferScore(trk)])
+            
+    p = pd.DataFrame(l)
+    p.to_csv('C:\\python\\testdata\\gpxx4\\test.csv')
+
+        
+        
+
   #=============================================================================
   #       gpsh = showEleMap(trk)
   #       dtmh = getClimbingHeightDTM(trk)
