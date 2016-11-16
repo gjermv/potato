@@ -9,6 +9,7 @@
 </metadata>
 <trk>
 	<name>Cycle,Walk,Cycle</name>
+	<desc>Cycle</desc>
 	<trkseg>
 		<trkpt lat="59.921219442" lon="11.6493462212">
 			<ele>285.17</ele>
@@ -331,6 +332,9 @@
 			<time>2013-07-02T08:48:23Z</time>
 		</trkpt>
 	</trkseg>
+</trk>
+<trk>
+	<desc>Walk</desc>
 	<trkseg>
 		<trkpt lat="59.9282766692" lon="11.6389897093">
 			<ele>398.12</ele>
@@ -629,6 +633,9 @@
 			<time>2013-07-02T08:59:11Z</time>
 		</trkpt>
 	</trkseg>
+</trk>
+<trk>
+	<desc>Cycle</desc>
 	<trkseg>
 		<trkpt lat="59.9281478394" lon="11.6390550043">
 			<ele>376.49</ele>
