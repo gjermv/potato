@@ -3,9 +3,9 @@ from PyQt4 import QtGui
 # import the UI from the generated file
 from gpx.trainingAnalyzer_Form import Ui_MainWindow
 from PyQt4 import QtCore, QtGui
-from gpx import gpx_file_formater
-from gpx import training_analyzer
-from gpx.segmentTimer import TrackSegment,CrossLine,SegmentResult
+import gpx_file_formater
+import training_analyzer
+from segmentTimer import TrackSegment,CrossLine,SegmentResult
 import matplotlib.pyplot as plt
 import numpy as np
 import pickle

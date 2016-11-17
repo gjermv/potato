@@ -6,7 +6,7 @@ Created on 7 Jan 2016
 '''
 
 from jinja2 import Environment, FileSystemLoader
-from gpx import gpxtricks
+import gpxtricks
 import os.path
 from datetime import timedelta as dtt
 

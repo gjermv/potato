@@ -9,6 +9,9 @@ from datetime import datetime as dt
 from datetime import timedelta as dtt
 import googlemaps
 import os.path
+import utmconverter as utmconv
+import collections as cs
+
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -124,7 +127,7 @@ def copyGPSFile(originalFile,saveFilepath,newFilename):
     if 'gpx' in extension:
         copyGPX2(originalFile, saveFilepath, newFilename)
     elif 'tcx' in extension:
-       copyTCX2(originalFile, saveFilepath, newFilename)
+        copyTCX2(originalFile, saveFilepath, newFilename)
     return 1
 
 def getNewFileName(filename):
@@ -147,10 +150,17 @@ def getNewFileName(filename):
         startlon = pdata['lon']
         starttime = pdata['time']
         
-    loc = googleLocation(startlat, startlon)
+    
+    knowLoc = getKnownLocation(startlat, startlon)
+    loc = 'Unknown'
+    if knowLoc:
+        loc = knowLoc.placename
+    else:   
+        loc = googleLocation(startlat, startlon)
+        
     timezone = googleTimezone(startlat, startlon, starttime)
-     
     newfilename = createfilename(loc,starttime,timezone,extension)
+    
     return newfilename
     
 def normalizedata(lat,lon,mytime):
@@ -240,7 +250,24 @@ def googleTimezone(lat,lon,starttime):
         return totOffset
     else: return "Location not known"
 
+def getKnownLocation(lat,lon):
+    radius = 75 # unit: meter
+    loc = cs.namedtuple('Location','placename,lat, lon')
+    
+    locList = list()
+    locList.append(loc('The Coppice', 52.23757, 0.111214))
+    locList.append(loc('Moaveien', 59.278336, 11.026042))
+    locList.append(loc('Rotherwick', 51.302635,  -0.971286))
+    
+    for item in locList:
+        print(utmconv.haversine(item.lon, item.lat, lon, lat))
+        if utmconv.haversine(item.lon, item.lat, lon, lat)< radius:
+            return item
+    
+    return False
+    
 
+    
 #===============================================================================
 # for file in glob.glob('C:\\python\\testdata\\free\\fre5\\*.gpx'):
 #     print(file)
