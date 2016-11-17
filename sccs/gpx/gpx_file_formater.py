@@ -12,7 +12,6 @@ import os.path
 import utmconverter as utmconv
 import collections as cs
 
-
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -266,14 +265,3 @@ def getKnownLocation(lat,lon):
     
     return False
     
-
-    
-#===============================================================================
-# for file in glob.glob('C:\\python\\testdata\\free\\fre5\\*.gpx'):
-#     print(file)
-#     newname = copyGPX(file)
-#     print('->',newname)
-#     time.sleep(0.75)
-#===============================================================================
-
-#plotTCXfile('C:\\python\\testdata\\outdata\\2016-03-18 2129 Pine Court-Impington-Cambridge-Cambridgeshire CB24 9ZT-UK.tcx')
