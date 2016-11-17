@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 <html>
@@ -9,8 +8,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title></title>
 
-<script>
-(function(d, s, id) {
+<script>(function(d, s, id) {
 	var js, fjs = d.getElementsByTagName(s)[0];
 	if (d.getElementById(id)) return;
 	js = d.createElement(s); js.id = id;
@@ -20,7 +18,6 @@
 </script>
 
 <script>
-
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -28,31 +25,52 @@
 	
 	ga('create', 'UA-3916590-3', 'auto');
 	ga('send', 'pageview');
-
 </script>
 </head>
 
 <body>
 	<div id="header">
 		<div id="statistikk">
-		<!-- <img src='fig/statistic.png' width='30px' align='left'> -->
+		<!-- <img src='img/statistic.png' width='30px' align='left'> -->
 		<a href='index.html'>LITT STATISTIKK:</a><br>
-		<a href='stat02.html'>{{tot_antall_besteget}}/429 kommuner</a><br>
-		<a href='stat06.html'>{{tot_tottid}} timer på tur</a><br>
-		<a href='stat04.html'>{{tot_length}} kilometer</a><br>
-		<a href='stat14.html'>{{tot_elevation}} høydemeter</a></a>
+		<a href='stat02.html'>79/429 kommuner</a><br>
+		<a href='stat06.html'>297 timer på tur</a><br>
+		<a href='stat04.html'>778 kilometer</a><br>
+		<a href='stat14.html'>45630 høydemeter</a></a>
 		</div>
 		<div id="turrapporter">
-		<!-- <img src='fig/report.png' width='30px' align='left'> -->
+		<!-- <img src='img/report.png' width='30px' align='left'> -->
 		NOEN TURRAPPORTER:<br>
-		{{siste_rapporter}}
+		<a href='1551.html'>2015-08-30 Eide</a><br>
+		<a href='1557.html'>2015-08-30 Gjemnes</a><br>
+		<a href='0420.html'>2015-07-26 Eidskog</a><br>
+		<a href='0701.html'>2015-07-22 Horten</a>
 		</div>
 		<div id="search">
-		<img src='fig/search2.png' width='30px' align='left'>
+		<img src='img/search2.png' width='30px' align='left'>
 		<form name="searchform">
 		Fylke:<br>
 		<select name="textbox_id1" id="textbox_id1" onchange="updateTextBox2(this.selectedIndex)">
-		{{select_fylkeliste}}
+			<option selected>Velg fylke</option>
+			<option>Akershus</option>
+			<option>Aust-Agder</option>
+			<option>Buskerud</option>
+			<option>Finmark</option>
+			<option>Hedmark</option>
+			<option>Hordaland</option>
+			<option>Møre og Romsdal</option>
+			<option>Nord-Trøndelag</option>
+			<option>Nordland</option>
+			<option>Oppland</option>
+			<option>Oslo</option>
+			<option>Rogaland</option>
+			<option>Sogn og Fjordane</option>
+			<option>Sør-Trøndelag</option>
+			<option>Telemark</option>
+			<option>Troms</option>
+			<option>Vest-Agder</option>
+			<option>Vestfold</option>
+			<option>Østfold</option>
 		</select>
 		<br>
 		Kommune:<br>
@@ -61,22 +79,19 @@
 		</form>
 		</div>
 		<div id="banner">
-		<img src='fig/banner-logo3.png'>
+		<img src='img/banner-logo3.png'>
 		</div>
 	</div>
 
 	<div id="main">
 	<hr>
 	</div>
-	
 	<div id="main">
 		<div id="article">
 			<div id="articleheader">
-			{{topp}} ({{hoyde2}}moh)
-			<a href="{{neste_kommune}}.html">
-			<img src='fig/right.png' align='right'></a>
-			<a href="{{forrige_kommune}}.html">
-			<img src='fig/left.png' align='right'></a></div>
+			{{topp}} - {{hoyde2}} moh
+			<a href="{{kommunenr}}.html">
+			<img src='fig/right.png' align='right'></a></div>
 			<div id="articlestat">
 			KOMMUNE: {{kommunenavn}}
 			</div>
@@ -94,49 +109,64 @@
 			</div>
 			</div>
 			<div id="articleprofile">
-			<img src='profile2/{{kommunenr}}.png' width='99%' align='left' onerror="this.src='fig/fjell-error1.png'">
-
+			<img src='profile/{{kommunenr}}.png' width='99%' align='left' onerror="this.src='fig/fjell-error1.png'">
+			</div>
 			<div class="fb-comments" data-href="http://www.vingerhagen.com/topp/{{kommunenr}}.html" data-width="640" data-numposts="5">
 			</div>
 		</div>
 		
 		<div id="pic">
-			<img src='img/{{kommunenr}}.jpg' width='360'>
+			<img src='img/{{kommunenr}}.jpg' width='360' onerror="this.src='fig/fjell-error2.png'">
 			<div id="pictekst">
-			----
-			</div>
+			Bildetekst
+		</div> 
+		<div id="picstat">
+		GPS Statistikk</br>
+		<hr>
+		<table width='100%'>
+		<tr>
+		<td><b>Tur info</b></td><td align='left'></td><td align='right'></td></tr><tr>
+		<td align='left'>{{length}} km </td>
+		<td align='center'> {{walk_time}} t </td>
+		<td align='right'>{{avg_speed}} km/t </td>
+		</tr>
 		
-			<div id="picstat">
-			GPS Statistikk<br>
-			<hr>
-			<table width='100%'>
-			<tr>
-			<td><b>Tur info</b></td><td align='left'></td><td align='right'></td></tr><tr>
-			<td align='left'>{{length}} km </td>
-			<td align='center'> {{walk_time}} t </td>
-			<td align='right'>{{avg_speed}} km/t </td>
-			</tr>
-			</table>
-			<hr>
-			
-			<table width='100%'>
-			<tr><td>Pauser:</td><td align='right'>{{stop_time}} t</td><td align='right'><i>(22)</i></td></tr>
-			<tr><td>Pausefaktor:</td><td align='right'>{{pause_faktor}}% </td><td align='right'><i>(38)</i></td></tr>
-			<tr><td>Høydeforskjell:</td><td align='right'>{{elediff}} m</td><td align='right'><i>(14)</i></td></tr>
-			<tr><td>Total stigning:</td><td align='right'>{{climbing}} m</td><td align='right'><i>(13)</i></td></tr>
-			<tr><td>Bratthet:</td><td align='right'> {{steepness}} m/km</td><td align='right'><i>(7)</i></td></tr>
-			<tr><td>Høydemeter pr min:</td><td align='right'> {{climbingrate}} m/min</td><td align='right'><i>(23)</i></td></tr>
-			<tr><td>Kuperthetsfaktor:</td><td align='right'> {{kupert_faktor}} </td><td align='right'><i>(34)</i></td></tr>
-			<tr><td>Toppturfaktor:</td><td align='right'> {{topptur_faktor}} %</td><td align='right'><i>(40)</i></td></tr>
-			</table></div>
-		</div>
-	</div>
+		</table><hr><table width='100%'>
+		<tr><td>Pauser:</td><td align='right'>{{stop_time}} t</td><td align='right'><i>(22)</i></td></tr>
+		<tr><td>Pausefaktor:</td><td align='right'>{{pause_faktor}}% </td><td align='right'><i>(38)</i></td></tr>
+		<tr><td>Høydeforskjell:</td><td align='right'>{{elediff}} m</td><td align='right'><i>(14)</i></td></tr>
+		<tr><td>Total stigning:</td><td align='right'>{{climbing}} m</td><td align='right'><i>(13)</i></td></tr>
+		<tr><td>Bratthet:</td><td align='right'> {{steepness}} m/km</td><td align='right'><i>(7)</i></td></tr>
+		<tr><td>Høydemeter pr min:</td><td align='right'> {{climbingrate}} m/min</td><td align='right'><i>(23)</i></td></tr>
+		<tr><td>Kuperthetsfaktor:</td><td align='right'> {{kupert_faktor}} </td><td align='right'><i>(34)</i></td></tr>
+		<tr><td>Toppturfaktor:</td><td align='right'> {{topptur_faktor}} %</td><td align='right'><i>(40)</i></td></tr><tr>
+		<table></div></div></div>
 
 </body>
 
 <script>
 var kommuner = new Array();
-{{select_kommuneliste}}
+kommuner[0] = "";
+kommuner[1] = ["Velg kommune|0000","Asker|0220","* Aurskog-Høland|0221","Bærum|0219","* Eidsvoll|0237","Enebakk|0229","Fet|0227","Frogn|0215","Gjerdrum|0234","Hurdal|0239","Lørenskog|0230","Nannestad|0238","Nes|0236","Nesodden|0216","Nittedal|0233","Oppegård|0217","Rælingen|0228","Skedsmo|0231","Ski|0213","Sørum|0226","Ullensaker|0235","* Vestby|0211","Ås|0214",];
+kommuner[2] = ["Velg kommune|0000","Arendal|0906","Birkenes|0928","Bygland|0938","Bykle|0941","Evje og Hornnes|0937","Froland|0919","Gjerstad|0911","Grimstad|0904","Iveland|0935","Lillesand|0926","Risør|0901","Tvedestrand|0914","Valle|0940","Vegårshei|0912","Åmli|0929",];
+kommuner[3] = ["Velg kommune|0000","Drammen|0602","Flesberg|0631","Flå|0615","Gol|0617","Hemsedal|0618","Hol|0620","Hole|0612","Hurum|0628","Kongsberg|0604","Krødsherad|0622","Lier|0626","Modum|0623","Nedre Eiker|0625","Nes|0616","Nore og Uvdal|0633","Ringerike|0605","Rollag|0632","Røyken|0627","Sigdal|0621","Ål|0619","Øvre Eiker|0624",];
+kommuner[4] = ["Velg kommune|0000","Alta|2012","Berlevåg|2024","Båtsfjord|2028","Tana|2025","Gamvik|2023","Kautokeino|2011","Hammerfest|2004","Hasvik|2015","Karasjok|2021","Kvalsund|2017","Lebesby|2022","Loppa|2014","Måsøy|2018","Nesseby|2027","Nordkapp|2019","Porsanger|2020","Sør-Varanger|2030","Vadsø|2003","Vardø|2002",];
+kommuner[5] = ["Velg kommune|0000","Alvdal|0438","* Eidskog|0420","Elverum|0427","* Engerdal|0434","Folldal|0439","Grue|0423","Hamar|0403","Kongsvinger|0402","Løten|0415","* Nord-Odal|0418","Os|0441","Rendalen|0432","Ringsaker|0412","* Stange|0417","Stor-Elvdal|0430","Sør-Odal|0419","Tolga|0436","Trysil|0428","Tynset|0437","Våler|0426","Åmot|0429","Åsnes|0425",];
+kommuner[6] = ["Velg kommune|0000","Askøy|1247","Austevoll|1244","Austrheim|1264","Bergen|1201","Bømlo|1219","Eidfjord|1232","Etne|1211","Fedje|1265","Fitjar|1222","Fjell|1246","Fusa|1241","Granvin|1234","Jondal|1227","Kvam|1238","Kvinnherad|1224","Lindås|1263","Masfjorden|1266","Meland|1256","Modalen|1252","Odda|1228","Os|1243","Osterøy|1253","Radøy|1260","Samnanger|1242","Stord|1221","Sund|1245","Sveio|1216","Tysnes|1223","Ullensvang|1231","Ulvik|1233","Vaksdal|1251","Voss|1235","Øygarden|1259",];
+kommuner[7] = ["Velg kommune|0000","* Aukra|1547","* Aure|1576","* Averøy|1554","* Eide|1551","* Fræna|1548","* Giske|1532","* Gjemnes|1557","Halsa|1571","Haram|1534","* Hareid|1517","Herøy|1515","* Kristiansund|1505","* Midsund|1545","* Molde|1502","Nesset|1543","Norddal|1524","Rauma|1539","Rindal|1567","Sande|1514","* Sandøy|1546","Skodje|1529","* Smøla|1573","Stordal|1526","Stranda|1525","Sula|1531","* Sunndal|1563","* Surnadal|1566","Sykkylven|1528","Tingvoll|1560","* Ulstein|1516","Vanylven|1511","Vestnes|1535","Volda|1519","Ålesund|1504","Ørskog|1523","Ørsta|1520",];
+kommuner[8] = ["Velg kommune|0000","Flatanger|1749","Fosnes|1748","* Frosta|1717","Grong|1742","Høylandet|1743","* Inderøy|1756","Leka|1755","* Leksvik|1718","* Levanger|1719","Lierne|1738","* Meråker|1711","Mosvik|1723","Namdalseid|1725","Namsos|1703","Namsskogan|1740","Nærøy|1751","Overhalla|1744","Røyrvik|1739","Snåsa|1736","Steinkjer|1702","* Stjørdal|1714","Verdal|1721","Verran|1724","Vikna|1750",];
+kommuner[9] = ["Velg kommune|0000","Alstahaug|1820","Andøy|1871","Ballangen|1854","Beiarn|1839","Bindal|1811","Bodø|1804","Brønnøy|1813","Bø|1867","Dønna|1827","Evenes|1853","Fauske|1841","Flakstad|1859","Gildeskål|1838","Grane|1825","Hadsel|1866","Hamarøy|1849","Hattfjelldal|1826","Hemnes|1832","Herøy|1818","Leirfjord|1822","Lurøy|1834","Lødingen|1851","Meløy|1837","Moskenes|1874","Narvik|1805","Nesna|1828","Rana|1833","Rødøy|1836","Røst|1856","Saltdal|1840","Sortland|1870","Steigen|1848","Sømna|1812","Sørfold|1845","Tjeldsund|1852","Træna|1835","Tysfjord|1850","Vefsn|1824","Vega|1815","Vestvågøy|1860","Vevelstad|1816","Vågan|1865","Værøy|1857","Øksnes|1868",];
+kommuner[10] = ["Velg kommune|0000","Dovre|0511","Etnedal|0541","Gausdal|0522","Gjøvik|0502","Gran|0534","Jevnaker|0532","* Lesja|0512","* Lillehammer|0501","Lom|0514","Lunner|0533","* Nord-Aurdal|0542","Nord-Fron|0516","Nordre Land|0538","Ringebu|0520","Sel|0517","Skjåk|0513","Søndre Land|0536","Sør-Aurdal|0540","Sør-Fron|0519","Vang|0545","Vestre Slidre|0543","* Vestre Toten|0529","Vågå|0515","Østre Toten|0528","Øyer|0521","Øystre Slidre|0544",];
+kommuner[11] = ["Velg kommune|0000","Oslo|0301",];
+kommuner[12] = ["Velg kommune|0000","Bjerkreim|1114","Bokn|1145","Eigersund|1101","Finnøy|1141","Forsand|1129","Gjesdal|1122","Haugesund|1106","Hjelmeland|1133","Hå|1119","Karmøy|1149","* Klepp|1120","* Kvitsøy|1144","Lund|1112","* Randaberg|1127","* Rennesøy|1142","Sandnes|1102","Sauda|1135","Sokndal|1111","* Sola|1124","* Stavanger|1103","Strand|1130","Suldal|1134","Time|1121","Tysvær|1146","Utsira|1151","Vindafjord|1160",];
+kommuner[13] = ["Velg kommune|0000","Askvoll|1428","Aurland|1421","Balestrand|1418","Bremanger|1438","Eid|1443","Fjaler|1429","Flora|1401","Førde|1432","Gaular|1430","Gloppen|1445","Gulen|1411","Hornindal|1444","Hyllestad|1413","Høyanger|1416","Jølster|1431","Leikanger|1419","Luster|1426","Lærdal|1422","Naustdal|1433","Selje|1441","Sogndal|1420","Solund|1412","Stryn|1449","Vik|1417","Vågsøy|1439","Årdal|1424",];
+kommuner[14] = ["Velg kommune|0000","* Agdenes|1622","* Bjugn|1627","* Frøya|1620","* Hemne|1612","* Hitra|1617","* Holtålen|1644","* Klæbu|1662","* Malvik|1663","* Meldal|1636","* Melhus|1653","* Midtre Gauldal|1648","* Oppdal|1634","* Orkdal|1638","Osen|1633","* Rennebu|1635","* Rissa|1624","Roan|1632","Røros|1640","* Selbu|1664","* Skaun|1657","* Snillfjord|1613","* Trondheim|1601","* Tydal|1665","Åfjord|1630","* Ørland|1621",];
+kommuner[15] = ["Velg kommune|0000","Bamble|0814","* Bø|0821","Drangedal|0817","Fyresdal|0831","Hjartdal|0827","Kragerø|0815","Kviteseid|0829","Nissedal|0830","Nome|0819","Notodden|0807","* Porsgrunn|0805","Sauherad|0822","Seljord|0828","Siljan|0811","Skien|0806","Tinn|0826","Tokke|0833","Vinje|0834",];
+kommuner[16] = ["Velg kommune|0000","Balsfjord|1933","Bardu|1922","Berg|1929","Bjarkøy|1915","Dyrøy|1926","Kåfjord|1940","Gratangen|1919","Harstad|1901","Ibestad|1917","Karlsøy|1936","Kvæfjord|1911","Kvænangen|1943","Lavangen|1920","Lenvik|1931","Lyngen|1938","Målselv|1924","Nordreisa|1942","Salangen|1923","Skjervøy|1941","Skånland|1913","Storfjord|1939","Sørreisa|1925","Torsken|1928","Tranøy|1927","Tromsø|1902",];
+kommuner[17] = ["Velg kommune|0000","Audnedal|1027","Farsund|1003","Flekkefjord|1004","Hægebostad|1034","Kristiansand|1001","Kvinesdal|1037","Lindesnes|1029","Lyngdal|1032","Mandal|1002","Marnardal|1021","Sirdal|1046","Songdalen|1017","Søgne|1018","Vennesla|1014","Åseral|1026",];
+kommuner[18] = ["Velg kommune|0000","Andebu|0719","Hof|0714","Holmestrand|0702","* Horten|0701","Lardal|0728","Larvik|0709","Nøtterøy|0722","Re|0716","Sande|0713","Sandefjord|0706","Stokke|0720","Svelvik|0711","Tjøme|0723","Tønsberg|0704",];
+kommuner[19] = ["Velg kommune|0000","* Aremark|0118","* Askim|0124","Eidsberg|0125","* Fredrikstad|0106","Halden|0101","* Hobøl|0138","* Hvaler|0111","* Marker|0119","* Moss|0104","* Rakkestad|0128","* Rygge|0136","* Råde|0135","* Rømskog|0121","* Sarpsborg|0105","* Skiptvet|0127","* Spydeberg|0123","* Trøgstad|0122","* Våler|0137",];
+
 
 
 var kommunelist = document.searchform.textbox_id2;

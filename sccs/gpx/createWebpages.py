@@ -60,6 +60,7 @@ def updateDetailedStat(stat,mainInfo,kom):
     
     return stat
 
+
 def siste_rapporter_HTML(datolist):
     d = dict()
     rapports = sorted(datolist,reverse=True)[0:4]
