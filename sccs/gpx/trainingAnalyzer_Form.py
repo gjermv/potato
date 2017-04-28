@@ -7,6 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
+from PyQt4 import QtWebKit
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -295,4 +296,3 @@ class Ui_MainWindow(object):
         self.actionExit.setText(_translate("MainWindow", "Exit", None))
         self.actionSave_As.setText(_translate("MainWindow", "Save As", None))
 
-from PyQt4 import QtWebKit

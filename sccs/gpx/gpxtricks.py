@@ -203,8 +203,12 @@ def getmainInfo(dataframe):
     climbing = getClimbingHeightGPS(dataframe)
     steepness = climbing/(length/2)
     climbingrate = climbing/(walktime/2)
-    kupert_faktor = climbing/elediff
-    topptur_faktor = elediff/ele_max
+    try: 
+        kupert_faktor = climbing/elediff
+        topptur_faktor = elediff/ele_max
+    except: 
+        kupert_faktor = 0
+        topptur_faktor = 0
     
     info = dict()
     info['length'] = round(length/1000,2) #km 
@@ -905,7 +909,7 @@ def calculateSufferScore(dataframe):
 if __name__ == "__main__":
     df = pd.read_csv('C:\\python\\testdata\\gpxx4\\Activity_Summary2.csv',parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
     df_time = df[df['dateandtime']>'2016-01-01']
-    df_act = df_time[df_time['activity']!='Gree']
+    df_act = df_time[df_time['activity'] == 'Running']
     filelist = list(df_act['filename'])
     l = list()
     
@@ -919,13 +923,11 @@ if __name__ == "__main__":
         #print('Number of points: ',len(trk))
         x = calculateSufferScore(trk)
         print(item)
-        l.append([item,calculateSufferScore(trk)])
+        l.append([item.split(' ')[0],item.split(' ')[1:],calculateSufferScore(trk)])
             
     p = pd.DataFrame(l)
-    p.to_csv('C:\\python\\testdata\\gpxx4\\test.csv')
+    p.to_csv('C:\\python\\testdata\\gpxx4\\Suffer.csv')
 
-        
-        
 
   #=============================================================================
   #       gpsh = showEleMap(trk)

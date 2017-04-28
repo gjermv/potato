@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import ftplib
 import urllib
 from cryptography.fernet import Fernet
@@ -50,35 +52,70 @@ class Runner():
             int_pos = 99999    
         try:
             t = rResult.time.split(':')
-            d_time = timedelta(hours=t[0],minutes=t[1],seconds = t[2])
+            d_time = timedelta(hours=int(t[0]),minutes=int(t[1]),seconds = int(t[2]))
         except:
             d_time = rResult.time
         
         self.events.append(shortResult(courseId,int_pos,d_time,int_points))
 
         ## Update bofPoints
+    
+    def getAveragePoints(self):
+        s = 0
+        l = 0
+        for ev in self.events:
+            eventNr,courseNr = ev.courseId
+            if eventsDict[eventNr].eDate > datetime.now()-timedelta(days=365):
+                if ev.points > 0:
+                    s += ev.points
+                    l += 1
+        if l> 0:
+            return s/l
+        else:
+            return 0
+    
+    def getFastestRun(self):
+        bestRun = 0
+        for ev in self.events:
+            eventNr,courseNr = ev.courseId
+            if eventsDict[eventNr].eDate > datetime.now()-timedelta(days=365):
+                if type(ev.time) != type('str'):
+                    bestRun += courseDict[ev.courseId].cClimb
+        return bestRun
+                        
         
-    def printEvents(self):
+    def prettyPrint(self):
         numberOfEvents = 0
         numberOfRankingEvents = 0
         numberOfNoPosition = 0
+        topThree = 0
+        totRankPoints = 0 
+
         for ev in self.events[:]:
-            #print(eventsDict[ev.courseId[0]].eName,',',ev.pos,',',ev.time,',',ev.points)
-            print(ev.courseId,',',self.name)
+            eventNr,courseNr = ev.courseId
+            if eventsDict[eventNr].eDate > datetime(year=2015,month=12,day=31):
+                numberOfEvents += 1
+                if ev.points > 0:
+                    numberOfRankingEvents += 1
+                    totRankPoints += ev.points
+                    if ev.pos < 1000:
+                        numberOfNoPosition += 1
+                        if ev.pos in [1,2,3]:
+                            topThree += 1
+                    
+        return '{};{};{};{};{};{};{};{}\n'.format(self.name,self.club,self.yob,numberOfEvents,numberOfRankingEvents,numberOfNoPosition,topThree,totRankPoints)
+           
+    def prettyPrint2(self):
+        s = ''
+        
+        for ev in self.events[:]:
+            eventNr,courseNr = ev.courseId
+            event2 = eventsDict[eventNr]
+            if eventsDict[eventNr].eDate > datetime(year=2011,month=12,day=31):
+                
+                s += '{};{};{};{};{};{};{};{};{};{};{};{}\n'.format(self.name,eventNr,courseNr,event2.eDate,event2.eName,courseDict[ev.courseId].cName,ev.pos,ev.points,ev.time,courseDict[ev.courseId].cLength,courseDict[ev.courseId].cClimb,courseDict[ev.courseId].cControls)
             
-            
-    def getRankingPoints(self):
-        sl = sorted(self.events,key=attrgetter('points'),reverse=True)
-        su = 0
-        sx = 0
-        for r in sl[:6]:
-            date = datetime.strftime(eventsDict[r.courseId[0]].eDate,'"%d %m %Y')
-            print(date,eventsDict[r.courseId[0]].eName,r.points,r.courseId)
-            if r.points > 0:
-                su += r.points
-                sx += 1
-        print('Average = {}/{}'.format(su/sx,sx))
-                  
+        return s     
 
 class Event():
     def __init__(self):
@@ -128,14 +165,16 @@ class EventCourse():
 
     def updateCourseFromTXT(self,cId,txtLine):
         self.cId = cId
-        resstr = txtLine.split(';')
+        resstr = txtLine.replace('\n','').split(';')
         self.cName = resstr[0]
-        self.cLength  = resstr[1]
-        self.cClimb = resstr[2]
-        self.cControls = resstr[3]
+        self.cLength  = float(resstr[1])
+        self.cClimb = float(resstr[2])
+        self.cControls = int(resstr[3])
           
     def parseCourseDesc(self,desc):
         a1 = desc.rfind('(')
+        if a1 == -1:
+            a1 = len(desc)
         self.cName = desc[:a1].strip()
         s2 = desc[a1+1:-1].split(',')
         
@@ -280,6 +319,7 @@ def parseEventWebPage(local=True):
 
 def getCourseIDs(eDay,courseNr=1,local=True):
     url = 'https://www.britishorienteering.org.uk/index.php?pg=results&eday={0}&results={0}&course={1}&'.format(str(eDay),str(courseNr))
+    
     if local:
         response = open('C:\\python\\testdata\\bori\\BOResults_{0}_{1}.html'.format(str(eDay),str(courseNr),'r'))
     else:
@@ -307,7 +347,8 @@ def getCourseIDs(eDay,courseNr=1,local=True):
                 result_id = l[l.find('results=')+8:l.find('course=')-1]
                 if eday_id == result_id:
                     courseList.append((eDay,int(l[l.find('course=')+7:len(l)-1])))
-
+    
+    courseList = list(set(courseList))
     return courseList
 
 
@@ -317,12 +358,12 @@ def parseCourseWebpage(courseID,local=True):
     url = 'https://www.britishorienteering.org.uk/index.php?pg=results&eday={0}&results={0}&course={1}&'.format(str(eDay),str(courseNr))
     
     if local:
-        response = open('C:\\python\\testdata\\bori\\BOResults_{0}_{1}.html'.format(str(eDay),str(courseNr),'r'))
+        response = open('C:\\python\\testdata\\bori\\BOResults_{0}_{1}.html'.format(str(eDay),str(courseNr)),'rb')
     else:
         response = urllib.request.urlopen(url)
         soup = BeautifulSoup(response.read(), 'html.parser')
-        f2 = open('C:\\python\\testdata\\bori\\BOResults_{0}_{1}.html'.format(str(eDay),str(courseNr)),'wb')
-        f2.write(bytes(str(soup),encoding='utf-8')) # Creates an error in the s
+        f2 = open('C:\\python\\testdata\\bori\\BOResults_{0}_{1}.html'.format(str(eDay),str(courseNr)),'w')
+        f2.write(str(soup)) # Creates an error in the s
         f2.close()
         print('Saved: C:\\python\\testdata\\bori\\BOResults_{0}_{1}.html'.format(str(eDay),str(courseNr)))
         return False
@@ -330,7 +371,6 @@ def parseCourseWebpage(courseID,local=True):
     soup = BeautifulSoup(response.read(), 'html.parser')
     
     newCourse = EventCourse()
-    
     for main in soup.find_all('main'):
         for strong in main.find_all('strong')[:1]:
             newCourse = EventCourse()
@@ -345,9 +385,11 @@ def parseCourseWebpage(courseID,local=True):
         return newCourse,[]
     if not all_tr:
         return newCourse,[] 
+
     for tr in soup.tbody.find_all('tr'):
         if tr == None:
-            return newCourse,[]
+            return newCourse,resList
+        
         td = tr.find_all('td')
         
         if len(td)<7: # Tried with thead, but HTML is faulty...
@@ -362,12 +404,14 @@ def parseCourseWebpage(courseID,local=True):
         club = td[2].text.strip()
         gender = td[3].text.strip().replace('W','F')
         yob = td[4].text.strip()
+        
         try:
             t = datetime.strptime(td[5].text.strip(),"%H:%M:%S")
             time = timedelta(hours=t.hour, minutes=t.minute, seconds=t.second)
         except:
+            time = timedelta(hours=23, minutes=59, seconds=59)
             print("Timestring not in correct format")
-            return newCourse,[]
+        
         try:
             points = int(td[6].text.strip())
         except:
@@ -381,7 +425,7 @@ def parseCourseTXT(courseId):
     eDay = courseId[0]
     courseNr = courseId[1]
     
-    f = open('C:\\python\\testdata\\bori\\txt\\Results_{0}_{1}.res'.format(str(eDay),str(courseNr)),'r')
+    f = open('C:\\python\\testdata\\bori\\txt\\Results_{0}_{1}.res'.format(str(eDay),str(courseNr)),'r',encoding='utf-8')
     newEventCourse = EventCourse()
     newEventCourse.updateCourseFromTXT(courseId, f.readline())
     courseDict[courseId] = newEventCourse
@@ -391,19 +435,19 @@ def parseCourseTXT(courseId):
         updateRunnerDict(r2,newEventCourse)
 
 def BOFResultWebpageToTxt(courseID):
-    
     eDay = courseID[0]
     courseNr = courseID[1]
     
     if os.path.isfile('C:\\python\\testdata\\bori\\txt\\Results_{0}_{1}.res'.format(str(eDay),str(courseNr))):
-        #return True
         pass
+        #return True
     
     courseInfo,resList = parseCourseWebpage(courseID,local=True)
+    
     s1 = courseInfo.cName+';'+str(courseInfo.cLength)+';'+str(courseInfo.cClimb)+';'+str(courseInfo.cControls)+'\n'
-    f = open('C:\\python\\testdata\\bori\\txt\\Results_{0}_{1}.res'.format(str(eDay),str(courseNr)),'w')
+    f = open('C:\\python\\testdata\\bori\\txt\\Results_{0}_{1}.res'.format(str(eDay),str(courseNr)),'w',encoding='utf-8')
     f.write(s1)
-
+    
     for res in resList:
         s2 = str(res.pos)+';'+res.name+';'+res.club+';'+res.gender+';'+str(res.yob)+';'+str(res.time)+';'+str(res.points)+'\n'
         f.write(s2)
@@ -420,75 +464,69 @@ def updateRunnerDict(eventRes,cInfo):
         runners[hnr].addEvent(cInfo.cId,eventRes)
 
 
-eventsDict = parseEventWebPage(local=True)
-print("*****")
+def parseTime(x):
+    td = timedelta(minutes=int(x.split(':')[0]),seconds=int(x.split(':')[1]))
+    return td
+
+def averagePoints(row):
+    try:
+        return runners[hashNumber(row.Name, row.Club, -1)].getAveragePoints()
+    except:
+        return np.NaN
+
+def calculateBOFscore(file): # semicolon separted file Pos','Name','Club','Cat','Time' min:sec
+    df = pd.read_csv('C:\\python\\testdata\\bori\\resultfiles\\maulden.txt',sep=';',names=['Pos','Name','Club','Cat','Time'])
+    df.Time = df.Time.map(parseTime)
+    df['StdOff'] = (df.Time-df.Time.mean())/df.Time.std()
+    df['avgPoints'] = 0
+    
+    df['avgPoints'] = df.apply(averagePoints,axis=1)
+    df['Points'] = df.avgPoints.mean()-df['StdOff']*df.avgPoints.std()
+    print(df[['Name','Club','Time','avgPoints','Points']])
+
+
 #===============================================================================
-#    
+# eventsDict = parseEventWebPage(local=True)
+# print("*****")
+#         
 # for key,event in eventsDict.items():
-#     if event.eDate > datetime.now()-timedelta(days=365) and event.eLevel != 'Level D':
-#         print(key,event.eName)
+#     print("Key:",key,event.eName)
+#     #parseCourseWebpage((key,1), local=False)
+#     try:
 #         courses = getCourseIDs(key, local=True)
-#         for courseId in courses:
-#             print(courseId)
+#         print("local",courses)
+#     except:
+#         parseCourseWebpage((key,1), local=False)
+#         courses = getCourseIDs(key, local=True)
+#     for courseId in courses:
+#         print(courseId)
+#         #parseCourseWebpage(courseId, local=False)
+#         try:
+#             BOFResultWebpageToTxt(courseId)
 #             parseCourseTXT(courseId)
-#             #===================================================================
-#             # courseDict[course] = c
-#             # for p in res:
-#             #     updateRunnerDict(p,c)
-#             #===================================================================
-#     
-#            
-#===============================================================================
-runners = pickle.load(open( "C:\\python\\testdata\\bori\\runnersdump.p", "rb" ))
-eventsDict = pickle.load(open( "C:\\python\\testdata\\bori\\eventsdump.p", "rb" ))
-courseDict = pickle.load(open( "C:\\python\\testdata\\bori\\coursesdump.p", "rb" ))
-
-
-
-for key,run in runners.items():
-    if run.club == "WAOC":
-        run.printEvents()
-        
-
-
-
-
-
-
- 
-#===============================================================================
-# pickle.dump(runners, open( "C:\\python\\testdata\\bori\\runnersdump.p", "wb" ))
+#         except:
+#             parseCourseWebpage(courseId, local=False)
+#             BOFResultWebpageToTxt(courseId)
+#             parseCourseTXT(courseId)
+#   
+# pickle.dump(runners,open( "C:\\python\\testdata\\bori\\runnersdump.p", "wb" ))
 # pickle.dump(eventsDict, open( "C:\\python\\testdata\\bori\\eventsdump.p", "wb" ))
 # pickle.dump(courseDict, open( "C:\\python\\testdata\\bori\\coursesdump.p", "wb" ))
 #===============================================================================
 
+runners = pickle.load(open( "C:\\python\\testdata\\bori\\runnersdump.p", "rb" ))
+eventsDict = pickle.load(open( "C:\\python\\testdata\\bori\\eventsdump.p", "rb" ))
+courseDict = pickle.load(open( "C:\\python\\testdata\\bori\\coursesdump.p", "rb" ))
+bestAvg = list()
+ 
+sl = list()
+for key,runner in runners.items():
+    sl.append((runner.name,runner.club,runner.yob,runner.getFastestRun()))
+df = pd.DataFrame(sl,columns=['name','club','yob','climb']) 
+print(df[df.club == 'WAOC'].sort('climb').tail(50))
 
-#===============================================================================
-# f = open( "C:\\python\\testdata\\bori\\runner.csv", "w" )
-# for key,runner in runners.items():
-#     if runner.club == 'WAOC':
-#         print(runner.name,runner.club)
-#         f.write(runner.printEvents())
-#      
-# f.close()
-#===============================================================================
-     
-#cr = getCourseIDs(69649,local=False)
-#===============================================================================
-# evList = parseEventWebPage()
-# for event in evList:
-#     if event['eClub'] == 'WAOC':
-#         print(event['eDate'],event['eLink'],event['eClub'],event['eVenue'],event['eLevel'])
-#===============================================================================
-#===============================================================================
-# readRankingWebpages()    
-# df = readFabiabFour('http://www.fabian4.co.uk/start/list.aspx?EventID=1606')
-# 
-# for key,val in df.items():
-#     print('\n****',key)
-#     s = 0
-#     for person in val:
-#         print('{},{},{:.2f}'.format(person.name,person.club,person.points/len(person.events)))
-#         s+=person.points/len(person.events)
-#     print(key,"AVG: {:.1f}".format(s/len(val)))
-#===============================================================================
+for key,item in readFabiabFour('http://www.fabian4.co.uk/start/list.aspx?EventID=1714').items():
+    if key == 'Blue':
+        for runner in item:
+            print(runner.prettyPrint())
+    

@@ -61,7 +61,6 @@ class MyMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         path = self.lineEdit_file_saveto.text()
         newname = self.lineEdit_file_newname.text()
         
-
         self.data['filename'] = newname
         self.data['activity'] = self.comboBox.currentText()
         self.data['comment'] = self.textEdit.toPlainText()

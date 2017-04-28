@@ -10,8 +10,7 @@ import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
 from timeit import default_timer as timer
-
-
+from datetime import timedelta,datetime
 
 def training_analyzer(datafolder):
     trips = list()
@@ -321,13 +320,14 @@ def plotLength(dataframe,actList,period='day'):
 def plotLength2(dataframe,actList,period='day'):
     pdict = dict()
     pdict['day'] = [1,'D']
-    pdict['week'] = [7,'W-MON']
+    pdict['week'] = [7,'W']
     pdict['month'] = [28,'MS']
     pdict['year'] = [365,'AS']
     
     timeperiod = pdict[period][1]
     wi = pdict[period][0]
     print("WI",wi,timeperiod)
+    
     
     _summary = pd.DataFrame()
     fig,ax = plt.subplots()
@@ -336,10 +336,9 @@ def plotLength2(dataframe,actList,period='day'):
     df1 = pd.DataFrame()
     for i,act in enumerate(actList):
         df1[act] = pd.Series(indexed_df[indexed_df['activity'] == act]['length'],index=indexed_df.index)
-        _summary[act] = df1[act].resample(timeperiod,'sum')
+        _summary[act] = df1[act].resample(timeperiod,'sum',convention='start')
         
         if i == 0:
-           
             _summary['sum'] = _summary[act].fillna(0)
         else:
             _summary['sum'] += _summary[act].fillna(0)
@@ -349,7 +348,7 @@ def plotLength2(dataframe,actList,period='day'):
     
     ax.grid(True)
     plt.show()
-    print(_summary)
+    print(_summary.tail(54))
     
     #===========================================================================
     # _summary[act] = df1.length.resample(timeperiod,'sum')
@@ -479,9 +478,21 @@ def plotAvgImprovement(dataframe,activity,minDist=0,maxDist=1000):
     df = dataframe[dataframe['activity']==activity]
     dfmin = df[df['length']>minDist]
     dfmax = dfmin[dfmin['length']<maxDist]
+    timeX = (dfmax['dateandtime']-datetime(year=2016,month=12,day=31))
+    print(timeX.dt.days)
+    pf = np.polyfit(timeX.dt.days,dfmax['avg_speed'],1)
+    l1 = []
+    l1.append(min(dfmax['dateandtime']))
+    l1.append(max(dfmax['dateandtime']))
+    pg = np.poly1d(pf)
+    l2 = []
+    l2.append(pg(min(timeX.dt.days)))
+    l2.append(pg(max(timeX.dt.days)))
+    
     fig, ax = plt.subplots()
     ax.grid(True)
     ax.plot(dfmax['dateandtime'],dfmax['avg_speed'],'o',marker='o')
+    ax.plot(l1,l2)
     plt.show()
        
 
@@ -599,12 +610,13 @@ def sufferScoreCalculator(dataframe,period='month'):
     
     pdict = dict()
     pdict['day'] = [1,'D']
-    pdict['week'] = [7,'W-MON']
+    pdict['week'] = [7,'W']
     pdict['month'] = [28,'MS']
     pdict['year'] = [365,'AS']
     
     timeperiod = pdict[period][1]
     wi = pdict[period][0]
+    
     
     fig,ax = plt.subplots()
     indexed_df = dataframe.set_index(['dateandtime'])
@@ -614,27 +626,51 @@ def sufferScoreCalculator(dataframe,period='month'):
     _summ3 = pd.DataFrame()
     _summ3['suff'] = _summary/_summary1
     ax.bar(_summ3.index,_summ3['suff'],width=wi)
-    #plt.show()
+    plt.show()
     
     dataframe['sec'] = dataframe['walk_time'].dt.seconds
-    print(dataframe[df['sufferscore']>df['sufferscore'].max()-80][['filename','sufferscore','sec']].sort('sufferscore',ascending=False).head(30))
+    print(dataframe[df['sufferscore']>df['sufferscore'].max()-111][['filename','sufferscore','sec']].sort('sufferscore',ascending=False).head(30))
     
-    dataframe.to_csv('C:\\python\\testdata\\gpxx4\\test2.csv')
+    dataframe.to_csv('C:\\python\\testdata\\gpxx4\\sufferScoreExport.csv')
 
+def toPointCloud(datafolder,outputfile):
+    i = 0
+    for filename in glob.glob(datafolder):
+        
+        if os.path.isfile(filename):
+            f = open(outputfile,'a')
+        else: 
+            f = open(outputfile,'w')
+        
+        print(filename)
+        extension = os.path.splitext(filename)[1]
+    
+        if 'gpx' in extension:
+            df = gpxtricks.GPXtoDataFrame(filename)
+        elif 'tcx' in extension:
+            df = gpxtricks.TCXtoDataFrame(filename) 
+        
+        for row in df.iterrows():
+            if row[1].lat >10:  
+                s = '{};{};{}\n'.format(i,row[1].lat,row[1].lon)
+                i += 1
+                f.write(s)
+        
+        f.close()
+        
 
 if __name__ == "__main__":
-    
-    saveGPSFile('C:\\Users\\gjermund.vingerhagen\\Downloads\\activity_1441272743.gpx')
-    #===========================================================================
-    # start = timer()
-    # df = checkForNewFiles('C:\\python\\testdata\\gpxx4\\files\\*.*')
-    # end = timer()
-    # print(end-start)
-    # #sufferScoreCalculator(df)
-    # plotLength2(df,['Running','Rollerskiing'], period='month')
-    #===========================================================================
-    #plotAvgImprovement(df,'Running',minDist=7.2,maxDist=20)
-    #plotTrainingDiary(df,)
+
+    #saveGPSFile('C:\\Users\\gjermund.vingerhagen\\Downloads\\activity_1441272743.gpx')
+    start = timer()
+    #toPointCloud('C:\\python\\testdata\\gpxx4\\files\\2015*.*','C:\\python\\testdata\\gpxx4\\pCloud2.csv')
+    df = checkForNewFiles('C:\\python\\testdata\\gpxx4\\files\\*.*')
+    end = timer()
+    print(end-start)
+    plotLength2(df,['Running','Rollerskiing','Skiing-X','Cycling'], period='month')
+
+    plotAvgImprovement(df,'Rollerskiing',minDist=5,maxDist=60)
+    plotTrainingDiary(df)
     #plotDuration(df,['Running','Rollerskiing','Skiing-X','Cycling'], period='month')
     #plotAverage(df,'Cycling',20)
     #plotHeartrate(df,'month')

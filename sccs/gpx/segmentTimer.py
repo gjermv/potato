@@ -243,8 +243,6 @@ class TrackSegment():
     def save(self,activity):
         pickle.dump(self, open( "C:\\python\\testdata\\gpxx4\\segments\\{0}\\{1}.p".format(activity,self.name), "wb" ) )
     
-    
-      
 class CrossLine():
     def __init__(self,lat1,lon1,lat2,lon2,name='Unnamed',t=1):
         self.name = name
@@ -333,7 +331,6 @@ class SegmentResult():
         ax.scatter(x,y.total_seconds())  
         return ax
 
-    
     def addLap(self,laptime):
         self.laptimes.append(laptime)
     
@@ -341,8 +338,7 @@ class SegmentResult():
         #self.prettyPrint(100)
         return max(self.laptimes)
 
-
-       
+   
 def lineIntersection(s1,s2,u1,u2):
     """ calculates Line intersection where Line 1 is defined by point s1,s2 and line 2 by u1,u2 """
     S = np.array(s2[:2])-np.array(s1[:2])
@@ -455,7 +451,6 @@ def segmentAnalyzer(filename,segList):
                 seg.runNewPoint(filename,p1,p2)
             p1 = p2
 
-
 def getkmlSegmentList(activity=None):
     allSegments = set()
     
@@ -492,9 +487,10 @@ def getSegmentResults(filename,originalfile,activity):
     print("MyInfo",myInfo)
     return myInfo
      
+
 if __name__ == "__main__":
     # Create a tracksegment
-    myActivity = 'Running'
+    myActivity = 'Cycling'
     seglist = []
     
     newkmlfiles = getkmlSegmentList(myActivity)[0]
@@ -525,17 +521,10 @@ if __name__ == "__main__":
     for segname in getkmlSegmentList(myActivity)[1]:
 
         trkSeg = pickle.load( open( "C:\\python\\testdata\\gpxx4\\segments\\{}\\{}.p".format(myActivity,segname), "rb" ) )
-        
-        seginfo = trkSeg.prettyPrintInfo('2013-10-05 0930 Parkrun.gpx')
-        if seginfo == 123:
-            pass
-        elif seginfo == 124:
-            pass
-        else:
-            print(trkSeg.name,max(trkSeg.trkdistance))
-            print(seginfo)
+        print(trkSeg.name,max(trkSeg.trkdistance))
+        print(trkSeg.prettyPrintResults())
     
-        
+        #trkSeg.prettyPlotResults2()
 
     
 
