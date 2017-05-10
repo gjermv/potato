@@ -332,11 +332,11 @@ def reduceElevationPoints(df):
     return df_red
 
 def plotElevationProfile(dataframe,filename=None):
-    ""
+    """ For kommunetopper """
     dist = list(dataframe[dataframe['ele'] != np.nan]['dist'])
     ele = list(dataframe[dataframe['ele'] != np.nan]['ele'])
     
-    dist = [0] +dist+ [max(dist)]
+    dist = [0] + dist + [max(dist)]
     ele = [0] +ele+ [0]
     
     plt.figure(figsize=(15, 4), dpi=80)
@@ -354,8 +354,9 @@ def plotElevationProfile(dataframe,filename=None):
         print("file saved" , filename)
     else:
         plt.show()
+
 def plotElevationProfile2(dataframe,filename=None):
-    ""
+    """ For Training analyser """
     dist = list(dataframe[dataframe['ele'] != np.nan]['dist'])
     ele = list(dataframe[dataframe['ele'] != np.nan]['ele'])
     
@@ -363,7 +364,7 @@ def plotElevationProfile2(dataframe,filename=None):
     ele = [0] +ele+ [0]
     
     plt.figure(figsize=(15, 8), dpi=80)
-    plt.plot(dist,ele,'#666666',linewidth=2)
+    plt.plot(dist,ele,'#fc8d59',linewidth=2)
     
     plt.axis([0, max(dist), 0, max(ele)*1.1])
     ax = plt.axes()
@@ -387,7 +388,7 @@ def plotSpeedProfile(dataframe,filename=None):
     ax = plt.axes()
     ax.yaxis.grid(True)
     ax.set_axisbelow(True)
-    plt.plot(dist,y_val,'#838fd7')
+    plt.plot(dist,y_val,'#fc8d59')
     
     if filename:
         plt.savefig(filename, bbox_inches='tight')
@@ -407,7 +408,7 @@ def plotHeartrateProfile(dataframe,filename=None):
     ax.yaxis.grid(True)
     ax.set_axisbelow(True)
     plt.yticks([hrz_lim['sone1'],hrz_lim['sone2'],hrz_lim['sone3'],hrz_lim['sone4']])
-    plt.plot(dist,y_val,'#b30000',linewidth=3)
+    plt.plot(dist,y_val,'#e34a33',linewidth=2)
     
     if filename:
         plt.savefig(filename, bbox_inches='tight')
@@ -439,7 +440,7 @@ def plotHeartZone(dataframe,filename=None):
 
 
     if filename:
-        plt.savefig(filename, bbox_inches='tight')
+        plt.savefig(filename, bbox_inches='tight',transparent=True)
         plt.close()
         print("file saved" , filename)
     else:
@@ -907,14 +908,14 @@ def calculateSufferScore(dataframe):
     return df['suffer'].sum()
     
 if __name__ == "__main__":
-    df = pd.read_csv('C:\\python\\testdata\\gpxx4\\Activity_Summary2.csv',parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
+    df = pd.read_csv('C:\\python\\gpstracks\\Activity_Summary2.csv',parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
     df_time = df[df['dateandtime']>'2016-01-01']
     df_act = df_time[df_time['activity'] == 'Running']
     filelist = list(df_act['filename'])
     l = list()
     
     for item in filelist:  
-        filename = 'C:\\python\\testdata\\gpxx4\\files\\{}'.format(item)
+        filename = 'C:\\python\\gpstracks\\files\\{}'.format(item)
         #print(filename)
         try:
             trk=GPXtoDataFrame(filename)
@@ -926,7 +927,7 @@ if __name__ == "__main__":
         l.append([item.split(' ')[0],item.split(' ')[1:],calculateSufferScore(trk)])
             
     p = pd.DataFrame(l)
-    p.to_csv('C:\\python\\testdata\\gpxx4\\Suffer.csv')
+    p.to_csv('C:\\python\\gpstracks\\Suffer.csv')
 
 
   #=============================================================================

@@ -241,7 +241,7 @@ class TrackSegment():
  
         
     def save(self,activity):
-        pickle.dump(self, open( "C:\\python\\testdata\\gpxx4\\segments\\{0}\\{1}.p".format(activity,self.name), "wb" ) )
+        pickle.dump(self, open( "C:\\python\\gpstracks\\segments\\{0}\\{1}.p".format(activity,self.name), "wb" ) )
     
 class CrossLine():
     def __init__(self,lat1,lon1,lat2,lon2,name='Unnamed',t=1):
@@ -455,11 +455,11 @@ def getkmlSegmentList(activity=None):
     allSegments = set()
     
     activitySegments = set()
-    for kml_file in glob.glob("C:\\python\\testdata\\gpxx4\\segments\\*.kml"):
+    for kml_file in glob.glob("C:\\python\\gpstracks\\segments\\*.kml"):
         filename = os.path.basename(kml_file).replace('.kml','')
         allSegments.add(filename)
     
-    for p_file in glob.glob("C:\\python\\testdata\\gpxx4\\segments\\{}\\*.p".format(activity)):
+    for p_file in glob.glob("C:\\python\\gpstracks\\segments\\{}\\*.p".format(activity)):
         filename = os.path.basename(p_file).replace('.p','')
         activitySegments.add(filename)
     
@@ -472,7 +472,7 @@ def getSegmentResults(filename,originalfile,activity):
     myInfo = ''
     
     for segname in getkmlSegmentList(myActivity)[1]:
-        trkSeg = pickle.load( open( "C:\\python\\testdata\\gpxx4\\segments\\{}\\{}.p".format(myActivity,segname), "rb" ) )
+        trkSeg = pickle.load( open( "C:\\python\\gpstracks\\segments\\{}\\{}.p".format(myActivity,segname), "rb" ) )
         segmentAnalyzer(originalfile, [trkSeg])
         seginfo = trkSeg.prettyPrintInfo(filename)
         if seginfo == 123:
@@ -490,18 +490,18 @@ def getSegmentResults(filename,originalfile,activity):
 
 if __name__ == "__main__":
     # Create a tracksegment
-    myActivity = 'Cycling'
+    myActivity = 'Running'
     seglist = []
     
-    newkmlfiles = getkmlSegmentList(myActivity)[0]
+    newkmlfiles = getkmlSegmentList(myActivity)[0] 
     
     for segname in newkmlfiles:
         print(segname)
         trkSeg = TrackSegment(segname)
-        trkSeg.createSegmentfromKML('C:\\python\\testdata\\gpxx4\\segments\\{}.kml'.format(segname))
+        trkSeg.createSegmentfromKML('C:\\python\\gpstracks\\segments\\{}.kml'.format(segname))
         seglist.append(trkSeg)
     
-    df = pd.read_csv('C:\\python\\testdata\\gpxx4\\Activity_Summary2.csv',parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
+    df = pd.read_csv('C:\\python\\gpstracks\\Activity_Summary2.csv',parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
     df_time = df[df['dateandtime']>'2010-01-01']
     df_act = df_time[df_time['activity']==myActivity]
     filelist = list(df_act['filename'])
@@ -510,19 +510,17 @@ if __name__ == "__main__":
     if len(seglist) > 0:
         for item in filelist:
             print('****',item,'****')      
-            segmentAnalyzer('C:\\python\\testdata\\gpxx4\\files\\{}'.format(item),seglist)
+            segmentAnalyzer('C:\\python\\gpstracks\\files\\{}'.format(item),seglist)
     else:
         print("No new segments to analyse")
     
     for segname in seglist:
         segname.save(activity=myActivity)
     
-
     for segname in getkmlSegmentList(myActivity)[1]:
-
-        trkSeg = pickle.load( open( "C:\\python\\testdata\\gpxx4\\segments\\{}\\{}.p".format(myActivity,segname), "rb" ) )
+        trkSeg = pickle.load( open( "C:\\python\\gpstracks\\segments\\{}\\{}.p".format(myActivity,segname), "rb" ) )
         print(trkSeg.name,max(trkSeg.trkdistance))
-        print(trkSeg.prettyPrintResults())
+        print(trkSeg.prettyPrintBestResult())
     
         #trkSeg.prettyPlotResults2()
 

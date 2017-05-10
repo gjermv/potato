@@ -23,7 +23,7 @@ def training_analyzer(datafolder):
 
 def checkForNewFiles(datafolder):
     # Next line reads the dateandtime, but skips the seconds...
-    df = pd.read_csv('C:\\python\\testdata\\gpxx4\\Activity_Summary2.csv',parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
+    df = pd.read_csv('C:\\python\\gpstracks\\Activity_Summary2.csv',parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
     df['tottime'] = pd.to_timedelta(df['tottime'])
     df['walk_time'] = pd.to_timedelta(df['walk_time'])
     existing_files =  list(df['filename'])
@@ -61,7 +61,7 @@ def checkForNewFiles(datafolder):
     return df
 
 
-def saveGPSFile(gps_file,gps_datafolder='C:\\python\\testdata\\gpxx4\\files\\',csv_file='C:\\python\\testdata\\gpxx4\\Activity_Summary2.csv',additional_info=None):
+def saveGPSFile(gps_file,gps_datafolder='C:\\python\\gpstracks\\files\\',csv_file='C:\\python\\gpstracks\\Activity_Summary2.csv',additional_info=None):
     print("SAVEGPSFILE")
     df = pd.read_csv(csv_file,parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
     df['tottime'] = pd.to_timedelta(df['tottime'])
@@ -90,7 +90,7 @@ def saveGPSFile(gps_file,gps_datafolder='C:\\python\\testdata\\gpxx4\\files\\',c
     
 
 def insertToGPXDatabase(originalfile,filename,activity,comment,indata):
-    df = pd.read_csv('C:\\python\\testdata\\gpxx4\\Activity_Summary2.csv',parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
+    df = pd.read_csv('C:\\python\\gpstracks\\Activity_Summary2.csv',parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
     df['tottime'] = pd.to_timedelta(df['tottime'])
     df['walk_time'] = pd.to_timedelta(df['walk_time'])
     df['speed_00100'] = df['speed_00100'].convert_objects(convert_numeric=True)
@@ -153,7 +153,7 @@ def trainingdata_to_csv(df):
     
     df = df.sort('dateandtime')
     df.index = range(1,len(df) + 1)
-    df.to_csv('C:\\python\\testdata\\gpxx4\\Activity_Summary2.csv',columns=col)
+    df.to_csv('C:\\python\\gpstracks\\Activity_Summary2.csv',columns=col)
 
 def inputShortCut(txt):
     """ Shortcuts for different types of activity"""
@@ -211,10 +211,10 @@ def getTrainingData(filename,skip=False):
     print(gpxdict)
     
     if not skip:
-        gpxtricks.plotHeartZone(df, 'C:/python/image/pRect2.png')
-        gpxtricks.plotElevationProfile2(df, 'C:/python/image/elevationProfile.png')
-        gpxtricks.plotSpeedProfile(df, 'C:/python/image/speedProfile.png')
-        gpxtricks.plotHeartrateProfile(df, 'C:/python/image/hrProfile.png')
+        gpxtricks.plotHeartZone(df, 'C:/python/resc/pRect2.png')
+        gpxtricks.plotElevationProfile2(df, 'C:/python/resc/elevationProfile.png')
+        gpxtricks.plotSpeedProfile(df, 'C:/python/resc/speedProfile.png')
+        gpxtricks.plotHeartrateProfile(df, 'C:/python/resc/hrProfile.png')
     
     return gpxdict
 
@@ -664,13 +664,13 @@ if __name__ == "__main__":
     #saveGPSFile('C:\\Users\\gjermund.vingerhagen\\Downloads\\activity_1441272743.gpx')
     start = timer()
     #toPointCloud('C:\\python\\testdata\\gpxx4\\files\\2015*.*','C:\\python\\testdata\\gpxx4\\pCloud2.csv')
-    df = checkForNewFiles('C:\\python\\testdata\\gpxx4\\files\\*.*')
+    df = checkForNewFiles('C:\\python\\gpstracks\\files\\*.*')
     end = timer()
     print(end-start)
-    plotLength2(df,['Running','Rollerskiing','Skiing-X','Cycling'], period='month')
+    #plotLength2(df,['Running','Rollerskiing','Skiing-X','Cycling'], period='month')
 
-    plotAvgImprovement(df,'Rollerskiing',minDist=5,maxDist=60)
-    plotTrainingDiary(df)
+    plotAvgImprovement(df,'Running',minDist=7,maxDist=15)
+    #plotTrainingDiary(df)
     #plotDuration(df,['Running','Rollerskiing','Skiing-X','Cycling'], period='month')
     #plotAverage(df,'Cycling',20)
     #plotHeartrate(df,'month')

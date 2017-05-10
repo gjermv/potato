@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'Wind1.ui'
+# Form implementation generated from reading ui file 'TrainingAnalyser.ui'
 #
 # Created by: PyQt4 UI code generator 4.11.4
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
-from PyQt4 import QtWebKit
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -30,10 +29,10 @@ class Ui_MainWindow(object):
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.pushButton = QtGui.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(440, 10, 61, 23))
+        self.pushButton.setGeometry(QtCore.QRect(10, 10, 61, 23))
         self.pushButton.setObjectName(_fromUtf8("pushButton"))
         self.lineEdit_file_name = QtGui.QLineEdit(self.centralwidget)
-        self.lineEdit_file_name.setGeometry(QtCore.QRect(80, 10, 351, 21))
+        self.lineEdit_file_name.setGeometry(QtCore.QRect(80, 10, 421, 21))
         self.lineEdit_file_name.setObjectName(_fromUtf8("lineEdit_file_name"))
         self.label_info_length = QtGui.QLabel(self.centralwidget)
         self.label_info_length.setGeometry(QtCore.QRect(270, 105, 61, 16))
@@ -49,23 +48,14 @@ class Ui_MainWindow(object):
         font.setWeight(50)
         self.label_info_date.setFont(font)
         self.label_info_date.setObjectName(_fromUtf8("label_info_date"))
-        self.label_file_name = QtGui.QLabel(self.centralwidget)
-        self.label_file_name.setGeometry(QtCore.QRect(10, 15, 71, 16))
-        self.label_file_name.setObjectName(_fromUtf8("label_file_name"))
-        self.label_file_newname = QtGui.QLabel(self.centralwidget)
-        self.label_file_newname.setGeometry(QtCore.QRect(10, 65, 61, 16))
-        self.label_file_newname.setObjectName(_fromUtf8("label_file_newname"))
         self.lineEdit_file_newname = QtGui.QLineEdit(self.centralwidget)
-        self.lineEdit_file_newname.setGeometry(QtCore.QRect(80, 60, 351, 20))
+        self.lineEdit_file_newname.setGeometry(QtCore.QRect(70, 80, 431, 20))
         self.lineEdit_file_newname.setObjectName(_fromUtf8("lineEdit_file_newname"))
         self.lineEdit_file_saveto = QtGui.QLineEdit(self.centralwidget)
-        self.lineEdit_file_saveto.setGeometry(QtCore.QRect(80, 35, 351, 20))
+        self.lineEdit_file_saveto.setGeometry(QtCore.QRect(80, 35, 421, 20))
         self.lineEdit_file_saveto.setObjectName(_fromUtf8("lineEdit_file_saveto"))
-        self.label_file_saveto = QtGui.QLabel(self.centralwidget)
-        self.label_file_saveto.setGeometry(QtCore.QRect(10, 40, 46, 13))
-        self.label_file_saveto.setObjectName(_fromUtf8("label_file_saveto"))
         self.label_info_header = QtGui.QLabel(self.centralwidget)
-        self.label_info_header.setGeometry(QtCore.QRect(10, 90, 46, 13))
+        self.label_info_header.setGeometry(QtCore.QRect(10, 85, 46, 13))
         font = QtGui.QFont()
         font.setPointSize(8)
         font.setBold(True)
@@ -75,7 +65,7 @@ class Ui_MainWindow(object):
         self.label_info_header.setScaledContents(False)
         self.label_info_header.setObjectName(_fromUtf8("label_info_header"))
         self.pushButton_2 = QtGui.QPushButton(self.centralwidget)
-        self.pushButton_2.setGeometry(QtCore.QRect(440, 60, 61, 23))
+        self.pushButton_2.setGeometry(QtCore.QRect(749, 200, 71, 40))
         self.pushButton_2.setObjectName(_fromUtf8("pushButton_2"))
         self.tabWidget = QtGui.QTabWidget(self.centralwidget)
         self.tabWidget.setGeometry(QtCore.QRect(0, 250, 821, 451))
@@ -126,7 +116,7 @@ class Ui_MainWindow(object):
         self.textEdit_3.setObjectName(_fromUtf8("textEdit_3"))
         self.tabWidget.addTab(self.tab_6, _fromUtf8(""))
         self.pushButton_3 = QtGui.QPushButton(self.centralwidget)
-        self.pushButton_3.setGeometry(QtCore.QRect(440, 35, 61, 23))
+        self.pushButton_3.setGeometry(QtCore.QRect(10, 35, 61, 23))
         self.pushButton_3.setObjectName(_fromUtf8("pushButton_3"))
         self.line = QtGui.QFrame(self.centralwidget)
         self.line.setGeometry(QtCore.QRect(503, 10, 20, 161))
@@ -219,10 +209,10 @@ class Ui_MainWindow(object):
         self.label_6.setGeometry(QtCore.QRect(10, 165, 46, 13))
         self.label_6.setObjectName(_fromUtf8("label_6"))
         self.textEdit = QtGui.QTextEdit(self.centralwidget)
-        self.textEdit.setGeometry(QtCore.QRect(80, 190, 741, 46))
+        self.textEdit.setGeometry(QtCore.QRect(10, 200, 731, 40))
         self.textEdit.setObjectName(_fromUtf8("textEdit"))
         self.label_7 = QtGui.QLabel(self.centralwidget)
-        self.label_7.setGeometry(QtCore.QRect(10, 195, 46, 13))
+        self.label_7.setGeometry(QtCore.QRect(10, 185, 61, 16))
         self.label_7.setObjectName(_fromUtf8("label_7"))
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
@@ -255,13 +245,10 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
-        self.pushButton.setText(_translate("MainWindow", "Open file", None))
+        self.pushButton.setText(_translate("MainWindow", "File", None))
         self.label_info_length.setText(_translate("MainWindow", "Length", None))
         self.label_info_date.setText(_translate("MainWindow", "Date", None))
-        self.label_file_name.setText(_translate("MainWindow", "File name", None))
-        self.label_file_newname.setText(_translate("MainWindow", "New name", None))
-        self.label_file_saveto.setText(_translate("MainWindow", "Save to:", None))
-        self.label_info_header.setText(_translate("MainWindow", "File info", None))
+        self.label_info_header.setText(_translate("MainWindow", "File info:", None))
         self.pushButton_2.setText(_translate("MainWindow", "Save", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "WebView", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), _translate("MainWindow", "Elevation", None))
@@ -269,7 +256,7 @@ class Ui_MainWindow(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("MainWindow", "Heartrate", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_5), _translate("MainWindow", "Stats", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_6), _translate("MainWindow", "Segments", None))
-        self.pushButton_3.setText(_translate("MainWindow", "Choose dir.", None))
+        self.pushButton_3.setText(_translate("MainWindow", "Save in:", None))
         self.label_2.setText(_translate("MainWindow", "Total time", None))
         self.label_3.setText(_translate("MainWindow", "Walking time", None))
         self.label_4.setText(_translate("MainWindow", "Average speed", None))
@@ -288,11 +275,13 @@ class Ui_MainWindow(object):
         self.comboBox.setItemText(5, _translate("MainWindow", "Skiing-X", None))
         self.comboBox.setItemText(6, _translate("MainWindow", "Skiing", None))
         self.label_6.setText(_translate("MainWindow", "Activity", None))
-        self.label_7.setText(_translate("MainWindow", "Comment:", None))
+        self.label_7.setText(_translate("MainWindow", "Comments", None))
         self.menuFile.setTitle(_translate("MainWindow", "File", None))
         self.actionSave.setText(_translate("MainWindow", "Save", None))
         self.actionSave.setShortcut(_translate("MainWindow", "Ctrl+S", None))
         self.actionClose.setText(_translate("MainWindow", "Close", None))
         self.actionExit.setText(_translate("MainWindow", "Exit", None))
         self.actionSave_As.setText(_translate("MainWindow", "Save As", None))
+
+from PyQt4 import QtWebKit
 
