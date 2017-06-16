@@ -87,26 +87,19 @@ def saveGPSFile(gps_file,gps_datafolder='C:\\python\\gpstracks\\files\\',csv_fil
     print('Successfully updated csv file')
     
     
-    
-
 def insertToGPXDatabase(originalfile,filename,activity,comment,indata):
+    # Updates the GPS database, but don't store the values #
     df = pd.read_csv('C:\\python\\gpstracks\\Activity_Summary2.csv',parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
     df['tottime'] = pd.to_timedelta(df['tottime'])
     df['walk_time'] = pd.to_timedelta(df['walk_time'])
-    df['speed_00100'] = df['speed_00100'].convert_objects(convert_numeric=True)
+    df['speed_00100'] = df['speed_00100'].convert_objects(convert_numeric=True) # ????
     existing_files =  list(df['filename'])
     
     if filename in existing_files:
+        print('**** File already exist in CSV file:',filename,' ****')
         return df
     
     print('**** New file',filename,' ****')
-    #indata = getTrainingData(originalfile,skip=False)
-
-    print('Tottime',indata['tottime'])
-    print('Walktime',indata['walk_time'])
-    print('Length',indata['length'])
-    print('Avg',indata['avg_speed'])
-    print('Climbing',indata['climbing'])
 
     gpxdict =  pd.DataFrame([indata])
     gpxdict['filename'] = filename
@@ -114,12 +107,12 @@ def insertToGPXDatabase(originalfile,filename,activity,comment,indata):
     gpxdict['comment'] = comment
     df = pd.concat([df, gpxdict])
     
-    printSomething(df,filename)
+    # printSomething(df,filename) #????
             
     df = df.sort('dateandtime')
     df.index = range(1,len(df) + 1)
-    #trainingdata_to_csv(df)
     
+    print("- insertToGPXDatabase successfull")
     return df
         
 def trainingdata_to_csv(df):
@@ -317,7 +310,24 @@ def plotLength(dataframe,actList,period='day'):
 
     plt.show()
 
+def plotyeartoyear(dataframe,act):
+    
+    fig,ax = plt.subplots()
+    
+    df1 = dataframe[dataframe['activity'] == act]
+    indexed_df = df1.set_index(['dateandtime'])
+    df2 = indexed_df.groupby(pd.TimeGrouper(freq='AS'))
+    for key,item in df2:
+        print(key,sum(item['length']))
+        ax.plot(item.index.dayofyear,item['length'].cumsum(),'.-',label=str(key).split('-')[0],)
+
+    ax.grid(True)
+    plt.title(act)
+    plt.legend(loc=2)
+    plt.show()
+
 def plotLength2(dataframe,actList,period='day'):
+    
     pdict = dict()
     pdict['day'] = [1,'D']
     pdict['week'] = [7,'W']
@@ -496,8 +506,8 @@ def plotAvgImprovement(dataframe,activity,minDist=0,maxDist=1000):
     plt.show()
        
 
-def printSomething(df,filename):
-    print('*** Statistic ***\n',filename)
+def getStatistic(df,filename):
+    
     ex = df[df['filename']==filename]
     idx = ex.index[0]
     activity = ex['activity'].iloc[0]
@@ -540,9 +550,6 @@ def printSomething(df,filename):
     clb_best = dfmax['climbing'].max()
     clb_avg =dfmax['climbing'].mean()
     
-    print("Length {}/{}".format(len0-pos0,len0))
-    print("Avg speed {}/{} - Best: {:.2f} Avg: {:.2f}".format(lenx-pos1,lenx,avg_best,avg_avg))
-    print("Climbing {}/{}  - Max: {:.1f} Avg: {:.1f}".format(lenx-pos2,lenx,clb_best,clb_avg))
     txt = "Length {}/{}\n".format(len0-pos0,len0)
     txt += "{} from {:.2f} - {:.2f} kilometers\n".format(activity,triplength*0.8,triplength*1.3)
     txt +="Avg speed {}/{} - Best: {:.2f} - Avg: {:.2f}\n".format(lenx-pos1,lenx,avg_best,avg_avg)
@@ -558,6 +565,7 @@ def printSomething(df,filename):
     txt += "05000m - {: >2} - {:>4.2f} km/h\n".format(pos_05000,s_05000)
     txt += "10000m - {: >2} - {:>4.2f} km/h\n".format(pos_10000,s_10000)
     txt += "20000m - {: >2} - {:>4.2f} km/h\n".format(pos_20000,s_20000)
+    print('- getStatistic successful')
     return txt
     
 def getActivityColor(activity):
@@ -657,20 +665,24 @@ def toPointCloud(datafolder,outputfile):
                 f.write(s)
         
         f.close()
-        
-
+       
 if __name__ == "__main__":
-
     #saveGPSFile('C:\\Users\\gjermund.vingerhagen\\Downloads\\activity_1441272743.gpx')
     start = timer()
     #toPointCloud('C:\\python\\testdata\\gpxx4\\files\\2015*.*','C:\\python\\testdata\\gpxx4\\pCloud2.csv')
     df = checkForNewFiles('C:\\python\\gpstracks\\files\\*.*')
     end = timer()
     print(end-start)
-    #plotLength2(df,['Running','Rollerskiing','Skiing-X','Cycling'], period='month')
+    plotLength2(df,['Running','Skiing-X','Rollerskiing','Cycling'], period='month')
+    
+    print(plotyeartoyear(df, 'Running'))
+    print(plotyeartoyear(df, 'Cycling'))
+    print(plotyeartoyear(df, 'Rollerskiing'))
+    print(plotyeartoyear(df, 'Walking'))
+    
 
-    plotAvgImprovement(df,'Running',minDist=7,maxDist=15)
-    #plotTrainingDiary(df)
+    plotAvgImprovement(df,'Walking',minDist=2,maxDist=100)
+    plotTrainingDiary(df)
     #plotDuration(df,['Running','Rollerskiing','Skiing-X','Cycling'], period='month')
     #plotAverage(df,'Cycling',20)
     #plotHeartrate(df,'month')

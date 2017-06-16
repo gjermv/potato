@@ -10,6 +10,7 @@ from gpx import algos as algos
 from gpx import dtmdata as dtm
 import pandas as pd
 from datetime import datetime as dt
+from timeit import default_timer as timer
 from datetime import timedelta as dtt
 from matplotlib import pyplot as plt
 import time
@@ -178,9 +179,6 @@ def calcEleDiff(elemin,elemax):
 
 def getmainInfo(dataframe):
     print('Number of points:',len(dataframe))    
-    print('Length:',max(dataframe['dist']))
-    print('Lowest point:', min(dataframe['ele']))
-    print('Highest point:', max(dataframe['ele']))
     length = dataframe['dist'].max()
     tottime = max(dataframe['duration'])
     dateandtime = dataframe['time'][0] 
@@ -189,9 +187,6 @@ def getmainInfo(dataframe):
     dateandtime = dataframe['time'][0] 
     
     a = (dataframe[dataframe['speed']<0.50][['duration']].index)
-    print('Stop time:',dtt(seconds=sum(dataframe['duration'].diff()[a])))
-    print('Walking time:',dtt(seconds=max(dataframe['duration'])-sum(dataframe['duration'].diff()[a])))
-    print('Total time:',dtt(seconds=max(dataframe['duration'])))
     stopframe = (dataframe[dataframe['speed']<0.4167][['duration']].index)
     stoptime = sum(dataframe['duration'].diff()[stopframe])
     walktime = tottime - stoptime
@@ -203,6 +198,7 @@ def getmainInfo(dataframe):
     climbing = getClimbingHeightGPS(dataframe)
     steepness = climbing/(length/2)
     climbingrate = climbing/(walktime/2)
+    
     try: 
         kupert_faktor = climbing/elediff
         topptur_faktor = elediff/ele_max
@@ -272,12 +268,9 @@ def kartverketElevation2(dataframe):
     kartele = []
     for df in dataframe.iterrows():
         easting, northing, zone_number, zone_letter = utm.from_latlon(df[1]['lat'],df[1]['lon'],force_zone_number=32)
-        
         ele = dtm.calculateEle(easting,northing)
         kartele.append(ele)
-        
     dataframe['kartele'] = kartele
-    
     return dataframe
             
 def getClimbingHeightGPS(df):
@@ -803,16 +796,16 @@ def findBestTempo2(dataframe):
     df =  dataframe.copy()
     distances =  [100,200,400,800,1000,1500,3000,5000,10000,20000,50000]
     rbest = dict()
+    
     for item in distances:
         rbest[item] = [0,-1]
-    #print(df['dist'].head())
+    
+    A = np.array(df['dist'])
+    distances_reduced = [a for a in distances if a < max(A)]
     
     for i,line in enumerate(df.iterrows()):
         currpos = line[1]['dist']
-        #print(i,currpos)
-        A = np.array(df['dist'])
-        
-        for dist in distances:
+        for dist in distances_reduced:
             ind = A.searchsorted(dist+currpos,side='right')
             if ind < len(df)-1:
                 d = df.iloc[ind]['dist']-df.iloc[i]['dist']
@@ -823,6 +816,7 @@ def findBestTempo2(dataframe):
             else:
                 break
     
+    print("- findBestTempo2 finished")
     return rbest
             
 def updateBestTimes(dists,ditimes,distart,dist,ti,startdist):
@@ -908,33 +902,38 @@ def calculateSufferScore(dataframe):
     return df['suffer'].sum()
     
 if __name__ == "__main__":
-    df = pd.read_csv('C:\\python\\gpstracks\\Activity_Summary2.csv',parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
-    df_time = df[df['dateandtime']>'2016-01-01']
-    df_act = df_time[df_time['activity'] == 'Running']
-    filelist = list(df_act['filename'])
-    l = list()
+    #===========================================================================
+    # df = pd.read_csv('C:\\python\\gpstracks\\Activity_Summary2.csv',parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
+    # df_time = df[df['dateandtime']>'2016-01-01']
+    # df_act = df_time[df_time['activity'] == 'Running']
+    # filelist = list(df_act['filename'])
+    # l = list()
+    # 
+    # for item in filelist:  
+    #     filename = 'C:\\python\\gpstracks\\files\\{}'.format(item)
+    #     #print(filename)
+    #     try:
+    #         trk=GPXtoDataFrame(filename)
+    #     except:
+    #         trk=TCXtoDataFrame(filename)
+    #     #print('Number of points: ',len(trk))
+    #     x = calculateSufferScore(trk)
+    #     print(item)
+    #     l.append([item.split(' ')[0],item.split(' ')[1:],calculateSufferScore(trk)])
+    #         
+    # p = pd.DataFrame(l)
+    # p.to_csv('C:\\python\\gpstracks\\Suffer.csv')
+    #===========================================================================
     
-    for item in filelist:  
-        filename = 'C:\\python\\gpstracks\\files\\{}'.format(item)
-        #print(filename)
-        try:
-            trk=GPXtoDataFrame(filename)
-        except:
-            trk=TCXtoDataFrame(filename)
-        #print('Number of points: ',len(trk))
-        x = calculateSufferScore(trk)
-        print(item)
-        l.append([item.split(' ')[0],item.split(' ')[1:],calculateSufferScore(trk)])
-            
-    p = pd.DataFrame(l)
-    p.to_csv('C:\\python\\gpstracks\\Suffer.csv')
-
-
-  #=============================================================================
-  #       gpsh = showEleMap(trk)
-  #       dtmh = getClimbingHeightDTM(trk)
-  # 
-  #       if dtmh>0:
-  #           print('{};{};{}'.format(item,gpsh,dtmh))
-  #           showEleMap(trk)
-  #=============================================================================
+    filename = 'C:\\python\\gpstracks\\files\\2017-05-20 1322 Maldon Ultrasprint.gpx'
+    try:
+        trk=GPXtoDataFrame(filename)
+    except:
+        trk=TCXtoDataFrame(filename)
+    #gpsh = showEleMap(trk)
+    #dtmh = getClimbingHeightDTM(trk)
+    r = findBestTempo2(trk)
+    for key,item in r.items():
+        print(key,item)
+   
+    

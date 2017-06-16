@@ -493,7 +493,7 @@ if __name__ == "__main__":
     myActivity = 'Running'
     seglist = []
     
-    newkmlfiles = getkmlSegmentList(myActivity)[0] 
+    newkmlfiles = getkmlSegmentList(myActivity)[1] 
     
     for segname in newkmlfiles:
         print(segname)
@@ -520,7 +520,7 @@ if __name__ == "__main__":
     for segname in getkmlSegmentList(myActivity)[1]:
         trkSeg = pickle.load( open( "C:\\python\\gpstracks\\segments\\{}\\{}.p".format(myActivity,segname), "rb" ) )
         print(trkSeg.name,max(trkSeg.trkdistance))
-        print(trkSeg.prettyPrintBestResult())
+        print(trkSeg.trkdistance)
     
         #trkSeg.prettyPlotResults2()
 

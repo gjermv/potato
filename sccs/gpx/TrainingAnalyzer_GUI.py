@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pickle
 
+
 class MyMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
     def __init__(self, parent=None):
@@ -57,25 +58,7 @@ class MyMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         fname = QtGui.QFileDialog.getExistingDirectory(None, 'Select a folder:', 'C:\\python\\gpstracks\\files', QtGui.QFileDialog.ShowDirsOnly)
         if fname:
             self.lineEdit_file_saveto.setText(fname)
-    
-    def savefile(self):
-        origfile = self.lineEdit_file_name.text()
-        path = self.lineEdit_file_saveto.text()
-        newname = self.lineEdit_file_newname.text()
-        
-        self.data['filename'] = newname
-        self.data['activity'] = self.comboBox.currentText()
-        self.data['comment'] = self.textEdit.toPlainText()
-        self.data['segments'] = ''
-        
-        if len(newname)>0 and len(path) > 0:
-            try:
-                #training_analyzer.checkForNewFiles('C:\\python\\testdata\\gpxx4\\files\\*.*')
-                training_analyzer.saveGPSFile(origfile,additional_info=self.data)
-                gpx_file_formater.copyGPSFile(origfile,path,newname)
-            except:
-                print("Somthing went wrong saving the file")
-        
+         
     def onLoadFinished(self):
         with open("C:\\python\\resc\\map.js", 'r') as f:
             frame = self.webView.page().mainFrame()
@@ -95,8 +78,27 @@ class MyMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         print(filename)
         
         df = training_analyzer.insertToGPXDatabase(originalfile,filename, actbox_txt, comment_txt,self.data)
-        self.textEdit_2.setPlainText(training_analyzer.printSomething(df, filename))
+        self.textEdit_2.setPlainText(training_analyzer.getStatistic(df, filename))
         self.textEdit_3.setPlainText(training_analyzer.getSegmentResults(filename,originalfile,actbox_txt))
+
+    def savefile(self):
+        origfile = self.lineEdit_file_name.text()
+        path = self.lineEdit_file_saveto.text()
+        newname = self.lineEdit_file_newname.text()
+        
+        self.data['filename'] = newname
+        self.data['activity'] = self.comboBox.currentText()
+        self.data['comment'] = self.textEdit.toPlainText()
+        self.data['segments'] = ''
+        
+        if len(newname)> 0 and len(path) > 0:
+            try:
+                #training_analyzer.checkForNewFiles('C:\\python\\testdata\\gpxx4\\files\\*.*')
+                training_analyzer.saveGPSFile(origfile,additional_info=self.data)
+                gpx_file_formater.copyGPSFile(origfile,path,newname)
+            
+            except:
+                print("Somthing went wrong saving the file")
 
 if __name__ == '__main__':
     app = QtGui.QApplication([])
