@@ -5,9 +5,9 @@ Created on 7 Apr 2016
 '''
 
 from lxml import etree as etree
-from gpx import utmconverter as utm
-from gpx import algos as algos
-from gpx import gpxtricks
+import utmconverter as utm
+import algos as algos
+import gpxtricks
 import pandas as pd
 from datetime import datetime as dt
 from datetime import timedelta as dtt

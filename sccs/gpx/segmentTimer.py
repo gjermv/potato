@@ -490,7 +490,7 @@ def getSegmentResults(filename,originalfile,activity):
 
 if __name__ == "__main__":
     # Create a tracksegment
-    myActivity = 'Running'
+    myActivity = 'Walking'
     seglist = []
     
     newkmlfiles = getkmlSegmentList(myActivity)[1] 
@@ -520,7 +520,7 @@ if __name__ == "__main__":
     for segname in getkmlSegmentList(myActivity)[1]:
         trkSeg = pickle.load( open( "C:\\python\\gpstracks\\segments\\{}\\{}.p".format(myActivity,segname), "rb" ) )
         print(trkSeg.name,max(trkSeg.trkdistance))
-        print(trkSeg.trkdistance)
+        print(trkSeg.prettyPlotResults())
     
         #trkSeg.prettyPlotResults2()
 

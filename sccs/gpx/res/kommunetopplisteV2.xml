@@ -5,13 +5,13 @@
     <kommune>
       <areal>100,73</areal>
       <befolkning>55284</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>GPS spor viser bare halve turen. Må bli oppdatert engang i framtiden</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>12.07.2017</dato>
       <hoyde>458</hoyde>
       <hoyde2>458,7</hoyde2>
-      <km_fottur/>
+      <km_fottur>4,1</km_fottur>
       <km_ski/>
       <km_sykkel/>
       <kommunenavn>Asker</kommunenavn>
@@ -19,8 +19,8 @@
       <lat>59.85468212970477</lat>
       <lng>10.382752590214748</lng>
       <tid_ned/>
-      <tid_opp/>
-      <tid_totalt/>
+      <tid_opp>66</tid_opp>
+      <tid_totalt>100</tid_totalt>
       <topp>Hagahogget</topp>
     </kommune>
     <kommune>
@@ -42,7 +42,7 @@
       <tid_ned>8</tid_ned>
       <tid_opp>13</tid_opp>
       <tid_totalt>25</tid_totalt>
-      <topp>Sommerfjøstoppen(ved Runddelen)</topp>
+      <topp>Sommerfjøstoppen</topp>
     </kommune>
     <kommune>
       <areal>192,32</areal>
@@ -131,22 +131,22 @@
     <kommune>
       <areal>85,66</areal>
       <befolkning>14814</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kommer snart!</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>23.07.2017</dato>
       <hoyde>230</hoyde>
       <hoyde2>229,4</hoyde2>
-      <km_fottur/>
+      <km_fottur>6,4</km_fottur>
       <km_ski/>
       <km_sykkel/>
       <kommunenavn>Frogn</kommunenavn>
       <kommunenr>0215</kommunenr>
       <lat>59.68552603627209</lat>
       <lng>10.5831752363443</lng>
-      <tid_ned/>
-      <tid_opp/>
-      <tid_totalt/>
+      <tid_ned>61</tid_ned>
+      <tid_opp>132</tid_opp>
+      <tid_totalt>221</tid_totalt>
       <topp>Varden (på Håøya)</topp>
     </kommune>
     <kommune>
@@ -257,22 +257,22 @@
     <kommune>
       <areal>61,49</areal>
       <befolkning>17515</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kommer snart!</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>13.07.2017</dato>
       <hoyde>220</hoyde>
       <hoyde2>215,2</hoyde2>
-      <km_fottur/>
+      <km_fottur>3,1</km_fottur>
       <km_ski/>
       <km_sykkel/>
       <kommunenavn>Nesodden</kommunenavn>
       <kommunenr>0216</kommunenr>
       <lat>59.823202959042256</lat>
       <lng>10.65020593462439</lng>
-      <tid_ned/>
-      <tid_opp/>
-      <tid_totalt/>
+      <tid_ned>35</tid_ned>
+      <tid_opp>41</tid_opp>
+      <tid_totalt>110</tid_totalt>
       <topp>Toåsen</topp>
     </kommune>
     <kommune>
@@ -299,23 +299,23 @@
     <kommune>
       <areal>37,05</areal>
       <befolkning>25072</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kommer snart!</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>17.10.2017</dato>
       <hoyde>216</hoyde>
       <hoyde2>216,8</hoyde2>
-      <km_fottur/>
+      <km_fottur>2,5</km_fottur>
       <km_ski/>
       <km_sykkel/>
       <kommunenavn>Oppegård</kommunenavn>
       <kommunenr>0217</kommunenr>
       <lat>59.81794852669959</lat>
       <lng>10.824367533326992</lng>
-      <tid_ned/>
-      <tid_opp/>
-      <tid_totalt/>
-      <topp>Tarnåsen</topp>
+      <tid_ned>69</tid_ned>
+      <tid_opp>36</tid_opp>
+      <tid_totalt>107</tid_totalt>
+      <topp>Tårnåsen</topp>
     </kommune>
     <kommune>
       <areal>71,68</areal>
@@ -1147,22 +1147,22 @@
     <kommune>
       <areal>112,57</areal>
       <befolkning>19264</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kommer snart!</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>10.09.2017</dato>
       <hoyde>356</hoyde>
       <hoyde2>356,5</hoyde2>
-      <km_fottur/>
+      <km_fottur>7,9</km_fottur>
       <km_ski/>
       <km_sykkel/>
       <kommunenavn>Røyken</kommunenavn>
       <kommunenr>0627</kommunenr>
       <lat>59.71778980290538</lat>
       <lng>10.40869409342892</lng>
-      <tid_ned/>
-      <tid_opp/>
-      <tid_totalt/>
+      <tid_ned>67</tid_ned>
+      <tid_opp>125</tid_opp>
+      <tid_totalt>225</tid_totalt>
       <topp>Villingstadåsen</topp>
     </kommune>
     <kommune>
@@ -7292,10 +7292,10 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
     <kommune>
       <areal>791,47</areal>
       <befolkning>1597</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Dette var første ordentlig topptur med ski på aldri så lenge. Turen gikk mot Gaustatoppen, og bilen ble parkert på skiltet skiparkering nær avkjøringen til Kvitåvatnvegen. Været var upåklagelig fra start av, ikke en sky på himmelen så langt øye kunne se, og det er vel sånn cirka 1/6 del av Norge når man står på toppen av Gaustatoppen. Labbet oppover fra parkeringplassen, og det samme gjorde en lang rekke andre toppturentusiaster. Etter å ha gått i tog opp til ryggen av Gaustatoppmassivet, skar vi ut av rekken og trasket sørover mot høyeste punktet i Hjartdal, en sted som definitivt ikke var like populært som Gaustatoppen. Etter å ha besøkt Hjartdal ganske så alene, satte vi kursen mot Gaustatoppen der alle andre var. På toppen var det fortsatt like fint vær og fantastisk utsikt denne dagen. Kulden kjentes godt i kjakene i motvinden tilbake fra selve topppunktet, men gjorde at snøen ned fra turisthytta var perfekt for de første telemarkssvingen på lang, lang tid.</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>18.03.2018</dato>
       <hoyde>1615</hoyde>
       <hoyde2>1614,7</hoyde2>
       <km_fottur/>
@@ -7308,7 +7308,7 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
       <tid_ned/>
       <tid_opp/>
       <tid_totalt/>
-      <topp>Gaustaråen(punkt sør for topp)</topp>
+      <topp>Gaustaråen (punkt sør for topp)</topp>
     </kommune>
     <kommune>
       <areal>305,37</areal>
@@ -7523,10 +7523,10 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
     <kommune>
       <areal>2044,94</areal>
       <befolkning>6037</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Dette var første ordentlig topptur med ski på aldri så lenge. Turen gikk mot Gaustatoppen, og bilen ble parkert på skiltet skiparkering nær avkjøringen til Kvitåvatnvegen. Været var upåklagelig fra start av, ikke en sky på himmelen så langt øye kunne se, og det er vel sånn cirka 1/6 del av Norge når man står på toppen av Gaustatoppen. Labbet oppover fra parkeringplassen, og det samme gjorde en lang rekke andre toppturentusiaster. Etter å ha gått i tog opp til ryggen av Gaustatoppmassivet, skar vi ut av rekken og trasket sørover mot høyeste punktet i Hjartdal, en sted som definitivt ikke var like populært som Gaustatoppen. Etter å ha besøkt Hjartdal ganske så alene, satte vi kursen mot Gaustatoppen der alle andre var. På toppen var det fortsatt like fint vær og fantastisk utsikt denne dagen. Kulden kjentes godt i kjakene i motvinden tilbake fra selve topppunktet, men gjorde at snøen ned fra turisthytta var perfekt for de første telemarkssvingen på lang, lang tid.</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>18.03.2018</dato>
       <hoyde>1883</hoyde>
       <hoyde2>1882,9</hoyde2>
       <km_fottur/>

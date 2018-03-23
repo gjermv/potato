@@ -5,9 +5,9 @@ Created on Thu Nov 19 15:38:35 2015
 """
 
 from lxml import etree as etree
-from gpx import utmconverter as utm
-from gpx import algos as algos
-from gpx import dtmdata as dtm
+import utmconverter as utm
+import algos as algos
+import dtmdata as dtm
 import pandas as pd
 from datetime import datetime as dt
 from timeit import default_timer as timer
@@ -21,6 +21,7 @@ import numpy as np
 import urllib.request
 import xml.etree.ElementTree as ET
 import matplotlib.cm as cm
+import os.path
 
 def GPXtoDataFrame(filename):
     """ Reads a gpx file and returns a dataframe with the important parameters.
@@ -589,7 +590,7 @@ def readkommunexml(xml_file):
         d['kommunenavn'] = kommune.find('kommunenavn').text
         d['kommunenr'] = kommune.find('kommunenr').text
         d['lat'] = kommune.find('lat').text
-        d['lon'] = kommune.find('lng').text
+        d['lng'] = kommune.find('lng').text
         d['topp'] = kommune.find('topp').text
         
         if d['beskrivelse'] == None:
@@ -691,6 +692,8 @@ def createPicPage():
 def getKommuneGrense(filename='C:\\python\\kommuner\\kom_grens-mod.json',kommune='0101'):
     """ Leser kom-grens-mod og henter ut geometrien til en kommune
     basert paa kommunenummer   """
+    my_dir = os.path.dirname(__file__)
+    filename = my_dir + '\\res\\kom_grens-mod.json'
     l = []
     s = open(filename,'r',encoding='utf-8').read()
     js = json.loads(s)

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from gpx import gpxtricks
-from gpx import tcxtricks
-from gpx import segmentTimer
+import gpxtricks
+import tcxtricks
+import segmentTimer
 import glob
 import os
 import pandas as pd
@@ -673,7 +673,7 @@ if __name__ == "__main__":
     df = checkForNewFiles('C:\\python\\gpstracks\\files\\*.*')
     end = timer()
     print(end-start)
-    plotLength2(df,['Running','Skiing-X','Rollerskiing','Cycling'], period='month')
+    plotLength2(df,['Running','Cycling'], period='month')
     
     print(plotyeartoyear(df, 'Running'))
     print(plotyeartoyear(df, 'Cycling'))
@@ -681,8 +681,8 @@ if __name__ == "__main__":
     print(plotyeartoyear(df, 'Walking'))
     
 
-    plotAvgImprovement(df,'Walking',minDist=2,maxDist=100)
-    plotTrainingDiary(df)
+    plotAvgImprovement(df,'Cycling',minDist=30,maxDist=50)
+    #plotTrainingDiary(df)
     #plotDuration(df,['Running','Rollerskiing','Skiing-X','Cycling'], period='month')
     #plotAverage(df,'Cycling',20)
     #plotHeartrate(df,'month')

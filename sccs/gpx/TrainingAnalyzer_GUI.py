@@ -1,7 +1,7 @@
 from PyQt4 import QtGui
 
 # import the UI from the generated file
-from gpx.trainingAnalyzer_Form import Ui_MainWindow
+from trainingAnalyzer_Form import Ui_MainWindow
 from PyQt4 import QtCore, QtGui
 import gpx_file_formater
 import training_analyzer

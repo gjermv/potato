@@ -95,7 +95,7 @@ def createWebpages():
     template_stat = env.get_template('template_stat.html')
     template_stat_expl = env.get_template('template_stat_forklaring.html')
     
-    besteget = gpxtricks.get_besteget_kommuner(my_dir+'\\res\\kommunetopplisteV2.xml') # links to previuous and next kommune.
+    besteget = gpxtricks.get_besteget_kommuner(my_dir+'\\res\\kommunetopplisteV2.xml') # links to previous and next kommune.
     bC=2
     
     kommune_selected = gpxtricks.get_selected_kommune(my_dir+'\\res\\kommunetopplisteV2.xml') 
@@ -114,7 +114,7 @@ def createWebpages():
         kom['neste_kommune'] = besteget[bC]
         kom['forrige_kommune'] = besteget[bC-2]
         bC+=1
-        
+        print(kom)
         kom['select_fylkeliste'] = gpxtricks.get_selected_fylke(kom['kommunenr'])
         kom['select_kommuneliste'] = kommune_selected
         
@@ -160,6 +160,7 @@ def createWebpages():
     # Creating the actual reports
     
     print("Starting creating reports!")
+    
     for komm in komm_data:
         komm.update(totstat1)
         komm.update(siste_rapporter)
@@ -167,6 +168,7 @@ def createWebpages():
         file = open('C:\\python\\kommuner\\outdata\\{}.html'.format(komm['kommunenr']),'w',encoding='utf-8')
         file.write(template_rapport.render(komm))
         file.close()
+        
     print("Finished creating reports!")
     # Lage forklaring til statistikk sidene. 
     newStatExpl = dict()

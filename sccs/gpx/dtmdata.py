@@ -7,7 +7,7 @@ Created on 14 Jun 2016
 import numpy as np
 import scipy.interpolate as intp
 import linecache
-from gpx import utmconverter as utm
+import utmconverter as utm
 
 def splitHead(inp):
     return inp
