@@ -23,7 +23,7 @@ def training_analyzer(datafolder):
 
 def checkForNewFiles(datafolder):
     # Next line reads the dateandtime, but skips the seconds...
-    df = pd.read_csv('C:\\python\\gpstracks\\Activity_Summary2.csv',parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
+    df = pd.read_csv('C:\\python\\gpstracks\\Activity_Summary2.csv',parse_dates=[2], dayfirst=True,encoding='latin-1')
     df['tottime'] = pd.to_timedelta(df['tottime'])
     df['walk_time'] = pd.to_timedelta(df['walk_time'])
     existing_files =  list(df['filename'])
@@ -58,12 +58,14 @@ def checkForNewFiles(datafolder):
     df = df.sort('dateandtime')
     df.index = range(1,len(df) + 1)
     trainingdata_to_csv(df)
+    
     return df
 
 
 def saveGPSFile(gps_file,gps_datafolder='C:\\python\\gpstracks\\files\\',csv_file='C:\\python\\gpstracks\\Activity_Summary2.csv',additional_info=None):
     print("SAVEGPSFILE")
-    df = pd.read_csv(csv_file,parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
+    df = pd.read_csv(csv_file,parse_dates=[2], dayfirst=True, infer_datetime_format=False,encoding='latin-1')
+    # Skumle endringer for testing
     df['tottime'] = pd.to_timedelta(df['tottime'])
     df['walk_time'] = pd.to_timedelta(df['walk_time'])
 
@@ -196,10 +198,10 @@ def getTrainingData(filename,skip=False):
     # Add best speed data
     bt = gpxtricks.findBestTempo2(df)
     bt2 = dict()
-
+ 
     for itm in bt:
         bt2['speed_{:0>5}'.format(itm)] = float('{:.2f}'.format(bt[itm][0]*3.6))
-
+ 
     gpxdict.update(bt2)
     print(gpxdict)
     
@@ -669,20 +671,20 @@ def toPointCloud(datafolder,outputfile):
 if __name__ == "__main__":
     #saveGPSFile('C:\\Users\\gjermund.vingerhagen\\Downloads\\activity_1441272743.gpx')
     start = timer()
+    print(start)
     #toPointCloud('C:\\python\\testdata\\gpxx4\\files\\2015*.*','C:\\python\\testdata\\gpxx4\\pCloud2.csv')
     df = checkForNewFiles('C:\\python\\gpstracks\\files\\*.*')
-    end = timer()
-    print(end-start)
-    plotLength2(df,['Running','Cycling'], period='month')
     
+    plotLength2(df,['Running','Cycling'], period='month')
+     
     print(plotyeartoyear(df, 'Running'))
     print(plotyeartoyear(df, 'Cycling'))
     print(plotyeartoyear(df, 'Rollerskiing'))
-    print(plotyeartoyear(df, 'Walking'))
-    
+    print(plotyeartoyear(df, 'Skiing-X'))
+     
 
-    plotAvgImprovement(df,'Cycling',minDist=30,maxDist=50)
-    #plotTrainingDiary(df)
-    #plotDuration(df,['Running','Rollerskiing','Skiing-X','Cycling'], period='month')
-    #plotAverage(df,'Cycling',20)
-    #plotHeartrate(df,'month')
+    plotAvgImprovement(df,'Skiing-X',minDist=10,maxDist=50)
+    plotTrainingDiary(df)
+    plotDuration(df,['Running','Rollerskiing','Skiing-X','Cycling'], period='month')
+    plotAverage(df,'Cycling',15)
+    plotHeartrate(df,'month')

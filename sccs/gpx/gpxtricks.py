@@ -181,8 +181,7 @@ def calcEleDiff(elemin,elemax):
 def getmainInfo(dataframe):
     print('Number of points:',len(dataframe))    
     length = dataframe['dist'].max()
-    tottime = max(dataframe['duration'])
-    dateandtime = dataframe['time'][0] 
+    tottime = max(dataframe['duration']) 
     length = dataframe['dist'].max()
     tottime = max(dataframe['duration'])
     dateandtime = dataframe['time'][0] 

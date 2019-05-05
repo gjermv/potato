@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
 Created on 16 Mar 2016
 
@@ -250,13 +251,22 @@ def googleTimezone(lat,lon,starttime):
     else: return "Location not known"
 
 def getKnownLocation(lat,lon):
-    radius = 75 # unit: meter
+    radius = 150 # unit: meter
     loc = cs.namedtuple('Location','placename,lat, lon')
     
     locList = list()
-    locList.append(loc('The Coppice', 52.23757, 0.111214))
+    
+    locList.append(loc('Åbyfaret 121',59.822076279,10.4562542214 ))
     locList.append(loc('Moaveien', 59.278336, 11.026042))
+    locList.append(loc('Kjekstadmarka Dikemark',59.8010089,10.366168 ))
+    locList.append(loc('Sisjordvegen',59.4197395,9.069515 ))
+    locList.append(loc('Rønningen skole',59.8182866,10.4290311 ))
+    locList.append(loc('Vestmarka Solli',59.8469872,10.3405755 ))
+    locList.append(loc('Kjekstadmarka Liertoppen',59.8469872,10.3405755 ))
+    locList.append(loc('Eid skisenter', 59.8048770,10.4435070))
+    locList.append(loc('The Coppice', 52.23757, 0.111214))
     locList.append(loc('Rotherwick', 51.302635,  -0.971286))
+    locList.append(loc('Lilleakerveien 8', 59.915615,   10.635941))
     
     for item in locList:
         print(utmconv.haversine(item.lon, item.lat, lon, lat))

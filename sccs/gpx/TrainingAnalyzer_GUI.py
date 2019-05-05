@@ -29,7 +29,7 @@ class MyMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         
 
     def openfiledialog(self):
-        self.fname = QtGui.QFileDialog.getOpenFileName(self, 'Open file','C:\\python\\gpstracks\\files',("GPS files (*.tcx *.gpx)"))
+        self.fname = QtGui.QFileDialog.getOpenFileName(self, 'Open file','C:\\Users\\Gjermund\\Downloads\\gpx-n',("GPS files (*.tcx *.gpx)"))
         #'C:\\Users\\gjermund.vingerhagen\\Downloads\\'
         if self.fname:
             self.lineEdit_file_name.setText(self.fname)
@@ -79,7 +79,7 @@ class MyMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         
         df = training_analyzer.insertToGPXDatabase(originalfile,filename, actbox_txt, comment_txt,self.data)
         self.textEdit_2.setPlainText(training_analyzer.getStatistic(df, filename))
-        self.textEdit_3.setPlainText(training_analyzer.getSegmentResults(filename,originalfile,actbox_txt))
+        #self.textEdit_3.setPlainText(training_analyzer.getSegmentResults(filename,originalfile,actbox_txt))
 
     def savefile(self):
         origfile = self.lineEdit_file_name.text()
@@ -98,7 +98,7 @@ class MyMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                 gpx_file_formater.copyGPSFile(origfile,path,newname)
             
             except:
-                print("Somthing went wrong saving the file")
+                print("Something went wrong saving the file")
 
 if __name__ == '__main__':
     app = QtGui.QApplication([])

@@ -681,10 +681,10 @@
     <kommune>
       <areal>193,01</areal>
       <befolkning>6871</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>En kommunetopp som er fin å ta mens man kjører langs E18. Kjørte av ved Leirgrov, og parkerte bilen i ved gården Moland. I starten fulgte vi en sti, deretter kom det en grov traktorsti som vi fulgte et stykke. Når vi var omtrent rett sør for Espehaugen tok vi strake veien fatt gjennom skogen. Selve toppen var ikke så mye, og neppe noe Risør kommer til å trekke fram for sommerturistene. Flere punkter på toppen kunne være høyeste punkt, men det var en liten varde der. På vei tilbake ble det litt mer sti å følge. Det må på et tidspunkt ha vært noen som hadde forsøkt å merke en sti til toppen for det hang plastikkmerker på trærne.  </beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>02.10.2018</dato>
       <hoyde>244</hoyde>
       <hoyde2>243,5</hoyde2>
       <km_fottur/>
@@ -2148,7 +2148,7 @@ Jeg parkert ved et skilt som pekte mot Elgåhogna, like før en plass som het Da
       <areal>1467,13</areal>
       <befolkning>2789</befolkning>
       <beskrivelse/>
-      <besteget>False</besteget>
+      <besteget>True</besteget>
       <bilde/>
       <dato/>
       <hoyde>109</hoyde>
@@ -2190,7 +2190,7 @@ Jeg parkert ved et skilt som pekte mot Elgåhogna, like før en plass som het Da
       <areal>246,13</areal>
       <befolkning>11421</befolkning>
       <beskrivelse/>
-      <besteget>False</besteget>
+      <besteget>True</besteget>
       <bilde/>
       <dato/>
       <hoyde>474</hoyde>
@@ -2253,7 +2253,7 @@ Jeg parkert ved et skilt som pekte mot Elgåhogna, like før en plass som het Da
       <areal>9,25</areal>
       <befolkning>587</befolkning>
       <beskrivelse/>
-      <besteget>False</besteget>
+      <besteget>True</besteget>
       <bilde/>
       <dato/>
       <hoyde>42</hoyde>
@@ -2463,7 +2463,7 @@ Jeg parkert ved et skilt som pekte mot Elgåhogna, like før en plass som het Da
       <areal>92,59</areal>
       <befolkning>6824</befolkning>
       <beskrivelse/>
-      <besteget>False</besteget>
+      <besteget>True</besteget>
       <bilde/>
       <dato/>
       <hoyde>324</hoyde>
@@ -2568,7 +2568,7 @@ Jeg parkert ved et skilt som pekte mot Elgåhogna, like før en plass som het Da
       <areal>111,86</areal>
       <befolkning>4896</befolkning>
       <beskrivelse/>
-      <besteget>False</besteget>
+      <besteget>True</besteget>
       <bilde/>
       <dato/>
       <hoyde>217</hoyde>
@@ -3012,13 +3012,13 @@ Jeg parkert ved et skilt som pekte mot Elgåhogna, like før en plass som het Da
     <kommune>
       <areal>119,77</areal>
       <befolkning>8533</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kommer snart</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
       <hoyde2>661,0</hoyde2>
       <lat>62.256308031988205</lat>
       <lng>5.6801598199453744</lng>
-      <dato/>
+      <dato>28.03.2019</dato>
       <hoyde>660</hoyde>
       <km_fottur/>
       <km_ski/>
@@ -3180,13 +3180,13 @@ Jeg parkert ved et skilt som pekte mot Elgåhogna, like før en plass som het Da
     <kommune>
       <areal>93,12</areal>
       <befolkning>2625</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kommer snart</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
       <hoyde2>660,3</hoyde2>
       <lat>62.25656184321625</lat>
       <lng>5.677626416480002</lng>
-      <dato/>
+      <dato>28.03.2019</dato>
       <hoyde>660</hoyde>
       <km_fottur/>
       <km_ski/>
@@ -5598,7 +5598,7 @@ Været var heller labert på turen. Det var regn, vind og tåke over 1800 meter,
       <areal>47,18</areal>
       <befolkning>837</befolkning>
       <beskrivelse/>
-      <besteget>False</besteget>
+      <besteget>True</besteget>
       <bilde/>
       <dato/>
       <hoyde>293</hoyde>
@@ -5745,7 +5745,7 @@ Været var heller labert på turen. Det var regn, vind og tåke over 1800 meter,
       <areal>258,01</areal>
       <befolkning>16822</befolkning>
       <beskrivelse/>
-      <besteget>False</besteget>
+      <besteget>True</besteget>
       <bilde/>
       <dato/>
       <hoyde>430</hoyde>
@@ -6039,7 +6039,7 @@ Været var heller labert på turen. Det var regn, vind og tåke over 1800 meter,
       <areal>183,67</areal>
       <befolkning>16450</befolkning>
       <beskrivelse/>
-      <besteget>False</besteget>
+      <besteget>True</besteget>
       <bilde/>
       <dato/>
       <hoyde>430</hoyde>
@@ -6147,10 +6147,23 @@ Været var heller labert på turen. Det var regn, vind og tåke over 1800 meter,
     <kommune>
       <areal>1467,86</areal>
       <befolkning>1689</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Startet på turen fra motsatt side av fjellet i forhold til det mange andre som gikk opp på turen gjorde. Tok
+bomvei opp fra Laukeland (50 kr) og parkerte ved Nedre Laukelandsstølen. Derfra gikk det sakte men
+sikkert opp til DNT- hytta Massbu som fungerte som basecamp. Fra Massbu gikk turen rett nordover opp
+brattura til Blåegga. Fulgte ryggen vestover til Nipevatnet. Ryggen er oversiktlig men ikke akkurat lettgått
+da fjellformasjoner har laget flere bratte skrenter som krever bruk av både hender og føtter. Fra
+Nipevatnet gikk jeg ryggen opp fra Blægjeskardet som var nok et parti som krevde bruk av hender i
+tillegg til føtter. Mange varder på toppen, noe som ikke var så rart da hele toppen var en eneste stor ur
+av sandstein med ekstremt god friksjon. Tilbake igjen brukte jeg mer eller mindre samme rute. På
+strategiske plasser hadde jeg laget punkter på GPSen for å ikke bruke for mye tid til å finne rett sted å gå
+nedover.
+Ned ura fra Blåegga kjente jeg at det er lenge siden jeg har gått i nedoverbakker. Musklene i lårene var
+nærmest borte og i gressbakkene var det fristene å sette seg på rompa for å ake ned. Været var aldeles
+upåklagelig, T-skjorte og shorts hele veien. Av dyreliv så jeg både hjort og padde. Etter nok en god natts
+søvn på Massbu sammen med resten av teamet på basecamp og noen maur, gikk turen tilbake til bilen.</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>19.07.2018</dato>
       <hoyde>1809</hoyde>
       <hoyde2>1809,2</hoyde2>
       <km_fottur/>
@@ -6562,15 +6575,21 @@ Været var heller labert på turen. Det var regn, vind og tåke over 1800 meter,
       <tid_ned/>
       <tid_opp/>
       <tid_totalt/>
-      <topp>Grensevarden(paJøstedalsbreen)</topp>
+      <topp>Grensevarden (på Jostedalsbreen)</topp>
     </kommune>
     <kommune>
       <areal>228,45</areal>
       <befolkning>862</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Parkerte i en møtelomme nær skilt som sa Krakhellenipa. Etter ett par 100meter var stien så utydelig at
+det var veldig greit å ha GPS med ferdig spor å følge. Fulgte GPS sporet over en myr og gjennom litt
+skog før jeg kom inn på en tydeligere sti som gikk brattere opp lia. Opp til platået var det stort sett
+vegetasjonsdekke å gå på. Oppe på platået var det bart konglomerat fjell som det ble småløpe over
+begge veier. Utsikten på toppen var bra og været var fint for fjelltur. Glemte for første gang å ta med meg
+fotoapparat opp til toppen. Tok samme vei ned igjen, det hadde vært greit med sko med litt mer mønster
+under for å få feste i gresset på vei nedover. Skogen var full av flått som man har plukket i dager etterpå</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>21.07.2018</dato>
       <hoyde>569</hoyde>
       <hoyde2>568,6</hoyde2>
       <km_fottur/>
@@ -7439,10 +7458,10 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
     <kommune>
       <areal>320,53</areal>
       <befolkning>4358</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kommer snart. Gikk oss fast med sykler i skog og kratt. Stiene forsvant. Stor kløft på toppen. Forkjølet og snørrete. Sent hjem til midddag. </beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>25.08.2018</dato>
       <hoyde>814</hoyde>
       <hoyde2>814,5</hoyde2>
       <km_fottur/>
@@ -8141,7 +8160,7 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
       <areal>262,47</areal>
       <befolkning>9415</befolkning>
       <beskrivelse/>
-      <besteget>False</besteget>
+      <besteget>True</besteget>
       <bilde/>
       <dato/>
       <hoyde>506</hoyde>
@@ -8267,7 +8286,7 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
       <areal>391,02</areal>
       <befolkning>7815</befolkning>
       <beskrivelse/>
-      <besteget>False</besteget>
+      <besteget>True</besteget>
       <bilde/>
       <dato/>
       <hoyde>506</hoyde>
@@ -8628,7 +8647,7 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
       <areal>121,06</areal>
       <befolkning>43648</befolkning>
       <beskrivelse/>
-      <besteget>False</besteget>
+      <besteget>True</besteget>
       <bilde/>
       <dato/>
       <hoyde>148</hoyde>
