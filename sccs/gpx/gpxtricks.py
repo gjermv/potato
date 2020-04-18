@@ -499,7 +499,8 @@ def exportStopLoc(dataframe):
         s += 'stopMarker.bindPopup("{} minutter");\n'.format(int(loc[2]//60))
     return s
 
-def exportRedPoints(dataframe):
+def exportRedPoints2(dataframe):
+    # Original
     geojson = ''
     groups = dataframe.groupby('desc')
     movtype = 'NA'
@@ -524,6 +525,37 @@ def exportRedPoints(dataframe):
             geojson += getWalkText()
     
     return  geojson
+
+def exportRedPoints(dataframe):
+    # Exprimental....
+    geojson = ''
+    groups = dataframe.groupby('segno')
+    movtype = 'NA'
+    
+    for group,items in groups:
+        s = ''
+        for p in reducePoints(items):
+            if not np.isnan(p[0]):
+                s += '[{0},{1}],'.format(p[1],p[0])
+                activityType = p[2]
+
+            
+        geojson += """var myLines = [{
+        "type": "LineString",
+        "coordinates": ["""
+        geojson += s
+        
+        
+        if activityType == 'Ski':
+            geojson += getSkiText()
+
+        elif activityType == 'Cycle':
+            geojson += getCycleText()
+        else:
+            geojson += getWalkText()
+    
+    return  geojson
+
 
 def getTrackBounds(dataframe):
     minlat= dataframe['lat'].min()
@@ -927,15 +959,16 @@ if __name__ == "__main__":
     # p.to_csv('C:\\python\\gpstracks\\Suffer.csv')
     #===========================================================================
     
-    filename = 'C:\\python\\gpstracks\\files\\2017-05-20 1322 Maldon Ultrasprint.gpx'
+    filename = 'C:\\Users\\Gjermund\\git\\potato3\\sccs\\gpx\\res\\gpx\\0219.gpx'
     try:
         trk=GPXtoDataFrame(filename)
     except:
         trk=TCXtoDataFrame(filename)
+    print(exportRedPoints(trk))
     #gpsh = showEleMap(trk)
     #dtmh = getClimbingHeightDTM(trk)
-    r = findBestTempo2(trk)
-    for key,item in r.items():
-        print(key,item)
+    #r = findBestTempo2(trk)
+    #for key,item in r.items():
+        #print(key,item)
    
     

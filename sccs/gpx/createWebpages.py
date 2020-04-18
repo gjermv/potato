@@ -60,7 +60,6 @@ def updateDetailedStat(stat,mainInfo,kom):
     
     return stat
 
-
 def siste_rapporter_HTML(datolist):
     d = dict()
     rapports = sorted(datolist,reverse=True)[0:4]
@@ -170,6 +169,7 @@ def createWebpages():
         file.close()
         
     print("Finished creating reports!")
+
     # Lage forklaring til statistikk sidene. 
     newStatExpl = dict()
     newStatExpl['select_fylkeliste'] = gpxtricks.get_selected_fylke('00')
