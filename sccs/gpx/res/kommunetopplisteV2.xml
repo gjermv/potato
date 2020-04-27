@@ -341,8 +341,8 @@
     <kommune>
       <areal>77,03</areal>
       <befolkning>48752</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kommer snart</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
       <dato/>
       <hoyde>345</hoyde>
@@ -383,23 +383,23 @@
     <kommune>
       <areal>206,61</areal>
       <befolkning>15686</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kommer snart</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
       <dato/>
-      <hoyde>352</hoyde>
-      <hoyde2>352,0</hoyde2>
+      <hoyde>347</hoyde>
+      <hoyde2>347,4</hoyde2>
       <km_fottur/>
       <km_ski/>
       <km_sykkel/>
       <kommunenavn>Sørum</kommunenavn>
       <kommunenr>0226</kommunenr>
-      <lat>59.89949786287712</lat>
-      <lng>11.30094059480131</lng>
+      <lat>59.98895444482</lat>
+      <lng>11.166925976753</lng>
       <tid_ned/>
       <tid_opp/>
       <tid_totalt/>
-      <topp>Kukollen</topp>
+      <topp>Bjørnholen</topp>
     </kommune>
     <kommune>
       <areal>252,46</areal>
@@ -3474,8 +3474,8 @@ Jeg parkert ved et skilt som pekte mot Elgåhogna, like før en plass som het Da
     <kommune>
       <areal>547,52</areal>
       <befolkning>8655</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kommer snart</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
       <dato/>
       <hoyde>1482</hoyde>
@@ -6630,8 +6630,8 @@ Været var heller labert på turen. Det var regn, vind og tåke over 1800 meter,
     <kommune>
       <areal>176,52</areal>
       <befolkning>6030</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kommer snart</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
       <dato/>
       <hoyde>689</hoyde>

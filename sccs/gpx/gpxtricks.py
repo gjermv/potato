@@ -22,6 +22,8 @@ import urllib.request
 import xml.etree.ElementTree as ET
 import matplotlib.cm as cm
 import os.path
+from itertools import groupby
+from operator import itemgetter
 
 def GPXtoDataFrame(filename):
     """ Reads a gpx file and returns a dataframe with the important parameters.
@@ -186,8 +188,7 @@ def getmainInfo(dataframe):
     tottime = max(dataframe['duration'])
     dateandtime = dataframe['time'][0] 
     
-    a = (dataframe[dataframe['speed']<0.50][['duration']].index)
-    stopframe = (dataframe[dataframe['speed']<0.4167][['duration']].index)
+    stopframe = (dataframe[dataframe['speed']<0.2777][['duration']].index)
     stoptime = sum(dataframe['duration'].diff()[stopframe])
     walktime = tottime - stoptime
     average_speed = length/walktime
@@ -461,15 +462,19 @@ def reducePoints(dataframe):
 def findStopLocations(dataframe):
     stopLoc = []
     
-    ind = dataframe[dataframe['speed']<0.4167][['duration']].index
-    dur = (dataframe['duration'].diff()[ind])
+    ind = dataframe[dataframe['speed']<0.2777][['duration']].index
+    dur= (dataframe['duration'].diff()[ind])
+
     lat = (dataframe['lat'][ind])
     lon = (dataframe['lon'][ind])
+    
+    print("Find Stop Locations:", dur.sum())
     
     tmp = None
     totdur = 0
     
     for i in ind:
+
         if tmp == None:        
             latS = lat[i]
             lonS = lon[i]
@@ -486,9 +491,24 @@ def findStopLocations(dataframe):
                 lonS = lon[i]
                 totdur = 0
             tmp = i
+            
+    new_stopLoc = []
+    for k, g in groupby(enumerate(ind), lambda ix : ix[0] - ix[1]):
+        
+        a = list(map(itemgetter(1), g))
+        stop_time = dataframe['duration'].diff()[a].sum()
+        stop_loc_lat = dataframe['lat'][a].mean()
+        stop_loc_lon = dataframe['lon'][a].mean()
+        
+        if stop_time > 180:
+            new_stopLoc.append([stop_loc_lat,stop_loc_lon,stop_time])
+            
+        
+            print(stop_loc_lat,stop_loc_lon,stop_time)
 
-              
-    return stopLoc
+        
+          
+    return new_stopLoc
 
 def exportStopLoc(dataframe):
     stopLoc = findStopLocations(dataframe)
@@ -959,12 +979,12 @@ if __name__ == "__main__":
     # p.to_csv('C:\\python\\gpstracks\\Suffer.csv')
     #===========================================================================
     
-    filename = 'C:\\Users\\Gjermund\\git\\potato3\\sccs\\gpx\\res\\gpx\\0219.gpx'
+    filename = 'C:\\Users\\A485753\\git\\gjermv\\potato\\sccs\\gpx\\res\\gpx\\0125.gpx'
     try:
         trk=GPXtoDataFrame(filename)
     except:
         trk=TCXtoDataFrame(filename)
-    print(exportRedPoints(trk))
+    print(findStopLocations(trk))
     #gpsh = showEleMap(trk)
     #dtmh = getClimbingHeightDTM(trk)
     #r = findBestTempo2(trk)
