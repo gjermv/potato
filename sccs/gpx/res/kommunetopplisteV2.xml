@@ -194,10 +194,10 @@
     <kommune>
       <areal>70,55</areal>
       <befolkning>33308</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Startet med litt buldring i Østmarka. Når vi hadde fått nok av det, tok jeg sykkelen fatt og satte kursen mot Svartåsen i Lørenskog. Planene for å nå toppen var gode, men fant etterhvert ut at stien jeg hadde lyst til å sykle på, egnet seg mye bedre for fottur. Trakk allikevel med meg sykkelen over røtter og stein. I skogen møtte jeg også en gjeng som ikke helt visste hvor de var, men jeg pekte de videre og til nærmeste skogsbilvei. Det siste stykket fra Halsjøen mistet jeg også stien, så måtte bakse meg gjennom litt tett skog. Fant tilslutt toppen, og bestemte meg for å ta en annen vei tilbake via Losby. Sykkelsko på beina, og gnagsår fra sist tur bidro til ønsket om mer sykling og mindre gåing på vanskelig syklebar sti. For en enkel tur til toppen av Svartåsen er nok parkeringsplassen ved Losby det beste utgangspunktet. Været var bra, men møtte en regnskur på vei mot Oslo. Dette er muligens den første kommunetoppen jeg har besteget som ikke har samme start og sluttpunkt.</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>02.05.2020</dato>
       <hoyde>362</hoyde>
       <hoyde2>361,3</hoyde2>
       <km_fottur/>
@@ -1000,10 +1000,10 @@
     <kommune>
       <areal>301,65</areal>
       <befolkning>23580</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kjørte til utfartsparkeringen ved Trolldalen og parkerte der som en av de første bilene. Hele familien startet avgårde med sykler, A. parkerte sin etter noen hundre meter og hoppet opp i sykkelsetet som tilfeldigvis også var tatt med på tur. Fulgte grusveien innover mot Store Nykjua. I nordhellingen etter Store Dammyrdammen begynte vi å møte snø på veien, og sykling ble vanskelig. Ved brua i krysset før Kringlehølen ble syklene parkert og lunch i sola. Derifra fortsatte jeg alene på beina, stort sett på snødekt veg. Fram til Store Nykjua var det preppet skiløype som holdt godt. Snøen i terrenget gav etter, men heldigvis ble det bare 20 meter med stabaser før det stort sett var snøfritt terreng opp til toppen, kun med enkelte flekker som man enten kunne hoppe over eller gå rundt. Tok samme vei tilbake, og fant resten av turfølge ved demningen til Store Dammyrdammen. </beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>02.05.2020</dato>
       <hoyde>630</hoyde>
       <hoyde2>632,0</hoyde2>
       <km_fottur/>
@@ -6630,7 +6630,7 @@ Været var heller labert på turen. Det var regn, vind og tåke over 1800 meter,
     <kommune>
       <areal>176,52</areal>
       <befolkning>6030</befolkning>
-      <beskrivelse>Kommer snart</beskrivelse>
+      <beskrivelse>Selv om været var fint og snøforholdene gode, gjorde store gnagsår på føttene det lite fristende å gjøre en ny topptur etter gårsdagens bestigning av Eidskyrkja i Volda . I stedet ble det en to timers biltur til Vågsøy for å forhåpentligvis finne en snøfri topp som man kunne gå opp på i lave sko. Parkerte bilen på en utfartsparkering ved et lite vann nederst i Austadalen, og fulgte vei/sti hele veien opp til toppen. Som jeg håpet var det ingen snø på veien opp, men noen mindre myrområder gjorde allikevel at skoene ble litt våte. Fin tur med god utsikt utover havet fra toppen. Fortsatte turen utover til Refsviksanda for litt lokal guiding. Marie S. var med på turen. </beskrivelse>
       <besteget>True</besteget>
       <bilde/>
       <dato/>
@@ -6646,7 +6646,7 @@ Været var heller labert på turen. Det var regn, vind og tåke over 1800 meter,
       <tid_ned/>
       <tid_opp/>
       <tid_totalt/>
-      <topp>Synnevahornet</topp>
+      <topp>Sankta Synnevahornet</topp>
     </kommune>
     <kommune>
       <areal>976,58</areal>
