@@ -278,10 +278,10 @@
     <kommune>
       <areal>186,23</areal>
       <befolkning>21165</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Etter å ha bommet litt på veien før Harestua, fant jeg bomveiene opp til den nedre parkeringsplassen ved Solobservatoriet. Der snørte jeg på meg joggeskoene og fulgte skogsbilveien videre forbi et par vann som glitret i solen. Ved veis ende begynte jeg å følge minste motstand vei som så ut til å gå langs kraftlinja, men alt av GPSer begynte raskt å pipe at jeg var på feil kurs. Jeg justerte kursen etter strekene på GPS, og etterhvert kom man da seg fram gjennom skog og myr til et sted som kunne se ut til å være det høyeste punktet i Nittedal. Litt annen vei tilbake, men med samme filosofi om å følge strekene på GPSen inntil jeg var på skogsbilveien og kunne gasse litt mer på. Fint vær på turen, måtte stoppe å duppe beina i Dampipern for å kjøle de ned. Måtte selvfølgelig også legge turen inn via selve Solobservatoriet på tilbaketuren for å se hva det var for noe.</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>11.06.2020</dato>
       <hoyde>613</hoyde>
       <hoyde2>613,5</hoyde2>
       <km_fottur/>
@@ -425,7 +425,7 @@
     <kommune>
       <areal>133,93</areal>
       <befolkning>14708</befolkning>
-      <beskrivelse>Bilen ble parkert langs Hauerveien like øst for Søndre Rønjul ved starten av en liten kjerrevei som var sperret med piggtråd. Piggtråden var kun satt opp over kjerreveien, så det var lett å gå utenom den for å komme inn på stien som gikk sørover. Stien sørover var lett å følge, men når vi nærmet oss toppen tok vi av stien i et mer åpent område, og kom inn på en ny sti. Denne stien hadde faktisk et skilt som pekte til Utsikten. Utsikten var definitivt en skogstopp, så ikke så veldig mye annet enn trær og skog å se, men det var svaberg og et klart definert høyeste punkt.</beskrivelse>
+      <beskrivelse>Potensielt feil topp, endret 2018ish. Bilen ble parkert langs Hauerveien like øst for Søndre Rønjul ved starten av en liten kjerrevei som var sperret med piggtråd. Piggtråden var kun satt opp over kjerreveien, så det var lett å gå utenom den for å komme inn på stien som gikk sørover. Stien sørover var lett å følge, men når vi nærmet oss toppen tok vi av stien i et mer åpent område, og kom inn på en ny sti. Denne stien hadde faktisk et skilt som pekte til Utsikten. Utsikten var definitivt en skogstopp, så ikke så veldig mye annet enn trær og skog å se, men det var svaberg og et klart definert høyeste punkt.</beskrivelse>
       <besteget>True</besteget>
       <bilde/>
       <dato>24.09.2014</dato>
@@ -441,7 +441,7 @@
       <tid_ned>14</tid_ned>
       <tid_opp>14</tid_opp>
       <tid_totalt>37</tid_totalt>
-      <topp>Høyåsen(øst for Hvitsten)</topp>
+      <topp>Høyåsen (øst for Hvitsten)</topp>
     </kommune>
     <kommune>
       <areal>103,11</areal>
@@ -790,10 +790,10 @@
     <kommune>
       <areal>137,56</areal>
       <befolkning>63582</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Telttur og kommunetopptur en helg i juni. Kjørte opp til Montebello skiarena (bomvei 50 kroner) og startet kombinert gå- og sykkeltur derifra. Første del av veien gikk langs en skiløype som var midt i en oppgradering, så det var både vanskelig å sykle og gjørmete, men kom etterhvert innpå bedre sykkelvei. Første stopp var Gallebergsetra der basecamp ble satt opp. Ikke alene der, også en vennegjeng med fiskeinteresse hadde slått seg ned på plassen, samt 100 000 knott. Etter at de fysiologiske behovene for mat og trygghetsbehovet for soveplass uten knott var dekket, var det tid for selvrealisering. Hele gjengen satt kurs mot Prestseteråsen. På grusveien sør for Preseteråsen ble turgruppen delt i to. Halvparten snudde og resten fortsatte mot dagens turmål. Relativt bratt opp første del fra skogsbilveien til Prestseteråsen, ellers var det lett og åpent skogsterreng å bevege seg i. Med GPS i hånda var det ingen problem å finne punktene i skogen som markerte de høyeste stedene i gamle Sande og Drammen kommune. Tok en litt annen vei tilbake for å få gått litt mer på sti. Tilfeldigvis kom vi da inn på ultramaraton løypa fra Soria Moria til Verdens Ende og så noen relativt slitne løpere passere oss. Ingen bad i Øyvannet når vi kom tilbake til teltet, til det var det alt for mange knott som surret rundt. Etter frokost i teltet dagen etter gikk vi tilbake til bilen i grått vær. </beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>20.06.2020</dato>
       <hoyde>557</hoyde>
       <hoyde2>557,4</hoyde2>
       <km_fottur/>
@@ -1021,10 +1021,10 @@
     <kommune>
       <areal>517,19</areal>
       <befolkning>12940</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kommer snart</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>12.07.2020</dato>
       <hoyde>703</hoyde>
       <hoyde2>703,5</hoyde2>
       <km_fottur/>
@@ -1912,8 +1912,8 @@ Jeg parkert ved et skilt som pekte mot Elgåhogna, like før en plass som het Da
     <kommune>
       <areal>724,27</areal>
       <befolkning>19154</befolkning>
-      <beskrivelse>Kjørte inn en grusvei like ved Malungstugua og betalte 40 kroner i bompenger med mobiltelefonen. Det hang noen røde merker i trærne som så ut til å lede mot Orrkjølen der bilen ble parkert. De røde merkene ble forsøkt fulgt i begynnelsen, men siden stien ikke var så mye brukt og dermed var vanskelig å følge, og siden det begynte å bli mørkt, var det plutselig ikke noen flere røde merker å følge. Når det ble ordentlig mørkt, ble soveposen funnet fram og det ble tatt en god natts pause. Når det lysnet av dag igjen tråkket man seg videre over myrer og flere myrer, for dette var en myrete tur. Etterhvert kom man plutselig inn på de røde merkene igjen, og de ledet ganske riktig fram til Orrkjølen. På toppen var det bok, et utsiktstårn og en liten varmestue. De røde merkene ble fulgt på veien tilbake igj</beskrivelse>
-      <besteget>True</besteget>
+      <beskrivelse>Feil kommunetopp - Kjørte inn en grusvei like ved Malungstugua og betalte 40 kroner i bompenger med mobiltelefonen. Det hang noen røde merker i trærne som så ut til å lede mot Orrkjølen der bilen ble parkert. De røde merkene ble forsøkt fulgt i begynnelsen, men siden stien ikke var så mye brukt og dermed var vanskelig å følge, og siden det begynte å bli mørkt, var det plutselig ikke noen flere røde merker å følge. Når det ble ordentlig mørkt, ble soveposen funnet fram og det ble tatt en god natts pause. Når det lysnet av dag igjen tråkket man seg videre over myrer og flere myrer, for dette var en myrete tur. Etterhvert kom man plutselig inn på de røde merkene igjen, og de ledet ganske riktig fram til Orrkjølen. På toppen var det bok, et utsiktstårn og en liten varmestue. De røde merkene ble fulgt på veien tilbake igj</beskrivelse>
+      <besteget>False</besteget>
       <bilde>img/orrkjolen.jpg</bilde>
       <dato>11.08.2012</dato>
       <hoyde>641</hoyde>
@@ -1933,10 +1933,10 @@ Jeg parkert ved et skilt som pekte mot Elgåhogna, like før en plass som het Da
     <kommune>
       <areal>2165,79</areal>
       <befolkning>2665</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kommer snart</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>31.07.2020</dato>
       <hoyde>1767</hoyde>
       <hoyde2>1766,6</hoyde2>
       <km_fottur/>
@@ -2017,10 +2017,10 @@ Jeg parkert ved et skilt som pekte mot Elgåhogna, like før en plass som het Da
     <kommune>
       <areal>1880,50</areal>
       <befolkning>5495</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Å kjøre rett opp på toppen er litt for enkelt, så bilen ble parkert nederst på parkeringsplassen som ligger i bunnen av Tronfjellvegen. Sykkelen ble hektet av sykkelfestet, og den lange oppoverbakken mot toppen kunne starte. Mangt kan sikkert om hva man tenker og føler mens man tråkker seg oppover den veien som brødrene Gjermundshaug bygde for flerfoldige tiår siden, men at man bruker mye hjernekapasitet for å finne retningen er ikke en del av denne tankevirksomheten. Enkelte Teslaer og andre biler snek seg forbi oppover, de hyggeligste kunne også finne på å gi tommel opp når de passerte. Alvdalsværet viste seg fra en god side, med medvind opp og solgløtt på toppen. Både hovedtoppen og kommunetoppen til Tynset ble besteget. Deretter bar det utfor, og denne gangen var det bilene som måtte trekke seg til side og slippe forbi en hissig syklist. Helskinnet nede ble det tid for et besøk på Aukrustsenteret.</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>19.07.2020</dato>
       <hoyde>1653</hoyde>
       <hoyde2>1653,4</hoyde2>
       <km_fottur/>
@@ -2033,7 +2033,7 @@ Jeg parkert ved et skilt som pekte mot Elgåhogna, like før en plass som het Da
       <tid_ned/>
       <tid_opp/>
       <tid_totalt/>
-      <topp>Tronden(østretopp/Tyldalstoppen)</topp>
+      <topp>Tronden (øst/Tyldalstoppen)</topp>
     </kommune>
     <kommune>
       <areal>705,28</areal>
@@ -3667,7 +3667,7 @@ Jeg parkert ved et skilt som pekte mot Elgåhogna, like før en plass som het Da
     <kommune>
       <areal>145,83</areal>
       <befolkning>5906</befolkning>
-      <beskrivelse>Marsteinvola i Inderøy kommune ble tatt på direkten etter Hårskallen. Tok av fra E6 ved Fleskhus mot Huseby, og kjørte oppover en bomveg (20kr) i Yssedalen til det var ett skilt som viste vei til Marsteinsvola. Det var en fin traktorvei i starten som etterhvert gikk over til å bli myr. På toppen var det en gjeng amerikanere fra Minnesota som hadde grillfest. Vi hadde blåbærfest både på vei oppover og nedover, før dagen ble avsluttet med Spelet om Heilage Olav på Stiklestad.</beskrivelse>
+      <beskrivelse>Mangler sannsynligvis rett GPS spor! Marsteinvola i Inderøy kommune ble tatt på direkten etter Hårskallen. Tok av fra E6 ved Fleskhus mot Huseby, og kjørte oppover en bomveg (20kr) i Yssedalen til det var ett skilt som viste vei til Marsteinsvola. Det var en fin traktorvei i starten som etterhvert gikk over til å bli myr. På toppen var det en gjeng amerikanere fra Minnesota som hadde grillfest. Vi hadde blåbærfest både på vei oppover og nedover, før dagen ble avsluttet med Spelet om Heilage Olav på Stiklestad.</beskrivelse>
       <besteget>True</besteget>
       <bilde>img/marsteinsvola.jpg</bilde>
       <dato>30.07.2011</dato>
@@ -3688,10 +3688,10 @@ Jeg parkert ved et skilt som pekte mot Elgåhogna, like før en plass som het Da
     <kommune>
       <areal>109,48</areal>
       <befolkning>589</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Dagens andre topp. R. hadde allerede vært opp på rekognoseringstur, mens jeg ordnet middag på villcampingen vi hadde funnet nede ved Gutvik-havna. Så var det min tur. Først nesten 3 km sykling langs grusveien vi kom på, og litt innover en traktorvei. Sykkelen ble parkert før jeg jogget videre langs markert sti. Stien oppover var godt markert med røde merker, sannsynligvis ikke så lenge siden de var frisket opp. Kom fort opp over tregrensa, og hadde god oversikt over hvor man burde gå. På toppen var det turbok og stor varde. Været holdt seg på god siden. Endel vind, men slapp unna regnbyger som har kommet og godt i løpet av dagen. Tok samme rute ned igjen, og avsluttet turen med en rask vask i sjøen.</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>22.07.2020</dato>
       <hoyde>588</hoyde>
       <hoyde2>589,4</hoyde2>
       <km_fottur/>
@@ -3815,10 +3815,10 @@ Toppen var veldig grei å finne. Fra parkeringsplassen var det ett stort skilt m
     <kommune>
       <areal>769,94</areal>
       <befolkning>1707</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Etter suksess med bestigningen av Tronfjellet og en god natts søvn i seng i Meldal gikk turen videre til Øyenskavelen i Namsos. Ikke like mange høydemeter som Tronfjellet, men ellers ganske mange likheter; parkering i bunn av en grusveg, sykkel opp til en radiomast og toppen ikke så langt unna. Vegen opp til Øyenskavlen var låst med bom og litt grovere i steinsorteringen. Avstanden fra radiomasta til toppen var drøye 500 meter, så det var greit å bytte fra sykkelsko til joggesko. Været slo til her også. Litt vind, men solgløtt og god utsikt. Vindturbinene i det fjerne syntes godt. Det var trimbok på toppen der jeg var dagens første til å skrive meg inn. Med sykkel fra radiomasta og ned, gikk tilbaketuren i en fei.</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>20.07.2020</dato>
       <hoyde>687</hoyde>
       <hoyde2>686,5</hoyde2>
       <km_fottur/>
@@ -3836,10 +3836,10 @@ Toppen var veldig grei å finne. Fra parkeringsplassen var det ett stort skilt m
     <kommune>
       <areal>777,88</areal>
       <befolkning>12906</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Bobilen ble parkert i en liten lomme langs grusveien over natta. Dette var rett før en litt overraskende bom. Med dette som utgangspunkt tok R. en rekognoseringstur til toppen på kvelden, og kunne melde om en merket snøscooterløype helt til topps som startet ved to tydelig merkede stolper litt lengre inn langs veien. Etter en god natts søvn startet jeg turen morgenen etter. Den første kilometeren brukte jeg sykkel langs veien, og fra de merkede stolpene tok jeg beina fatt. Først gjennom skog og mye myr, deretter opp på fjellet med stedvis lettgått svaberg. Nederste del av turen var merket med refleksbånd festet i trær, deretter var det tett i tett med stolper som ledet rett til topps. Rett før varden var det til og med laget en liten bru. Været på turen var skiftene, fra regnbyger til solgløtt. På toppen var utsikten grei. Forsøkte å løpe opp, men hadde mer suksess med løpingen på vei ned. Dro videre til Oasen svømmehall i Namsos for å bløte opp slitne muskler. </beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>21.07.2020</dato>
       <hoyde>648</hoyde>
       <hoyde2>678,1</hoyde2>
       <km_fottur/>
@@ -3857,10 +3857,10 @@ Toppen var veldig grei å finne. Fra parkeringsplassen var det ett stort skilt m
     <kommune>
       <areal>1417,16</areal>
       <befolkning>928</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Den smale brua over Namsen var ikke bred nok for bobilen vår, og Børgefjell camping hadde sett sine bedre dager for mange år siden. Bilen ble parkert ved rasteplassen ved avkjøringen til Kalvvatnet og sykkelen ble mobilisert for første del av turen. Denne turen hadde litt av mye, først et lite stykke langs E6, deretter grusveg (med advarsel om at veien kun gikk an for terrengkjøretøy), så var det trøndersk mur, litt bjørkekratt, passering av stein dekket av bregner, gjennom blåbærlyng, passering av to snøfonner og tilslutt over goldt berg, og det var jevn stigning og rett linje mot toppen hele veien. På myrene bugnet det enkelte steder av molteblader, men så knapt et bær. I skogen skremte jeg opp flere ryper med kyllinger. Litt vind på toppen, men ikke verre enn at det fin gikk an å sitte litt i le av varden. God utsikt i alle himmelretninger. Samme veien tilbake, og bortsett fra ved en våt stein som jeg gled på og trodde kneet hadde vridd seg samtidig, gikk turen problemfritt. !! GPS-spor starter ikke fra parkeringsplass !!</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>28.07.2020</dato>
       <hoyde>1167</hoyde>
       <hoyde2>1167,0</hoyde2>
       <km_fottur/>
@@ -3962,10 +3962,10 @@ Toppen var veldig grei å finne. Fra parkeringsplassen var det ett stort skilt m
     <kommune>
       <areal>1564,29</areal>
       <befolkning>21151</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Betalte bomveien inn til Øyingen med tekstmelding 100 kroner og parkerte på en stor parkeringsplass ved Svarttjønnin. R. tok kveldsøkten opp til Brannheiklumpen og kunne melde om merket sti til turboka ca. 500 meter før toppen, og store mengder med myr. Jeg tok morgenøkten dagen etter med tidlig start. Etter at hytteområdet ved Øyingen var passert var det ganske riktig store mengder med myr som skulle passeres. Å holde joggeskoene tørre var et avsluttet tema umiddelbart. Enkelte stipartier som var fine for løping var det innimellom, men mye av turen opp til Brannheiklumpen gikk i som nevnt i myr. Den merkede stien var relativt lett å følge selv i regnvær og skyer, men stoppet noe overraskende på et punkt som er godt lavere enn kommunetoppen. Derifra til toppen var det fram med GPS, for det var så grått på toppen at det ellers ville vært vanskelig å holde retningen. Forsøkte meg på en liten snarvei utenom turbok-toppen, ellers ble det samme vei, og samme myrtråkking på vei tilbake. Deretter biltur videre til Trondheim. </beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>30.07.2020</dato>
       <hoyde>818</hoyde>
       <hoyde2>818,3</hoyde2>
       <km_fottur/>
@@ -4047,10 +4047,10 @@ På Sunndalshøgda 100 hoydemeter før hovedtoppen snudde de fleste KRIK'erne, m
     <kommune>
       <areal>318,10</areal>
       <befolkning>4135</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Startet dagen med å våkne på Fjukstad camping, spise litt corn flakes og sykle mot Austafjord. Omtrent på motsatt side av idrettsbanen går det inn en sti med skilt til en trimtopp som R hadde observert på sin rekognoseringstokt kvelden før. Forsåvidt et dårlig kart, men antok at trimtoppen kunne være Vattafjellet, så gav dette et forsøk. Syklet innover langs lysløypa, og forsøkte å se etter merking, men så ingen spor. Når lysløypa så begynte å gå nedover, og i feil retning fra toppen, tok jeg ikke lengre noen sjanser og begynte å bevege meg i retning toppen uten å ha funnet noe sti. Det ble mye tett bjørkeskog og lav fart før jeg kom meg over tregrensa. Kom meg tilslutt opp til radiomasten på toppen og kunne se på utsikten, blant annet vindturbinene på Ytre-Vikna. Heller ikke på toppen så jeg tegn til noen trimtoppsti, så jeg forsøkte å følge en kraftlinjegate ned. Heller ikke det var noen videre suksesshistorie. Istedet for å få bjørkekratt i øyehøyde, var det dobbelt så mye kvist i knehøyde. Kom meg ned og tilbake i lysløypa, og fant sykkelen. Etter å ha syklet 100 meter videre var det skilt og sti til Vattafjellet. Nedtur, men fortsatte rundt hele lysløypa og tilbake til campingplassen. </beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>22.07.2020</dato>
       <hoyde>173</hoyde>
       <hoyde2>172,9</hoyde2>
       <km_fottur/>
@@ -4240,10 +4240,10 @@ På Sunndalshøgda 100 hoydemeter før hovedtoppen snudde de fleste KRIK'erne, m
     <kommune>
       <areal>193,90</areal>
       <befolkning>1449</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Rutebeskrivelse til toppen finnes det godt med på Internett. En kort oppsummering: startet fra parkeringsplassen ved Einvika, dvs startet egentlig ved Herøy Caravan Camping og syklet derifra, inkludert et lite stykke innover stien mot Hagen. Derifra bar det bratt oppover, bra med vann i bekken og litt sleipt fjell etter endel regn. På toppen ble jeg møtt av en drone som suste rundt og gjeng andre som hadde gått opp. En kort stopp før jeg fortsatte videre til Leppa og så på utsikten til De Syv Søstre. Når jeg var på vei ned igjen så jeg at gjengen på Nesa hadde gått nedover. I tillegg var skyene lettet enda mer, og sola stod fint, så jeg tok en ny tur innom hovedtoppen for å ta noen flere bilder. Passerte tre stykk på vei nedover, så tydelig at ganske mange benyttet værvinduet til å komme seg opp. Fant sykkelen der jeg hadde lagt den ifra meg og syklet tilbake til bobilen.</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>24.07.2020</dato>
       <hoyde>858</hoyde>
       <hoyde2>856,0</hoyde2>
       <km_fottur/>
@@ -4256,7 +4256,7 @@ På Sunndalshøgda 100 hoydemeter før hovedtoppen snudde de fleste KRIK'erne, m
       <tid_ned/>
       <tid_opp/>
       <tid_totalt/>
-      <topp>Dønmannen</topp>
+      <topp>Dønnmannen</topp>
     </kommune>
     <kommune>
       <areal>252,31</areal>
@@ -4450,13 +4450,13 @@ På Sunndalshøgda 100 hoydemeter før hovedtoppen snudde de fleste KRIK'erne, m
     <kommune>
       <areal>64,83</areal>
       <befolkning>1649</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Etter å ligget og ventet på været på Herøy Caravan en dag, og fått tiden til å gå ved å oppsøke fremmede steder som Herøy bygdemuseum, våknet vi opp på søndag til lite vind og blå himmel. Perfekte forhold for å gjennomføre planen vår for bestigning av Vardøyfjellet uten hjelp. Kjørte til veis ende der vi pumpet opp den oppblåsbare båten, trakk på oss våtdrakten og gikk ned til fjæra. Når vi stakk tærne i vannet kjente vi at det definitivt ikke var 20 grader i vannet - 14-15 grader var sikkert nærmere sannheten. R. tauet båten med A. og S. godt plassert oppi, jeg hadde nok med å holde følge, uten noe ekstra å taue på mellom øyene. På vei utover endte vi opp med å ta noen lengre krysninger enn det som var nødvendig, og det fikk R. nok kjenne litt på siden hun hadde den tynneste og korteste våtdrakten. Det ble lunch i sola så fort vi hadde kommer over. Fra lunchplassen til toppen var det ikke akkurat tråkket flust med stier de siste årene, så det ble å tråkke seg gjennom gresset. Greit for de med voksen høyde, men ikke like populært når gresset når deg godt over ørene. Det ble bedre lengre oppe. De siste stykket til toppen var det bøttevis med molter, om man hadde tatt med seg bøtter. Brukte ikke alt for lang tid på å ta bilder og nyte utsikten for yr.no meldte om at vinden skulle øke på, og med ikke verdens mest sjødyktige farkost for å komme seg tilbake var det ønskelig å unngå for mye bølger og sterk strøm. Tok en rute med litt mindre svømming og litt mer gåing på småholmene tilbake. Vardøyfjellet er dermed besteget unsupported! R. dro direkte til Dønnmannen og gikk på alle tre toppene der.</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
       <hoyde2>118,9</hoyde2>
       <lat>66.01165623474412</lat>
       <lng>12.158338588435488</lng>
-      <dato/>
+      <dato>26.07.2020</dato>
       <hoyde>119</hoyde>
       <km_fottur/>
       <km_ski/>
@@ -4744,10 +4744,10 @@ På Sunndalshøgda 100 hoydemeter før hovedtoppen snudde de fleste KRIK'erne, m
     <kommune>
       <areal>194,62</areal>
       <befolkning>2025</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Parkerte bobilen i en lomme med postkassestativ ved innkjøringen til Daleveien. Benyttet som vanlig sykkelen for å komme seg så langt som mulig innover, og fikk den med meg til der stien opp til Lysingen tok av fra kjerreveien opp til Lislvatnet, selvom jeg måtte trille sykkelen fra bunn av bakken og opp. Fortsatte videre på beina, for første gang med fjellsko som fottøy på denne ferieturen. Bratt opp i skogen den første kneika, men så ble det flatere. Lettgått sti eller svaberg nesten hele veien, med litt mer småknauser og småvann nærmere toppen. Lett å navigere til toppen ved hjelp av vardene og rødmerkingen når det var god sikt, men kjekt med GPS de gangene skyene gjorde det hvitt på fjellet. Bra med vind på toppen, så det var greit å ha på jakke med hette og hansker på hendene. Slapp heldigvis  unna med kun noen få regndråper. Turbok og skilt på toppen. Tok samme rute ned igjen, og kjekk sykling ned kjerreveien til tross for våte og sleipe steiner. Traff en kar ved postkassene når jeg skiftet til rene klær som lurte på hvorfor vi hadde parkert der, og ikke kjørt forbi bondegården og parkert lengre inne. R. gjentok turen rett etter meg.</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>23.07.2020</dato>
       <hoyde>648</hoyde>
       <hoyde2>648,1</hoyde2>
       <km_fottur/>
@@ -5148,7 +5148,7 @@ Været var heller labert på turen. Det var regn, vind og tåke over 1800 meter,
     <kommune>
       <areal>478,17</areal>
       <befolkning>26571</befolkning>
-      <beskrivelse>Vi parkerte bilen på 40 kroners parkeringen på Nordsæter, og fulgte skiltingen til Nevelfjell derifra. Stormen Dagmar hadde herjet de siste dagene over store deler av Norge, så det var lave forventninger om gode skiforhold til toppen, men det ble bedre enn fryktet. En løypemaskin hadde nylig kjørt i trasen til Pellestova og lagd to spor etter beltene der det var mykt og lett å gå. Nærmere toppen ble det mer avblåst og hardt, og de siste 300 meterne ble skiene tatt av fordi det var lettere å gå på beina mellom alle steinene som stakk opp. På toppen var den en liten nødbu der man kunne komme i ly for vinden og utsiktstavle med pil der man kunne sikte på andre topper i fjern og nær.</beskrivelse>
+      <beskrivelse>Vi parkerte bilen på 40 kroners parkeringen på Nordsæter, og fulgte skiltingen til Nevelfjell derifra. Stormen Dagmar hadde herjet de siste dagene over store deler av Norge, så det var lave forventninger om gode skiforhold til toppen, men det ble bedre enn fryktet. En løypemaskin hadde nylig kjørt i trasen til Pellestova og lagd to spor etter beltene der det var mykt og lett å gå. Nærmere toppen ble det mer avblåst og hardt, og de siste 300 meterne ble skiene tatt av fordi det var lettere å gå på beina mellom alle steinene som stakk opp. På toppen var den en liten nødbu der man kunne komme i ly for vinden og utsiktstavle med pil der man kunne sikte på andre topper i fjern og nær. Mangler ca 137 meter fra å ha vært på den offisielle toppen.</beskrivelse>
       <besteget>True</besteget>
       <bilde>img/nevelfjell.jpg</bilde>
       <dato>27.12.2011</dato>
@@ -5274,10 +5274,10 @@ Været var heller labert på turen. Det var regn, vind og tåke over 1800 meter,
     <kommune>
       <areal>1247,57</areal>
       <befolkning>4556</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Første dag på bobilferie, og kartleseren oppdaget umiddelbart at det lå en enkel kommunetopp på vei over Venabygdsfjellet. Bilen ble parkert på rasteplassen ved starten av stien. Tåka lå lavt, det blåste friskt og det var regn i lufta, men etter en runde med pølse og potetmos var motivasjonen kommet seg såpass at det gikk an å snøre på seg joggeskoene. Stien til topps var det umulig å ta feil av, ihvertfall med bruk av GPS for å holde retningen i stikryssene. Mye stein i siste kneika opp til toppvardene (ja, vardene i flertall). Tok de nødvendige bildene, og gikk samme vei ned igjen. Utsikten var null og niks.</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>18.07.2020</dato>
       <hoyde>1424</hoyde>
       <hoyde2>1423,9</hoyde2>
       <km_fottur/>
@@ -5374,7 +5374,7 @@ Været var heller labert på turen. Det var regn, vind og tåke over 1800 meter,
       <tid_ned/>
       <tid_opp/>
       <tid_totalt/>
-      <topp>Orneflag</topp>
+      <topp>Ørneflag</topp>
     </kommune>
     <kommune>
       <areal>742,14</areal>
@@ -5384,18 +5384,18 @@ Været var heller labert på turen. Det var regn, vind og tåke over 1800 meter,
       <bilde/>
       <dato/>
       <hoyde>1580</hoyde>
-      <hoyde2>1552,2</hoyde2>
+      <hoyde2>1579,9</hoyde2>
       <km_fottur/>
       <km_ski/>
       <km_sykkel/>
       <kommunenavn>Sør-Fron</kommunenavn>
       <kommunenr>0519</kommunenr>
-      <lat>61.31281238013265</lat>
-      <lng>9.383751144009457</lng>
+      <lat>61.8464673</lat>
+      <lng>10,043341</lng>
       <tid_ned/>
       <tid_opp/>
       <tid_totalt/>
-      <topp>Blakollen</topp>
+      <topp>Blåkollen</topp>
     </kommune>
     <kommune>
       <areal>1505,45</areal>
@@ -6702,14 +6702,14 @@ Været var heller labert på turen. Det var regn, vind og tåke over 1800 meter,
       <bilde>img/seksortklumpen.jpg</bilde>
       <dato>21.07.2012</dato>
       <hoyde>490</hoyde>
-      <hoyde2>483,7</hoyde2>
+      <hoyde2>492,5</hoyde2>
       <km_fottur>10,8</km_fottur>
       <km_ski/>
       <km_sykkel/>
       <kommunenavn>Bjugn</kommunenavn>
       <kommunenr>1627</kommunenr>
-      <lat>63.806754631456386</lat>
-      <lng>9.73689019226701</lng>
+      <lat>63.8527093</lat>
+      <lng>10.1114415</lng>
       <tid_ned>101</tid_ned>
       <tid_opp>122</tid_opp>
       <tid_totalt>245</tid_totalt>
@@ -6824,19 +6824,19 @@ Kong Olav V og tidligere statsminister Per Borten rastet på Kråkfjellet i 1969
     <kommune>
       <areal>168,54</areal>
       <befolkning>12677</befolkning>
-      <beskrivelse>Det ble tur til Malviks høyeste punkt i helgen. Turen startet ved skytebanen i Møstadmarka, og fulgte en skogsbilvei de forste kilometerene. Deretter ble det a ta seg over litt myrer og kravle seg oppover med fjellskiene i snøen som la i furuskogen. På toppen av Baklifjell var det bra utsikt i alle retninger. Det høyeste punktet i selve Malvik la i skraningen pa vei nedover fra Baklifjell.</beskrivelse>
+      <beskrivelse>Det ble tur til Malviks høyeste punkt i helgen. Turen startet ved skytebanen i Møstadmarka, og fulgte en skogsbilvei de første kilometerene. Deretter ble det a ta seg over litt myrer og kravle seg oppover med fjellskiene i snøen som la i furuskogen. På toppen av Baklifjell var det bra utsikt i alle retninger. Det høyeste punktet i selve Malvik la i skraningen pa vei nedover fra Baklifjell.</beskrivelse>
       <besteget>True</besteget>
       <bilde>img/baklifjellet.jpg</bilde>
       <dato>20.02.2011</dato>
       <hoyde>620</hoyde>
-      <hoyde2>504,5</hoyde2>
+      <hoyde2>624,2</hoyde2>
       <km_fottur/>
       <km_ski>8</km_ski>
       <km_sykkel/>
       <kommunenavn>Malvik</kommunenavn>
       <kommunenr>1663</kommunenr>
-      <lat>63.33788989513359</lat>
-      <lng>10.696041879063817</lng>
+      <lat>63.3131229</lat>
+      <lng>10.9140714</lng>
       <tid_ned>56</tid_ned>
       <tid_opp>116</tid_opp>
       <tid_totalt>172</tid_totalt>
@@ -6999,18 +6999,18 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
       <bilde>img/skurvhatten.jpg</bilde>
       <dato>13.06.2011</dato>
       <hoyde>623</hoyde>
-      <hoyde2>610,6</hoyde2>
+      <hoyde2>622,6</hoyde2>
       <km_fottur>5</km_fottur>
       <km_ski/>
       <km_sykkel/>
       <kommunenavn>Rissa</kommunenavn>
       <kommunenr>1624</kommunenr>
-      <lat>63.689976081478704</lat>
-      <lng>10.201973567609658</lng>
+      <lat>63.7707263</lat>
+      <lng>10.3916701</lng>
       <tid_ned>56</tid_ned>
       <tid_opp>62</tid_opp>
       <tid_totalt>137</tid_totalt>
-      <topp>Ytre Skurvhatten</topp>
+      <topp>Ytter Skurvhatten</topp>
     </kommune>
     <kommune>
       <areal>374,91</areal>
@@ -7292,7 +7292,7 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
     <kommune>
       <areal>791,47</areal>
       <befolkning>1597</befolkning>
-      <beskrivelse>Dette var første ordentlig topptur med ski på aldri så lenge. Turen gikk mot Gaustatoppen, og bilen ble parkert på skiltet skiparkering nær avkjøringen til Kvitåvatnvegen. Været var upåklagelig fra start av, ikke en sky på himmelen så langt øye kunne se, og det er vel sånn cirka 1/6 del av Norge når man står på toppen av Gaustatoppen. Labbet oppover fra parkeringplassen, og det samme gjorde en lang rekke andre toppturentusiaster. Etter å ha gått i tog opp til ryggen av Gaustatoppmassivet, skar vi ut av rekken og trasket sørover mot høyeste punktet i Hjartdal, en sted som definitivt ikke var like populært som Gaustatoppen. Etter å ha besøkt Hjartdal ganske så alene, satte vi kursen mot Gaustatoppen der alle andre var. På toppen var det fortsatt like fint vær og fantastisk utsikt denne dagen. Kulden kjentes godt i kjakene i motvinden tilbake fra selve topppunktet, men gjorde at snøen ned fra turisthytta var perfekt for de første telemarkssvingen på lang, lang tid.</beskrivelse>
+      <beskrivelse>Dette var første ordentlig topptur med ski på aldri så lenge. Turen gikk mot Gaustatoppen, og bilen ble parkert på skiltet skiparkering nær avkjøringen til Kvitåvatnvegen. Været var upåklagelig fra start av, ikke en sky på himmelen så langt øye kunne se, og det er vel sånn cirka 1/6 del av Norge når man står på toppen av Gaustatoppen. Labbet oppover fra parkeringplassen, og det samme gjorde en lang rekke andre toppturentusiaster. Etter å ha gått i tog opp til ryggen av Gaustatoppmassivet, skar vi ut av rekken og trasket sørover mot høyeste punktet i Hjartdal, en sted som definitivt ikke var like populært som Gaustatoppen. Etter å ha besøkt Hjartdal ganske så alene (var ihvertfall nesten over kommunegrensa), satte vi kursen mot Gaustatoppen der alle andre var. På toppen var det fortsatt like fint vær og fantastisk utsikt denne dagen. Kulden kjentes godt i kjakene i motvinden tilbake fra selve topppunktet, men gjorde at snøen ned fra turisthytta var perfekt for de første telemarkssvingen på lang, lang tid.</beskrivelse>
       <besteget>True</besteget>
       <bilde/>
       <dato>18.03.2018</dato>
@@ -8144,8 +8144,8 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
       <besteget>True</besteget>
       <bilde/>
       <dato/>
-      <hoyde>506</hoyde>
-      <hoyde2>486,7</hoyde2>
+      <hoyde>486</hoyde>
+      <hoyde2>486,6</hoyde2>
       <km_fottur/>
       <km_ski/>
       <km_sykkel/>
@@ -8156,7 +8156,7 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
       <tid_ned/>
       <tid_opp/>
       <tid_totalt/>
-      <topp>Kaldasknipa</topp>
+      <topp>Lyfjellet</topp>
     </kommune>
     <kommune>
       <areal>543,23</areal>
@@ -8282,7 +8282,7 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
       <tid_ned/>
       <tid_opp/>
       <tid_totalt/>
-      <topp>Kaldasknipa</topp>
+      <topp>Kaldåsknipa</topp>
     </kommune>
     <kommune>
       <areal>222,44</areal>
@@ -8438,10 +8438,10 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
     <kommune>
       <areal>185,90</areal>
       <befolkning>5372</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kommer snart!</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>16.07.2020</dato>
       <hoyde>399</hoyde>
       <hoyde2>398,9</hoyde2>
       <km_fottur/>
@@ -8454,15 +8454,15 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
       <tid_ned/>
       <tid_opp/>
       <tid_totalt/>
-      <topp>Branafjell</topp>
+      <topp>Brånafjell</topp>
     </kommune>
     <kommune>
       <areal>163,12</areal>
       <befolkning>3073</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kommer snart</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>13.07.2020</dato>
       <hoyde>632</hoyde>
       <hoyde2>634,0</hoyde2>
       <km_fottur/>
@@ -8564,10 +8564,10 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
     <kommune>
       <areal>60,86</areal>
       <befolkning>20897</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kommer snart</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>15.07.2020</dato>
       <hoyde>101</hoyde>
       <hoyde2>99,7</hoyde2>
       <km_fottur/>
@@ -8585,10 +8585,10 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
     <kommune>
       <areal>224,65</areal>
       <befolkning>8821</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kommer snart</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>16.12.2020</dato>
       <hoyde>400</hoyde>
       <hoyde2>399,6</hoyde2>
       <km_fottur/>
@@ -8601,18 +8601,18 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
       <tid_ned/>
       <tid_opp/>
       <tid_totalt/>
-      <topp>Snippane</topp>
+      <topp>Snipane</topp>
     </kommune>
     <kommune>
       <areal>178,28</areal>
       <befolkning>8529</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Telttur og kommunetopptur en helg i juni. Kjørte opp til Montebello skiarena (bomvei 50 kroner) og startet kombinert gå- og sykkeltur derifra. Første del av veien gikk langs en skiløype som var midt i en oppgradering, så det var både vanskelig å sykle og gjørmete, men kom etterhvert innpå bedre sykkelvei. Første stopp var Gallebergsetra der basecamp ble satt opp. Ikke alene der, også en vennegjeng med fiskeinteresse hadde slått seg ned på plassen, samt 100 000 knott. Etter at de fysiologiske behovene for mat og trygghetsbehovet for soveplass uten knott var dekket, var det tid for selvrealisering. Hele gjengen satt kurs mot Prestseteråsen. På grusveien sør for Preseteråsen ble turgruppen delt i to. Halvparten snudde og resten fortsatte mot dagens turmål. Relativt bratt opp første del fra skogsbilveien til Prestseteråsen, ellers var det lett og åpent skogsterreng å bevege seg i. Med GPS i hånda var det ingen problem å finne punktene i skogen som markerte de høyeste stedene i gamle Sande og Drammen kommune. Tok en litt annen vei tilbake for å få gått litt mer på sti. Tilfeldigvis kom vi da inn på ultramaraton løypa fra Soria Moria til Verdens Ende og så noen relativt slitne løpere passere oss. Ingen bad i Øyvannet når vi kom tilbake til teltet, til det var det alt for mange knott som surret rundt. Etter frokost i teltet dagen etter gikk vi tilbake til bilen i grått vær. </beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
       <hoyde2>570,4</hoyde2>
       <lat>59.638324426367994</lat>
       <lng>10.060694867012822</lng>
-      <dato/>
+      <dato>20.06.2020</dato>
       <hoyde>567</hoyde>
       <km_fottur/>
       <km_ski/>
@@ -8648,10 +8648,10 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
     <kommune>
       <areal>118,33</areal>
       <befolkning>11129</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kommer snart</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>14.10.2020</dato>
       <hoyde>172</hoyde>
       <hoyde2>175,5</hoyde2>
       <km_fottur/>
@@ -8664,7 +8664,7 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
       <tid_ned/>
       <tid_opp/>
       <tid_totalt/>
-      <topp>Hogståsen</topp>
+      <topp>Høgståsen</topp>
     </kommune>
     <kommune>
       <areal>57,66</areal>
@@ -8690,10 +8690,10 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
     <kommune>
       <areal>39,40</areal>
       <befolkning>4738</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kommer snart</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>15.07.2020</dato>
       <hoyde>78</hoyde>
       <hoyde2>80,5</hoyde2>
       <km_fottur/>
@@ -8706,15 +8706,15 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
       <tid_ned/>
       <tid_opp/>
       <tid_totalt/>
-      <topp>Herkelas</topp>
+      <topp>Herkelås</topp>
     </kommune>
     <kommune>
       <areal>106,63</areal>
       <befolkning>39758</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kommer snart</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>14.07.2020</dato>
       <hoyde>144</hoyde>
       <hoyde2>145,2</hoyde2>
       <km_fottur/>

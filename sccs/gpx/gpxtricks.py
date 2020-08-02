@@ -164,7 +164,6 @@ def gpxtimeToStr(timestr):
         t = dt.strptime(timestr,'%Y-%m-%dT%H:%M:%S.%fZ')
         return t
     
-
 def findNamespace(file):
     str = file.read(1000)
     file.seek(0)
@@ -576,7 +575,6 @@ def exportRedPoints(dataframe):
     
     return  geojson
 
-
 def getTrackBounds(dataframe):
     minlat= dataframe['lat'].min()
     maxlat= dataframe['lat'].max()
@@ -638,6 +636,7 @@ def readkommunexml(xml_file):
         d['besteget'] = kommune.find('besteget').text
         d['dato'] = kommune.find('dato').text
         d['hoyde2'] = kommune.find('hoyde2').text
+        d['hoyde'] = kommune.find('hoyde').text
         d['kommunenavn'] = kommune.find('kommunenavn').text
         d['kommunenr'] = kommune.find('kommunenr').text
         d['lat'] = kommune.find('lat').text
@@ -762,7 +761,6 @@ def heartZoneTable():
     hr_tab['sone3'] = 165
     hr_tab['sone4'] = 175
     return hr_tab
-
 
 def heartZone(df):
     df = df[df['heartrate'].notnull()][:]
@@ -954,6 +952,12 @@ def calculateSufferScore(dataframe):
     df['suffer'] = df['d_dur']*a*np.exp(df['r_hr']*b)
 
     return df['suffer'].sum()
+
+def get_closestPoint(dataframe,point):
+    trk['dist_from_point'] = trk.apply(lambda row: utm.haversine(row['lon'],row['lat'],point[0],point[1]), axis=1 ) 
+    
+    #print(trk.ix[trk['dist_from_point'].idxmin()])
+    return trk['dist_from_point'].min()
     
 if __name__ == "__main__":
     #===========================================================================
@@ -979,16 +983,30 @@ if __name__ == "__main__":
     # p.to_csv('C:\\python\\gpstracks\\Suffer.csv')
     #===========================================================================
     
-    filename = 'C:\\Users\\A485753\\git\\gjermv\\potato\\sccs\\gpx\\res\\gpx\\0125.gpx'
-    try:
-        trk=GPXtoDataFrame(filename)
-    except:
-        trk=TCXtoDataFrame(filename)
-    print(findStopLocations(trk))
+    for x in readkommunexml('C:\\Users\\A485753\\git\\gjermv\\potato\\sccs\\gpx\\res\\kommunetopplisteV2.xml'):
+        diff = float(x['hoyde2'].replace(',','.'))-float(x['hoyde'].replace(',','.'))
+        if diff < -10:
+            print(x['kommunenavn'],x['kommunenr'],x['topp'],x['lng'],x['lat'],x['hoyde2'],diff)
+    
+    
+    
+     
+    for x in readkommunexml('C:\\Users\\A485753\\git\\gjermv\\potato\\sccs\\gpx\\res\\kommunetopplisteV2.xml'):
+       if x['besteget'] == 'True':
+           try:
+               trk = GPXtoDataFrame('C:\\Users\\A485753\\git\\gjermv\\potato\\sccs\\gpx\\res\\gpx\\{}.gpx'.format(x['kommunenr']))
+           except:
+               trk = GPXtoDataFrame('C:\\Users\\A485753\\git\\gjermv\\potato\\sccs\\gpx\\res\\gpx\\{}_ex.gpx'.format(x['kommunenr']))
+            
+            
+            
+           dist  = get_closestPoint(trk, (float(x['lng']),float(x['lat'])))
+           if dist > 100:
+               print(x['kommunenavn'],x['kommunenr'],x['topp'],x['lng'],x['lat'],x['hoyde2'], dist)
+    
+    
     #gpsh = showEleMap(trk)
     #dtmh = getClimbingHeightDTM(trk)
     #r = findBestTempo2(trk)
     #for key,item in r.items():
         #print(key,item)
-   
-    
