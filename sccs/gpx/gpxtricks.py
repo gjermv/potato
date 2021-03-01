@@ -983,7 +983,7 @@ if __name__ == "__main__":
     # p.to_csv('C:\\python\\gpstracks\\Suffer.csv')
     #===========================================================================
     
-    for x in readkommunexml('C:\\Users\\A485753\\git\\gjermv\\potato\\sccs\\gpx\\res\\kommunetopplisteV2.xml'):
+    for x in readkommunexml('C:\\Users\\A485753\\git\\potato\\potato\\sccs\\gpx\\res\\kommunetopplisteV2.xml'):
         diff = float(x['hoyde2'].replace(',','.'))-float(x['hoyde'].replace(',','.'))
         if diff < -10:
             print(x['kommunenavn'],x['kommunenr'],x['topp'],x['lng'],x['lat'],x['hoyde2'],diff)
@@ -991,12 +991,12 @@ if __name__ == "__main__":
     
     
      
-    for x in readkommunexml('C:\\Users\\A485753\\git\\gjermv\\potato\\sccs\\gpx\\res\\kommunetopplisteV2.xml'):
+    for x in readkommunexml('C:\\Users\\A485753\\git\\potato\\potato\\sccs\\gpx\\res\\kommunetopplisteV2.xml'):
        if x['besteget'] == 'True':
            try:
-               trk = GPXtoDataFrame('C:\\Users\\A485753\\git\\gjermv\\potato\\sccs\\gpx\\res\\gpx\\{}.gpx'.format(x['kommunenr']))
+               trk = GPXtoDataFrame('C:\\Users\\A485753\\git\\potato\\potato\\sccs\\gpx\\res\\gpx\\{}.gpx'.format(x['kommunenr']))
            except:
-               trk = GPXtoDataFrame('C:\\Users\\A485753\\git\\gjermv\\potato\\sccs\\gpx\\res\\gpx\\{}_ex.gpx'.format(x['kommunenr']))
+               trk = GPXtoDataFrame('C:\\Users\\A485753\\git\\potato\\potato\\sccs\\gpx\\res\\gpx\\{}_ex.gpx'.format(x['kommunenr']))
             
             
             
