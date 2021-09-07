@@ -9,6 +9,9 @@ from jinja2 import Environment, FileSystemLoader
 import gpxtricks
 import os.path
 from datetime import timedelta as dtt
+import xml.etree.ElementTree as ET
+
+        
 
 def select_statistikk_overskrifter():
     txtstring = '<option selected>Velg liste</option>\n'
@@ -83,6 +86,8 @@ var polygon{0} = L.polygon(
 {1}, kommstyle).addTo(map);
 polygon{0}.bindPopup("{2}<br>{3}");""".format(i,gpxtricks.getKommuneGrense(kommune=item[2]),item[1],item[0])
     return txtstr
+
+
         
 def createWebpages():
     """ Load the rapport template """
@@ -194,3 +199,4 @@ def createWebpages():
         file.close()
     
 createWebpages()
+#createExcelList()

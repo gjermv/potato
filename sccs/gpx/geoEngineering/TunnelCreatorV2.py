@@ -44,13 +44,11 @@ def verticalLines(tunnelLayout):
     else:
         return verticalLines_East()
         
-    
 def verticalLines_199():
 
     vl_max = 110/500*T_scale 
     vl_mid = 50/500*T_scale 
     return  [-vl_max,-vl_mid, 0, vl_mid, vl_max]   
-
 
 def verticalLines_East():
     return [-21.5, 21.5, -10.25, 10.25, 0, 53.5, 63.75, 43.25, 75.0, 32.0]
@@ -73,7 +71,8 @@ def tunnelCreator_Run(tunnel_name, tunnel_start, tunnel_stop, tunnel_placeUp, tu
     # Fil som skal importeres
     xlsx_file = xlsx_fil_import
     
-    drawing = ezdxf.new(dxfversion='R2010')  
+    drawing = ezdxf.new(dxfversion='R2010')
+    drawing.styles.new('myStandard', dxfattribs={'font' : 'OpenSans-Regular.ttf'})
     
     "Layers"
     drawing.layers.new('V_Background', dxfattribs={'color': 0})
@@ -138,6 +137,11 @@ def tunnelCreator_Run(tunnel_name, tunnel_start, tunnel_stop, tunnel_placeUp, tu
     block_luke = drawing.blocks.new(name = "Luke")
     block_luke.add_lwpolyline([(-1.5,-1.5),(1.5,-1.5), (1.5,1.5), (-1.5,1.5), (-1.5,-1.5)])
     block_luke.add_text('L', dxfattribs={'height': 1.5}).set_pos((0,0), align='MIDDLE_CENTER')
+
+    block_luke = drawing.blocks.new(name = "Door")
+    block_luke.add_lwpolyline([(-1.5,-1.5),(1.5,-1.5), (1.5,1.5), (-1.5,1.5), (-1.5,-1.5)])
+    block_luke.add_text('D', dxfattribs={'height': 1.5}).set_pos((0,0), align='MIDDLE_CENTER')
+
     
     modelspace.add_blockref('Bolt',(pos_x,pos_y+5), dxfattribs={'layer': 'Markering_ny'})
     modelspace.add_blockref('Bolt',(pos_x+3,pos_y+5), dxfattribs={'layer': 'Markering_eksisterende'})
@@ -145,6 +149,9 @@ def tunnelCreator_Run(tunnel_name, tunnel_start, tunnel_stop, tunnel_placeUp, tu
     modelspace.add_blockref('Rensk',(pos_x+3,pos_y+2.5), dxfattribs={'layer': 'Markering_eksisterende','rotation': 30})
     modelspace.add_blockref('Luke',(pos_x,pos_y+7.5), dxfattribs={'layer': 'Markering_ny','rotation': 0})
     modelspace.add_blockref('Luke',(pos_x+3,pos_y+7.5), dxfattribs={'layer': 'Markering_eksisterende','rotation': 0})
+    modelspace.add_blockref('Door',(pos_x,pos_y+10.5), dxfattribs={'layer': 'Markering_ny','rotation': 0})
+    modelspace.add_blockref('Door',(pos_x+3,pos_y+10.5), dxfattribs={'layer': 'Markering_eksisterende','rotation': 0})
+
     
     hatch_portal = modelspace.add_hatch(color=254 , dxfattribs={'layer': 'Registeringer_generell'})
     with hatch_portal.edit_boundary() as boundary:
@@ -205,14 +212,24 @@ def tunnelCreator_Run(tunnel_name, tunnel_start, tunnel_stop, tunnel_placeUp, tu
     block_header.add_line((108, 255), (108, 263), dxfattribs={'layer': 'V_Background'})
     block_header.add_line((180, 255), (180, 263), dxfattribs={'layer': 'V_Background'})
     
-    block_header.add_text('Tunnel (og løp)', dxfattribs={'layer': 'V_Background', 'height': 1.5}).set_pos((0.6, 261), align='LEFT')
-    block_header.add_text('Dato', dxfattribs={'layer': 'V_Background', 'height': 1.5}).set_pos((81, 261), align='LEFT')
-    block_header.add_text('Registert av', dxfattribs={'layer': 'V_Background', 'height': 1.5}).set_pos((110, 261), align='LEFT')
+    block_header.add_text('Tunnel (og løp)', dxfattribs={'layer': 'V_Background', 'height': 1.5}).set_pos((1, 261), align='LEFT')
+    block_header.add_text('Dato', dxfattribs={'layer': 'V_Background', 'height': 1.5}).set_pos((80, 261), align='LEFT')
+    block_header.add_text('Registert av', dxfattribs={'layer': 'V_Background', 'height': 1.5}).set_pos((109, 261), align='LEFT')
                           
-    block_header.add_text(T_Name, dxfattribs={'layer': 'V_Background', 'height': 3}).set_pos((0.6, 256), align='LEFT')
-    block_header.add_text(T_Date, dxfattribs={'layer': 'V_Background', 'height': 3}).set_pos((81, 256), align='LEFT')
-    block_header.add_text(T_Reg, dxfattribs={'layer': 'V_Background', 'height': 3}).set_pos((110, 256), align='LEFT')
-    
+    block_header.add_text(T_Name, dxfattribs={'layer': 'V_Background', 'height': 3}).set_pos((1, 256), align='LEFT')
+    block_header.add_text(T_Date, dxfattribs={'layer': 'V_Background', 'height': 3}).set_pos((80, 256), align='LEFT')
+    block_header.add_text(T_Reg, dxfattribs={'layer': 'V_Background', 'height': 3}).set_pos((109, 256), align='LEFT')
+
+    'Document control'
+    block_drawnby = drawing.blocks.new(name = "drawnBy")
+    block_drawnby.add_line((0, 2.5), (50, 2.5),dxfattribs={'layer': 'V_rightField'})
+    block_drawnby.add_line((0, 5), (50, 5),dxfattribs={'layer': 'V_rightField'})
+    block_drawnby.add_line((0, 7.5), (50, 7.5),dxfattribs={'layer': 'V_rightField'})
+    block_drawnby.add_line((13, 0), (13, 7.5),dxfattribs={'layer': 'V_rightField'})
+    block_drawnby.add_line((31, 0), (31, 7.5),dxfattribs={'layer': 'V_rightField'})
+    block_drawnby.add_text('Dato', dxfattribs={'layer': 'V_rightField', 'height': 1.5}).set_pos((1, 5.5), align='LEFT')
+    block_drawnby.add_text('Tegnet av', dxfattribs={'layer': 'V_rightField', 'height': 1.5}).set_pos((14, 5.5), align='LEFT')
+    block_drawnby.add_text('Kontrollert av', dxfattribs={'layer': 'V_rightField', 'height': 1.5}).set_pos((32, 5.5), align='LEFT')
     
     pages = getPages(T_start, T_stop)
     p = getPages(T_start, T_stop)['start']
@@ -240,8 +257,9 @@ def tunnelCreator_Run(tunnel_name, tunnel_start, tunnel_stop, tunnel_placeUp, tu
             'layer': 'V_PaperRightField'
         })
         
-        'Notater'
+        'Notater og kontrollert av '
         l[paper].add_blockref('Notes', (130,10), dxfattribs={'layer': 'V_PaperRightField'})
+        l[paper].add_blockref('drawnBy', (130,10), dxfattribs={'layer': 'V_PaperRightField'})
         
         'Header'
         l[paper].add_blockref('Header', (0,0))
@@ -295,6 +313,9 @@ def tunnelCreator_Run(tunnel_name, tunnel_start, tunnel_stop, tunnel_placeUp, tu
                     modelspace.add_blockref('Rensk',(pos,pel), dxfattribs={'layer': 'V_import_point','xscale': 1,'yscale': 1,})
                 elif row['Symbol'] == 'Luke':
                     modelspace.add_blockref('Luke',(pos,pel), dxfattribs={'layer': 'V_import_point','xscale': 1,'yscale': 1,})
+                elif row['Symbol'] == 'Dør':
+                    modelspace.add_blockref('Door',(pos,pel), dxfattribs={'layer': 'V_import_point','xscale': 1,'yscale': 1,})
+                
                 else: 
                     modelspace.add_text(row['Symbol'], dxfattribs={'layer': 'V_import_point', 'height': 1.5}).set_pos((pos, pel), align='MIDDLE_CENTER')
                     modelspace.add_text(row['Kommentar'], dxfattribs={'layer': 'V_import_point', 'height': 1.2}).set_pos((pos, pel-1.5), align='MIDDLE_CENTER')
@@ -309,7 +330,7 @@ def tunnelCreator_Run(tunnel_name, tunnel_start, tunnel_stop, tunnel_placeUp, tu
     print("Drawing saved:", dwg_filename)
 
 if __name__ == '__main__':
-    tunnelCreator_Run('Helgehorntunnelen', 12000, 13400, '-', '-', 'C:\\Users\\A485753\\Desktop\\Prosjekter lokalt\\19500 Tunnelinspeksjoner\\tem.xlsx')
+    tunnelCreator_Run('Updated - Kontrollert av 2', 12000, 13400, '-', '-', 'C:\\Users\\A485753\\Desktop\\Prosjekter lokalt\\19500 Tunnelinspeksjoner\\tem.xlsx',1)
     
 """ To FIX:
 Feilmelding hvis Pel kolonne ikke har tall. """

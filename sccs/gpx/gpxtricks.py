@@ -25,6 +25,8 @@ import os.path
 from itertools import groupby
 from operator import itemgetter
 
+import fitdecode
+
 def GPXtoDataFrame(filename):
     """ Reads a gpx file and returns a dataframe with the important parameters.
     'name','desc','segno','dist','lat','lng','ele','time','duration','speed' """
@@ -622,6 +624,35 @@ L.geoJson(myLines, {
 """
     return txt
 
+def xmltoCSV(xml_file):
+    """ Reads the Offical kommunedatalist and returns a Excelfile """
+    my_dir = os.path.dirname(__file__)
+    xml_file = my_dir+'\\res\\kommunetopplisteV2.xml'
+    
+    p = etree.XMLParser(remove_blank_text=True)
+    et = etree.parse(xml_file,parser=p)      
+    d = dict()
+    df = pd.DataFrame()
+    
+    for kommune in et.iter('kommune'):
+        
+        d['areal'] = kommune.find('areal').text
+        d['befolkning'] = kommune.find('befolkning').text
+        d['beskrivelse'] = kommune.find('beskrivelse').text
+        d['besteget'] = kommune.find('besteget').text
+        d['dato'] = kommune.find('dato').text
+        d['hoyde2'] = kommune.find('hoyde2').text
+        d['hoyde'] = kommune.find('hoyde').text
+        d['kommunenavn'] = kommune.find('kommunenavn').text
+        d['kommunenr'] = kommune.find('kommunenr').text
+        d['lat'] = kommune.find('lat').text
+        d['lng'] = kommune.find('lng').text
+        d['topp'] = kommune.find('topp').text
+        
+        df = df.append(d,ignore_index=True)
+    df.to_csv('C:\\python\\kommuner\\temp\\kommunetopp.csv', encoding='utf-8')
+        
+
 def readkommunexml(xml_file):
     """ Reads the Offical kommunedatalist and yields a dictionary with basic information """
     kommunedict = dict()
@@ -958,8 +989,104 @@ def get_closestPoint(dataframe,point):
     
     #print(trk.ix[trk['dist_from_point'].idxmin()])
     return trk['dist_from_point'].min()
+
+
+def FITtoDataFrame(filename):
+    """ Reads a FIT file and returns a dataframe with the important parameters.
+    'name','desc','segno','dist','lat','lng','ele','time','duration','speed', 'heartrate', 'power' """
     
+    gpxinfo = list() 
+
+    with fitdecode.FitReader(filename) as fit:
+        for frame in fit:
+            # The yielded frame object is of one of the following types:
+            # * fitdecode.FitHeader
+            # * fitdecode.FitDefinitionMessage
+            # * fitdecode.FitDataMessage
+            # * fitdecode.FitCRC
+            
+            try:
+                if isinstance(frame, fitdecode.FitDataMessage):
+                    if frame.name == 'record':
+                        timestamp       = frame.get_value('timestamp',fallback='field not present')
+                        position_lat    = frame.get_value('position_lat',fallback=0) / 11930465
+                        position_long   = frame.get_value('position_long',fallback=0) / 11930465
+                        distance        = frame.get_value('distance',fallback='field not present')
+                        altitude        = frame.get_value('altitude',fallback='field not present')
+                        power           = frame.get_value('power',fallback='field not present')
+                        heart_rate      = frame.get_value('heart_rate',fallback='field not present')
+                        cadence         = frame.get_value('cadence',fallback='field not present')
+                        temperature        = frame.get_value('temperature',fallback='field not present')
+                        
+                        
+                        gpxinfo.append(['Fit','Fit',1,distance,position_lat,position_long,altitude,timestamp,-1,heart_rate, power,cadence,temperature ])
+    
+                        # for field in frame.fields:
+                        #     print(field.name,field.value)
+            except:
+                print('ERROR')
+                
+        gpxdf = pd.DataFrame(gpxinfo,columns=['name','desc','segno','dist','lat','lon','ele','time','duration','heartrate','power','cad','temp'])
+        gpxdf = gpxdf.set_index('time')
+        return gpxdf
+
+def FITCombine(zwiftFile, garminFile):
+    
+    a = FITtoDataFrame(zwiftFile)[['lat','lon','ele','power','cad']]
+    b = FITtoDataFrame(garminFile)[['heartrate','temp']]
+    
+    combinedFile = pd.concat([a,b],axis=1, join= 'inner')
+    
+    combinedFile['temp'].plot(style=['-'])
+
+    gpx = etree.Element('gpx')
+    trk = etree.SubElement(gpx,'trk')
+    doc = etree.ElementTree(gpx)
+    trkseg = etree.SubElement(trk, 'trkseg')
+    
+    for row in combinedFile.iterrows():
+        time_mod =  str(dt.strptime(str(row[0])[:19], '%Y-%m-%d %H:%M:%S'))+'Z'
+        time_mod = time_mod.replace(' ','T')
+        
+        trkpkt = etree.SubElement(trkseg, 'trkpt', lat=str(row[1]['lat']), lon = str(row[1]['lon']))
+        
+        ele = etree.SubElement(trkpkt, 'ele')
+        time = etree.SubElement(trkpkt, 'time')
+        
+        extensions = etree.SubElement(trkpkt, 'extensions')
+        power = etree.SubElement(extensions, 'power')
+        gpxtpx = etree.SubElement(extensions, "gpxtpx_TrackPointExtension")
+        atemp = etree.SubElement(gpxtpx, 'gpxtpx_atemp')
+        cad = etree.SubElement(gpxtpx, 'gpxtpx_cad')
+        hr = etree.SubElement(gpxtpx, 'gpxtpx_hr')
+        
+        time.text = time_mod
+        power.text = str(row[1]['power'])
+        hr.text = str(row[1]['heartrate'])
+        ele.text = str(row[1]['ele']//1)
+        cad.text = str(row[1]['cad'])
+        atemp.text = str(row[1]['temp'])
+    
+    gpxfile = 'C:\\python_proj\\FitFileParser\\5\\output.gpx'
+    doc.write(gpxfile, xml_declaration=True, encoding='utf-8',pretty_print=True) 
+    
+    with open(gpxfile,'r') as file:
+        filedata = file.read()
+        filedata = filedata.replace('_',':')
+    with open(gpxfile,'w') as file:
+        file.write(filedata)
+    
+
 if __name__ == "__main__":
+    
+    xmltoCSV('text')
+    
+    # FITCombine('C:\\python_proj\\FitFileParser\\5\\Zwift.fit','C:\\python_proj\\FitFileParser\\5\\Garmin.fit')
+
+    
+    
+
+    
     #===========================================================================
     # df = pd.read_csv('C:\\python\\gpstracks\\Activity_Summary2.csv',parse_dates=[2], infer_datetime_format=True,encoding='latin-1')
     # df_time = df[df['dateandtime']>'2016-01-01']
@@ -983,27 +1110,28 @@ if __name__ == "__main__":
     # p.to_csv('C:\\python\\gpstracks\\Suffer.csv')
     #===========================================================================
     
-    for x in readkommunexml('C:\\Users\\A485753\\git\\potato\\potato\\sccs\\gpx\\res\\kommunetopplisteV2.xml'):
-        diff = float(x['hoyde2'].replace(',','.'))-float(x['hoyde'].replace(',','.'))
-        if diff < -10:
-            print(x['kommunenavn'],x['kommunenr'],x['topp'],x['lng'],x['lat'],x['hoyde2'],diff)
+    #===========================================================================
+    # for x in readkommunexml('C:\\Users\\A485753\\git\\potato\\potato\\sccs\\gpx\\res\\kommunetopplisteV2.xml'):
+    #     diff = float(x['hoyde2'].replace(',','.'))-float(x['hoyde'].replace(',','.'))
+    #     if diff < -10:
+    #         print(x['kommunenavn'],x['kommunenr'],x['topp'],x['lng'],x['lat'],x['hoyde2'],diff)
     
     
     
      
-    for x in readkommunexml('C:\\Users\\A485753\\git\\potato\\potato\\sccs\\gpx\\res\\kommunetopplisteV2.xml'):
-       if x['besteget'] == 'True':
-           try:
-               trk = GPXtoDataFrame('C:\\Users\\A485753\\git\\potato\\potato\\sccs\\gpx\\res\\gpx\\{}.gpx'.format(x['kommunenr']))
-           except:
-               trk = GPXtoDataFrame('C:\\Users\\A485753\\git\\potato\\potato\\sccs\\gpx\\res\\gpx\\{}_ex.gpx'.format(x['kommunenr']))
+    # for x in readkommunexml('C:\\Users\\A485753\\git\\potato\\potato\\sccs\\gpx\\res\\kommunetopplisteV2.xml'):
+    #    if x['besteget'] == 'True':
+    #        try:
+    #            trk = GPXtoDataFrame('C:\\Users\\A485753\\git\\potato\\potato\\sccs\\gpx\\res\\gpx\\{}.gpx'.format(x['kommunenr']))
+    #        except:
+    #            trk = GPXtoDataFrame('C:\\Users\\A485753\\git\\potato\\potato\\sccs\\gpx\\res\\gpx\\{}_ex.gpx'.format(x['kommunenr']))
             
             
             
-           dist  = get_closestPoint(trk, (float(x['lng']),float(x['lat'])))
-           if dist > 100:
-               print(x['kommunenavn'],x['kommunenr'],x['topp'],x['lng'],x['lat'],x['hoyde2'], dist)
-    
+    #        dist  = get_closestPoint(trk, (float(x['lng']),float(x['lat'])))
+    #        if dist > 100:
+    #            print(x['kommunenavn'],x['kommunenr'],x['topp'],x['lng'],x['lat'],x['hoyde2'], dist)
+    #===========================================================================
     
     #gpsh = showEleMap(trk)
     #dtmh = getClimbingHeightDTM(trk)

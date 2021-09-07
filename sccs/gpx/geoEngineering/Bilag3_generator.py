@@ -9,6 +9,7 @@ Created on 28. okt. 2019
 from docx import Document
 from docx.shared import Cm
 import pandas as pd
+import PIL.Image
 
 
 
@@ -41,13 +42,13 @@ def createPage(document, dict, image_folder, tunnelinfo={'tunnel_name': 'Eksempe
         body_cells[2].text = 'Venstre side, vegg'
         run.add_picture('C:\\python_proj\\Bilag3\\plassering\\vs_vegg.png', width=Cm(5))        
         
-    elif dict['Plassering'] =='vs_vederlag':
+    elif dict['Plassering'] in ['vs_vederlag','vs_vl']:
         body_cells[2].text = 'Venstre side, vederlag'
-        run.add_picture('C:\\python_proj\\Bilag3\\plassering\\vs_vederlag.png', width=Cm(5))        
+        run.add_picture('C:\\python_proj\\Bilag3\\plassering\\vs_vl.png', width=Cm(5))        
         
-    elif dict['Plassering'] == 'hs_vederlag':
+    elif dict['Plassering'] in ['hs_vederlag','hs_vl']:
         body_cells[2].text = 'Høyre side, vederlag'
-        run.add_picture('C:\\python_proj\\Bilag3\\plassering\\hs_vederlag.png', width=Cm(5))           
+        run.add_picture('C:\\python_proj\\Bilag3\\plassering\\hs_vl.png', width=Cm(5))           
     
     elif dict['Plassering'] == 'heng':
         body_cells[2].text = 'Heng'
@@ -107,8 +108,19 @@ def create_bilag3(tunnel_name, excel_fil, image_folder):
     
     return docName
 
+def split_textTimestamp(myTxt):
+    myData = myTxt.split(' ')
+    return [myData[0],myData[1], myData[2]]
+
+def read_TimeStampImage(img):
+    img = PIL.Image.open(img)
+    exif_data = img._getexif()
+    print(split_textTimestamp(exif_data[270])[2])
+
+
 if __name__ == '__main__':
-    print(create_bilag3('Testtunnel', 'C:\python_proj\\Bilag3\\Test_data.xlsx','C:\\python_proj\\Bilag3\\Test_data'))
+    read_TimeStampImage('C:\\python_proj\\readExif\\Images\\IMG_6882.JPG')
+    # print(create_bilag3('Espatunnelen - nordgående', 'C:\python_proj\\Bilag3\\Test_data.xlsx','C:\\python_proj\\Bilag3\\Test_data'))
     
 #     df = pd.read_excel('T:\\19500 - Tunnelinspeksjoner SVV Region Øst 2019\\018 Follotunnelen\\04 Rapport\\01 Arbeidsmappe\\Bilag 3\\Bilag3_FolloSør.xlsx', header=3)
 #     df_dict = df.to_dict(orient="index")
