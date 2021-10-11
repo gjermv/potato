@@ -236,13 +236,13 @@
     <kommune>
       <areal>637,35</areal>
       <befolkning>19049</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Etter en natt på Bekkestua, en gammel tømmerkoie i Romeriksåsene, durte vi videre til Nes og Ursknappen. Vi kjørte opp en grusvei forbi gården Fallet, 50 kr bomvei, og parkerte på en utfartsparkering med utedo i noe som lignet på et gammelt sandtak. S. ble med videre på sykkel. Det startet slakt oppover, før veien gjorde en u-sving opp det bratteste partiet. Etter ca. 4 km med sykling fortsatte vi til fots. Det var sti og merket mot Ursknappen hele veien til toppen. Turen gikk i skogsterreng, over noen myrer og forbi blåbærlyng. Vi kom oss fram nesten tørrskodd, men det skyldes nok mye at det var lenge siden forrige regnvær. På toppen var det bok, skiltet med Ursknappen 501 og ok utsikt i en retning. Tilbaketuren gikk adskillig raskere enn opp.</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
       <hoyde2>504,5</hoyde2>
       <lat>60.33200169995016</lat>
       <lng>11.474337833808622</lng>
-      <dato/>
+      <dato>05.09.2021</dato>
       <hoyde>501</hoyde>
       <km_fottur/>
       <km_ski/>
@@ -5232,10 +5232,10 @@ Været var heller labert på turen. Det var regn, vind og tåke over 1800 meter,
     <kommune>
       <areal>1141,51</areal>
       <befolkning>5834</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Værmeldingen for dagen så ikke spesielt lovende ut, derfor ble det planlagt kommunetopptur til Heimdalshøe og ikke familietur til en tilfeldig topp i Beitostølområdet denne tirsdagen i høstferien. Jeg fikk med S. sr. som co-pilot i tåka over Valdresflya, og fryktet stund at det skulle bli en tur der navigasjonen utelukkende kom til å bestå av og titte på GPS'en, men på Gjende siden var været adskillig lettere. Heimdalshøe er nok ingen utpreget fotturtopp, noe jeg kanskje burde forstå i og med at det ikke var noen stier markert på kartet som gikk til toppen. Men med grei sikt og lettgått terreng var det bare å sikte direkte mot toppen og gå. Grunnen til at Heimdalshøe sannsynligvis er en bedre skitopp enn fottur-topp skulle vise seg litt høyere opp ved kryssing av diverse steinrøyser, som i tillegg til å være normalt kjipe å gå igjennom, også var glatte og sleipe i oktober. Men med tida til hjelp kom vi oss over steinrøysene, og fra ca. 1700 moh høyde var det kommet nok snø til at mellomrommene mellom steinene var fylt opp og det igjen var lett å gå. Det var ingen spor i snøen som tydet på at det hadde vært andre mennesker på toppen på en god stund, men en stor gruppe med snøspurv likte tydeligvis denne toppen. På vei ned igjen møtte vi godt over 10 reinsdyr med stø kurs oppover Brusskardet, muligens for å spise seg feite på store mengder med krekling som vokste i lia.</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>09.10.2021</dato>
       <hoyde>1843</hoyde>
       <hoyde2>1842,9</hoyde2>
       <km_fottur/>
@@ -5248,7 +5248,7 @@ Været var heller labert på turen. Det var regn, vind og tåke over 1800 meter,
       <tid_ned/>
       <tid_opp/>
       <tid_totalt/>
-      <topp>Heimdalshoi</topp>
+      <topp>Heimdalshøe</topp>
     </kommune>
     <kommune>
       <areal>955,31</areal>
