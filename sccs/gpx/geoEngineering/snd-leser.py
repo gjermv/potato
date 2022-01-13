@@ -28,6 +28,68 @@ def snd_converter(filename):
     depth, stop_reason = snd_lastline(txt_split[-3])
     return (x,y,z,depth,bedrock_43,stop_reason)
 
+def tot_converter(filename):
+    file = open(filename, 'r')
+    txt = file.read()
+    txt_split = txt.split('\n')
+    
+    tot_depth = -9999
+    bed_rock_depth = -9999
+    stopreason = 'Not known'
+    
+    tot_df = pd.DataFrame()
+    
+    for linenr in txt_split[3:-1]:
+        station = dict()
+        for item in linenr.split(','):
+            key,val = item.split('=')[:2]
+            station[key] = val
+
+        
+        tot_df = tot_df.append(station, ignore_index=True)
+    try:
+        tot_df['D'] = pd.to_numeric(tot_df['D'], downcast="float")
+        tot_depth = max(tot_df['D'])
+        bed_rock_depth = max(tot_df[tot_df['K'] == '41']['D'])
+        stopreason = tot_df[tot_df['K'] == '94'].iloc[0]['T']
+    except:
+        tot_depth = float(max(tot_df['D']))
+        bed_rock_depth = -99999
+        stopreason = 'Error'
+    
+    return (tot_depth,bed_rock_depth,stopreason)
+
+def get_cordinates_from_kof(file_name, kof_file):
+    file = open(kof_file, 'r')
+    kof = file.read()
+    kof_lines = kof.split('\n')
+    
+    kof_df = pd.DataFrame()
+    station = dict()
+    
+    for line in kof_lines[:]:
+        station['id'] = line[:3].strip()
+        if station['id'] == '05':
+            station['name'] = line[3:22].strip()
+            station['east'] = line[22:35].strip()
+            station['north'] = line[35:48].strip()
+            station['elev'] = line[48:55].strip()
+            station['acc'] = line[55:89].strip()
+ 
+        
+            kof_df = kof_df.append(station, ignore_index=True)
+        
+    sub_df = kof_df[kof_df['name'].str.contains(file_name.split(' ')[0])]
+    if len(sub_df) > 0:
+        north = sub_df.iloc[0]['north']
+        east = sub_df.iloc[0]['east']
+        elev = sub_df.iloc[0]['elev']
+    
+        return (north, east, elev)
+    
+    else:
+        return (0,0,0)
+        
 
 def snd_lastline(line): 
     depth = float(line[0:8].strip())
@@ -115,10 +177,40 @@ def xlsx_to_dxf(file):
     drawing.saveas("C:\\python_proj\\snd_file_reader\\_OneDrive_1_1-8-2021 (2).dxf")
 
 
-datafolder = "T:\\22457 - E39_Lyngdal_øst_vest\\02 Arbeidskatalog\\12 Fagmapper\\RIG\\nedlastet 0801\\OneDrive_2021-01-08\\10206056 E39 Mandal-Lyngdal. Geosuite-database\\AUTOGRAF.DBF\\*.SND"
-datafolder2 = "T:\\22457 - E39_Lyngdal_øst_vest\\01 Grunnlag\\07 Konkurransegrunnlag\\Kapittel D\\D2\\D2.06 Annet grunnlag\\Geosuite database\\1350041000\\1350041000\\AUTOGRAF.DBF\\*.snd"
-csv_file = "C:\\python_proj\\snd_file_reader\\snd_output2.csv"
-xlsx_file =  "T:\\22457 - E39_Lyngdal_øst_vest\\02 Arbeidskatalog\\12 Fagmapper\\RIG\\nedlastet 0801\\OneDrive_1_1-8-2021 (2)/Copy of Alle borpunkter koordinater list 27.10.2015 ferdig.xlsx"
+
+
+# =============================================================================
+# datafolder = "T:\\22457 - E39_Lyngdal_øst_vest\\02 Arbeidskatalog\\12 Fagmapper\\RIG\\nedlastet 0801\\OneDrive_2021-01-08\\10206056 E39 Mandal-Lyngdal. Geosuite-database\\AUTOGRAF.DBF\\*.SND"
+# datafolder2 = "T:\\22457 - E39_Lyngdal_øst_vest\\01 Grunnlag\\07 Konkurransegrunnlag\\Kapittel D\\D2\\D2.06 Annet grunnlag\\Geosuite database\\1350041000\\1350041000\\AUTOGRAF.DBF\\*.snd"
+# csv_file = "C:\\python_proj\\snd_file_reader\\snd_output2.csv"
+# xlsx_file =  "T:\\22457 - E39_Lyngdal_øst_vest\\02 Arbeidskatalog\\12 Fagmapper\\RIG\\nedlastet 0801\\OneDrive_1_1-8-2021 (2)/Copy of Alle borpunkter koordinater list 27.10.2015 ferdig.xlsx"
+# 
+# =============================================================================
+datafolder = "C:\\python_proj\\snd_file_reader\\tot_files\\*.TOT"
+kof_file = "C:\\python_proj\\snd_file_reader\\E18_KOF\\Innmålte.KOF"
+
+df = pd.DataFrame()
+
+for file in glob.glob(datafolder):
+    df_dict = dict()
+    
+    file_name = os.path.basename(file)
+    file_name = file_name.split('.')[0]
+    
+    df_dict['file_name'] = file_name.split(' ')[0]
+    print(df_dict['file_name'])
+    
+    df_dict['north'], df_dict['east'], df_dict['elev'] = get_cordinates_from_kof(file_name,kof_file)
+    df_dict['tot_depth'],df_dict['bed_rock_depth'],df_dict['stopreason'] = tot_converter(file)
+    
+    df = df.append(df_dict,ignore_index=True)
+    
+    
+print(df)
+
+df.to_excel('C:\\python_proj\\snd_file_reader\\Tot_coord.xlsx', index = False, header=True)
+    
+
 
 #snd_to_dxf(datafolder)
 #xlsx_to_dxf(xlsx_file)

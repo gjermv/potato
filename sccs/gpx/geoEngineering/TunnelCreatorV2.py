@@ -53,7 +53,10 @@ def verticalLines_199():
 def verticalLines_East():
     return [-21.5, 21.5, -10.25, 10.25, 0, 53.5, 63.75, 43.25, 75.0, 32.0]
 
-
+def convert_SwedishExcel(filename):
+    sw_df = pd.read_excel (filename, header=2)
+    sw_df['Pel'] = (sw_df['StartMeter']+sw_df['Slutmeter'])/2
+    
 def tunnelCreator_Run(tunnel_name, tunnel_start, tunnel_stop, tunnel_placeUp, tunnel_down, xlsx_fil_import, tunnelLayout ):
     "Tunnel parameteres"
     T_start = tunnel_start    # Pel ved tunnelportal
@@ -330,7 +333,9 @@ def tunnelCreator_Run(tunnel_name, tunnel_start, tunnel_stop, tunnel_placeUp, tu
     print("Drawing saved:", dwg_filename)
 
 if __name__ == '__main__':
-    tunnelCreator_Run('Updated - Kontrollert av 2', 12000, 13400, '-', '-', 'C:\\Users\\A485753\\Desktop\\Prosjekter lokalt\\19500 Tunnelinspeksjoner\\tem.xlsx',1)
+    #tunnelCreator_Run('Updated - Kontrollert av 2', 12000, 13400, '-', '-', 'C:\\Users\\A485753\\Desktop\\Prosjekter lokalt\\19500 Tunnelinspeksjoner\\tem.xlsx',1)
+    convert_SwedishExcel('C:\\python_proj\\tunnelinspek\\swedishConvert\\exportVarghammer.xlsx')
+    
     
 """ To FIX:
 Feilmelding hvis Pel kolonne ikke har tall. """
