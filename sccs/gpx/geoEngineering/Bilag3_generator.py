@@ -127,18 +127,19 @@ def TimeStampToExcel(folder):
         #     if key in ExifTags.TAGS:
         #         print(key,f'{ExifTags.TAGS[key]}:{val}')
         txt = exif_data[270].replace('ASCII','').strip('\x00').strip()
-        txt = txt.replace('\n', ' ').replace('Ã¸','ø').replace('Ã¥','å')
-        txt_tab = txt.split(' ',2)
         
-        print(txt_tab[0].lower(),txt_tab[1],txt_tab[2],os.path.basename(image).split('.')[0],sep=';')
+        txt = txt.replace('\n', ' ').replace('Ã¸','ø').replace('Ã¥','å')
+        #txt_tab = txt.split(' ',2)
+        print(txt)
+        #print(txt_tab[0].lower(),txt_tab[1],txt_tab[2],os.path.basename(image).split('.')[0],sep=';')
 
 def insertPDFToDWG():
-    folder = 'T:\\19500 - Tunnelinspeksjoner SVV Region Øst 2019\\023 Operatunnelen (Ekeberg)\\02 Feltskjema\\02 Scan\\Scan dag 1\\'
-    file = 'Ekeberg avrampe.pdf'
+    folder = 'C:\\Users\\A485753\\OneDrive - AFRY\\E18 Arbeidskatalog\\10 Fag\\RIG\\Ing.geo\\Parsell 3\\2022-03-10 Tunnelinspeksjon Bamble\\02 Kartleggingsskjema\\'
+    file = 'Kartleggingsskjema Bamble scannet.pdf'
     filename = folder + file
-    profile_start = 2200
+    profile_start = 16200
     
-    for i in range(2):
+    for i in range(6):
         print("""-ATTACH {}
 {}
 0,0
@@ -150,17 +151,17 @@ F
 -1,5
 
 
-0.9463,0.92
--21.5,{}
-5.396,10.1529
-75,{}
+1.0534,1.0079
+-44,{}
+5.2034,10.3147
+44,{}
 
 y""".format(filename, i+1,i*200+profile_start,i*200+200+profile_start)    )
 
 
 if __name__ == '__main__':
-    #TimeStampToExcel('T:\\19500 - Tunnelinspeksjoner SVV Region Øst 2019\\023 Operatunnelen (Ekeberg)\\03 Bilder\\Ekebergtunnelen østgående\\Bilder - Hovedløp')
-    insertPDFToDWG()
+    TimeStampToExcel('C:\\Users\\A485753\\OneDrive - AFRY\\E18 Arbeidskatalog\\10 Fag\\RIG\\Ing.geo\\Parsell 3\\2022-03-10 Tunnelinspeksjon Bamble\\01 Bilde')
+    #insertPDFToDWG()
     # print(create_bilag3('Espatunnelen - nordgående', 'C:\python_proj\\Bilag3\\Test_data.xlsx','C:\\python_proj\\Bilag3\\Test_data'))
     
 #     df = pd.read_excel('T:\\19500 - Tunnelinspeksjoner SVV Region Øst 2019\\018 Follotunnelen\\04 Rapport\\01 Arbeidsmappe\\Bilag 3\\Bilag3_FolloSør.xlsx', header=3)

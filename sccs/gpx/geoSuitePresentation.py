@@ -16,7 +16,7 @@ def createAttachment(filename, CenterLine, Elevation):
     Adds a Rectangle around the added XREF. """
     
     # Set width of rectangle. 
-    recWidth = 320
+    recWidth = 100
     upperL = CenterLine-recWidth
     lowerR = CenterLine+recWidth
     
@@ -68,8 +68,8 @@ Template
     
 df = pd.read_excel(VL_spreadSheet, sheet_name= VL_sheetName)
 
-f_out1 = open("C:\\GeoArkiv\\05 Parsell 2 geosuite\\Script_export\\{}-Script_1.txt".format(VL_sheetName), "w")
-f_out3 = open("C:\\GeoArkiv\\05 Parsell 2 geosuite\\Script_export\\{}-Script_3.txt".format(VL_sheetName), "w")
+f_out1 = open("C:\\GeoArkiv\\05 Parsell 2 geosuite\\Script_export\\{}-Script_new1.txt".format(VL_sheetName), "w")
+f_out3 = open("C:\\GeoArkiv\\05 Parsell 2 geosuite\\Script_export\\{}-Script_new3.txt".format(VL_sheetName), "w")
 
 for filename in glob.glob('{0}\\VL*.dwg'.format(geoSuiteDWGFolder)):
     
