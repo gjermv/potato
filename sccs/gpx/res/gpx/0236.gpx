@@ -20510,6 +20510,7 @@
 </trk>
 <trk>
 	<desc>Cycle</desc>
+	<name>Cycle</name>
 	<trkseg>
 		<trkpt lat="60.325293" lon="11.443339">
 			<ele>379.20</ele>
