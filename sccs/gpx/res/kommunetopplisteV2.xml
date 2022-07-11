@@ -7481,10 +7481,10 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
     <kommune>
       <areal>213,96</areal>
       <befolkning>2419</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Dagens andre kommunetopp. Det startet nokså likt som Skien sin topp. Det var god grusvei det første stykket godt egnet for sykkel. Ved xx setra parkerte jeg sykkelen, og hadde håpet å kunne følge gode tømmerhogstspor oppover lia, men sporene var grodd igjen med gress og andre grønne vekster som skjulte alt av hogstrester, steiner og andre ujevnheter i grunnen. Det var bare å bruke tiden til hjelp for å komme seg helskinnet fram, og selv det stoppet ikke leggene fra å bli rispet opp og blodige. Etter å ha passert hogstfeltet og kommet seg mer opp på toppen var det fortsatt ikke noe sti å finne, men det ble litt lettere å gå. På vei til Nordre Bølene ønø, var det først noen luretopper på Skien siden, før kommunegrensa ble krysset og en liten varde med gamle flagg dukket opp</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>09.07.2022</dato>
       <hoyde>645</hoyde>
       <hoyde2>649,4</hoyde2>
       <km_fottur/>
@@ -7502,10 +7502,10 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
     <kommune>
       <areal>779,15</areal>
       <befolkning>52077</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Alle gode ting er tre. Det ble nok en retur til Skåråfjell etter å ha vært cirka en kilometer unna i august 2018, og stoppet av for mye snø nær Fugleleikhytta i mai 2021. Denne gangen startet turen nærmere Sommerseter-hytta, med en sykkeltur fra brua over xxx bekken (der Løveskiold for mange år siden har satt opp et opp innkjøring forbudt skilt) til ccc vannet, og deretter videre på beina opp til toppen. Stien fra xx vannet til toppen var  merket, og om ikke den aller mest brukte stien, så var det et tråkk å følge hele veien opp. På toppen var det merket med høyest i Skien, så ingen tvil om at man traff riktig topp her. Jeg fulgte samme rute tilbake. 4 kilometer fra bilen møtte jeg resten av support-troppen i god gang.</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>09.07.2022</dato>
       <hoyde>814</hoyde>
       <hoyde2>813,5</hoyde2>
       <km_fottur/>
@@ -7518,7 +7518,7 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
       <tid_ned/>
       <tid_opp/>
       <tid_totalt/>
-      <topp>Skarafjell</topp>
+      <topp>Skåråfjell</topp>
     </kommune>
     <kommune>
       <areal>2044,94</areal>
@@ -8643,7 +8643,7 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
       <tid_ned/>
       <tid_opp/>
       <tid_totalt/>
-      <topp>Hjertas</topp>
+      <topp>Hjertås</topp>
     </kommune>
     <kommune>
       <areal>118,33</areal>
