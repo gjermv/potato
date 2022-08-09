@@ -6,10 +6,12 @@ sys.path.append('C:\\Users\\A485753\\eclipse-workspace\\Projectplace\\')
 from PyQt5 import QtGui
 from PyQt5 import QtCore, QtGui,QtWidgets
 
-from geoEngineering.tunnelProgGUI2 import Ui_MainWindow
-from geoEngineering import feltskjemaAnalyzer as fAnalyzer
-from geoEngineering import TunnelCreatorV2 as tunnelCreatorV2
-from geoEngineering import Bilag3_generator as bilag3
+import feltskjemaAnalyzer
+
+from tunnelProgGUI2 import Ui_MainWindow
+import feltskjemaAnalyzer as fAnalyzer
+import TunnelCreatorV2 as tunnelCreatorV2
+import Bilag3_generator as bilag3
 
 
 
@@ -30,7 +32,7 @@ class MyMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def openfiledialogExcel(self):
         self.fname = QtWidgets.QFileDialog.getOpenFileName(
-            self, 'Read file', 'C:\\',
+            self, 'Read file', 'C:\\python_proj\\tunnelinspek\\import_filer',
             filter=('Excel file (*.xlsx)'))[0]
             
        
