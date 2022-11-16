@@ -193,15 +193,15 @@ y""".format(filename, i+1,i*200+profile_start,i*200+200+profile_start)    )
 
 
 if __name__ == '__main__':
-    #TimeStampToExcel('C:\\Users\\gjermund.vingerhagen\\OneDrive - Asplan Viak\\Pictures\\Fosskolltunnelen - Bilder\\Bilder Marie\\Krabbefelt')
+    #TimeStampToExcel('C:\\python_proj\\Bilag3\Rallerud')
     #insertPDFToDWG()
     
     
-    Input_TunnelNavn = 'Kongsbergtunnelen - østgående'
-    Input_ExcelOversikt ='C:\\python_proj\\Bilag3\\Bilag 3 - Østgående - Kongsbergtunnelen_Import.xlsx'
-    Input_Bildemappe = 'S:\\Oppdrag\\Sandvika\\637592\\06\\02 Bilder\\99 Rapport\\Østgående skader'
+    # Input_TunnelNavn = 'Kongsbergtunnelen - østgående'
+    # Input_ExcelOversikt ='C:\\python_proj\\Bilag3\\Bilag 3 - Østgående - Kongsbergtunnelen_Import.xlsx'
+    # Input_Bildemappe = 'S:\\Oppdrag\\Sandvika\\637592\\06\\02 Bilder\\99 Rapport\\Østgående skader'
     
-    create_bilag3(Input_TunnelNavn, Input_ExcelOversikt,Input_Bildemappe)
+    create_bilag3('Rallerudtunnelen-Forsagere', 'C:\\python_proj\\Bilag3\\Rallerud\\Oppsummering Bilder2_Sprengstoff.xlsx', 'C:\\python_proj\\Bilag3\Rallerud')
     
 #     df = pd.read_excel('T:\\19500 - Tunnelinspeksjoner SVV Region Øst 2019\\018 Follotunnelen\\04 Rapport\\01 Arbeidsmappe\\Bilag 3\\Bilag3_FolloSør.xlsx', header=3)
 #     df_dict = df.to_dict(orient="index")
