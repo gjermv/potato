@@ -75,24 +75,28 @@ def tunnelCreator_Run(tunnel_name, tunnel_start, tunnel_stop, tunnel_placeUp, tu
     xlsx_file = xlsx_fil_import
     
     drawing = ezdxf.new(dxfversion='R2010')
-    drawing.styles.new('myStandard', dxfattribs={'font' : 'OpenSans-Regular.ttf'})
+    drawing.styles.new('myStandard', dxfattribs={'font' : 'Arial.ttf'}) # Virker ikke, ikke i bruk...
     
     "Layers"
     drawing.layers.new('V_Background', dxfattribs={'color': 0})
     drawing.layers.new('V_Background_grid', dxfattribs={'color': 8})
     drawing.layers.new('V_rightField', dxfattribs={'color': 0})
     drawing.layers.new('V_PaperRightField', dxfattribs={'color': 0})
+    drawing.layers.new('V_InfoField', dxfattribs={'color': 0})
     
+    # Hjelpelag
     drawing.layers.new('V_import_point', dxfattribs={'color': 252})
+    drawing.layers.new('W_PDF_Import', dxfattribs={'color': 0})
+    drawing.layers.new('W_PDF_Registered', dxfattribs={'color': 0})    
     
     
     drawing.layers.new('Markering_ny', dxfattribs={'color': 1})
     drawing.layers.new('Markering_eksisterende', dxfattribs={'color': 5})
     drawing.layers.new('Registeringer_generell', dxfattribs={'color': 0})
-    drawing.layers.new('Registeringer_test', dxfattribs={'color': 0})
+    drawing.layers.new('Fremkommelighet', dxfattribs={'color': 0})
+    drawing.layers.new('Hastetiltak', dxfattribs={'color': 1})
+    drawing.layers.new('Skaderegistrering', dxfattribs={'color': 1})
     
-    drawing.layers.new('PDF_Import', dxfattribs={'color': 0})
-    drawing.layers.new('PDF_Registered', dxfattribs={'color': 0})
 
     modelspace = drawing.modelspace()
     
@@ -157,16 +161,14 @@ def tunnelCreator_Run(tunnel_name, tunnel_start, tunnel_stop, tunnel_placeUp, tu
 
     
     hatch_portal = modelspace.add_hatch(color=254 , dxfattribs={'layer': 'Registeringer_generell'})
-    with hatch_portal.edit_boundary() as boundary:
-        boundary.add_polyline_path([(100, pos_y+10), (143, pos_y+10), (143, pos_y+20), (100, pos_y+20)], is_closed=1)
+    hatch_portal.paths.add_polyline_path([(100, pos_y+10), (143, pos_y+10), (143, pos_y+20), (100, pos_y+20)], is_closed=1)
     modelspace.add_text('Portal', dxfattribs={'layer': 'Registeringer_generell', 'height': txtSize}).set_pos((121.5, pos_y+15), align='MIDDLE_CENTER')   
     
     hatch_PE = modelspace.add_hatch(color=141, dxfattribs={'layer': 'Registeringer_generell'})
-    with hatch_PE.edit_boundary() as boundary:
-        boundary.add_polyline_path([(100, pos_y+22), (121.5, pos_y+22), (121.5, pos_y+32), (100, pos_y+32)], is_closed=1)
+    hatch_PE.paths.add_polyline_path([(100, pos_y+22), (121.5, pos_y+22), (121.5, pos_y+32), (100, pos_y+32)], is_closed=1)
     modelspace.add_text('PE-skum', dxfattribs={'layer': 'Registeringer_generell', 'height': txtSize}).set_pos((110.35, pos_y+37), align='MIDDLE_CENTER')   
     
-    'Lage tegneforklaring i modelspace'
+    # Lage tegneforklaring i modelspace, uavhengig av paperspace
     reg_list = ["F1","F2","F3","F4","F5","F6","F7","S1","S2","S3","S4","S5","S6","S7","S8","S9","B1x","B2","B3","B4","B5","M1","M2","M3","M4","M5", "I/X", "X", "L", "D"]
     
     for sym in reg_list:
@@ -189,31 +191,31 @@ def tunnelCreator_Run(tunnel_name, tunnel_start, tunnel_stop, tunnel_placeUp, tu
     for t in content:
         txt = str(t).replace('\n','')
         print(txt)
-        block_legend.add_text(txt, dxfattribs={ 'height': 1.5,'layer': 'V_rightField'}).set_pos((0, pos_y), align='LEFT')
-        block_legend.add_line((-2, pos_y-0.25), (48,pos_y-0.1),dxfattribs={'layer': 'V_rightField'})
+        block_legend.add_text(txt, dxfattribs={'height': 1.5}).set_pos((0, pos_y), align='LEFT')
+        block_legend.add_line((-2, pos_y-0.25),(48,pos_y-0.1))
         pos_y = pos_y - 2.5
         
-    block_legend.add_line((-2, pos_y+2.25), (-2,102.5),dxfattribs={'layer': 'V_rightField'})
-    block_legend.add_line((48, pos_y+2.25), (48,102.5),dxfattribs={'layer': 'V_rightField'})
-    block_legend.add_line((-2, 102.5), (48,102.5),dxfattribs={'layer': 'V_rightField'})
+    block_legend.add_line((-2, pos_y+2.25), (-2,102.5))
+    block_legend.add_line((48, pos_y+2.25), (48,102.5))
+    block_legend.add_line((-2, 102.5), (48,102.5))
     
     'Notes block'
     block_notes = drawing.blocks.new(name = "Notes")
-    block_notes.add_line((0, 0), (0, 130),dxfattribs={'layer': 'V_rightField'})
-    block_notes.add_line((50, 0), (50, 130),dxfattribs={'layer': 'V_rightField'})
-    block_notes.add_line((0, 0), (50, 0),dxfattribs={'layer': 'V_rightField'})      
-    block_notes.add_line((0, 130), (50, 130),dxfattribs={'layer': 'V_rightField'})      
-    block_notes.add_text('Notater:', dxfattribs={'height': 1.5,'layer': 'V_rightField'}).set_pos((1, 128), align='LEFT')
+    block_notes.add_line((0, 0), (0, 130))
+    block_notes.add_line((50, 0), (50, 130))
+    block_notes.add_line((0, 0), (50, 0))      
+    block_notes.add_line((0, 130), (50, 130))      
+    block_notes.add_text('Notater:', dxfattribs={'height': 1.5}).set_pos((1, 128), align='LEFT')
     
     'Header block'
     block_header = drawing.blocks.new(name = "Header")
-    block_header.add_text('Bilag 2 - Oversikt over registreringer', dxfattribs={'layer': 'V_Background', 'height': 3}).set_pos((0.6, 265), align='LEFT')
-    block_header.add_line((0, 263), (180, 263), dxfattribs={'layer': 'V_Background'})
-    block_header.add_line((0, 255), (180, 255), dxfattribs={'layer': 'V_Background'})
-    block_header.add_line((0, 255), (0, 263), dxfattribs={'layer': 'V_Background'})
-    block_header.add_line((79, 255), (79, 263), dxfattribs={'layer': 'V_Background'})
-    block_header.add_line((108, 255), (108, 263), dxfattribs={'layer': 'V_Background'})
-    block_header.add_line((180, 255), (180, 263), dxfattribs={'layer': 'V_Background'})
+    block_header.add_text('Bilag 2 - Oversikt over registreringer', dxfattribs={ 'height': 3}).set_pos((0.6, 265), align='LEFT')
+    block_header.add_line((0, 263), (180, 263))
+    block_header.add_line((0, 255), (180, 255))
+    block_header.add_line((0, 255), (0, 263))
+    block_header.add_line((79, 255), (79, 263))
+    block_header.add_line((108, 255), (108, 263))
+    block_header.add_line((180, 255), (180, 263))
     
     block_header.add_text('Tunnel (og løp)', dxfattribs={'layer': 'V_Background', 'height': 1.5}).set_pos((1, 261), align='LEFT')
     block_header.add_text('Dato', dxfattribs={'layer': 'V_Background', 'height': 1.5}).set_pos((80, 261), align='LEFT')
@@ -225,20 +227,49 @@ def tunnelCreator_Run(tunnel_name, tunnel_start, tunnel_stop, tunnel_placeUp, tu
 
     'Document control'
     block_drawnby = drawing.blocks.new(name = "drawnBy")
-    block_drawnby.add_line((0, 2.5), (50, 2.5),dxfattribs={'layer': 'V_rightField'})
-    block_drawnby.add_line((0, 5), (50, 5),dxfattribs={'layer': 'V_rightField'})
-    block_drawnby.add_line((0, 7.5), (50, 7.5),dxfattribs={'layer': 'V_rightField'})
-    block_drawnby.add_line((13, 0), (13, 7.5),dxfattribs={'layer': 'V_rightField'})
-    block_drawnby.add_line((31, 0), (31, 7.5),dxfattribs={'layer': 'V_rightField'})
-    block_drawnby.add_text('Dato', dxfattribs={'layer': 'V_rightField', 'height': 1.5}).set_pos((1, 5.5), align='LEFT')
-    block_drawnby.add_text('Tegnet av', dxfattribs={'layer': 'V_rightField', 'height': 1.5}).set_pos((14, 5.5), align='LEFT')
-    block_drawnby.add_text('Kontrollert av', dxfattribs={'layer': 'V_rightField', 'height': 1.5}).set_pos((32, 5.5), align='LEFT')
+    block_drawnby.add_line((0, 2.5), (50, 2.5))
+    block_drawnby.add_line((0, 5), (50, 5))
+    block_drawnby.add_line((0, 7.5), (50, 7.5))
+    block_drawnby.add_line((13, 0), (13, 7.5))
+    block_drawnby.add_line((31, 0), (31, 7.5))
+    block_drawnby.add_text('Dato', dxfattribs={'height': 1.5}).set_pos((1, 5.5), align='LEFT')
+    block_drawnby.add_text('Tegnet av', dxfattribs={'height': 1.5}).set_pos((14, 5.5), align='LEFT')
+    block_drawnby.add_text('Kontrollert av', dxfattribs={'height': 1.5}).set_pos((32, 5.5), align='LEFT')
     
     pages = getPages(T_start, T_stop)
     p = getPages(T_start, T_stop)['start']
     
     
+    
+    
     l = []
+    # Lag en egen infoside med div viktig info. 
+    info_layout = drawing.layouts.new('Info'.format(p,p+T_scale))
+    info_layout.page_setup(size=(210,297),margins=(10, 5, 10, 5),offset=(5.7,-4.8),scale=(1,0.9546), units='mm')
+    'Sett på notat og tegneforklaring felt : Comment / Uncomment'
+    info_layout.add_blockref('Legend',(132,147), dxfattribs={
+        'xscale': 1,
+        'yscale': 1,
+        'rotation': 0,
+        'layer': 'V_InfoField'
+    })
+    
+    'Notater og kontrollert av '
+    info_layout.add_blockref('Notes', (130,10), dxfattribs={'layer': 'V_InfoField'})
+    info_layout.add_blockref('drawnBy', (130,10), dxfattribs={'layer': 'V_InfoField'})
+    
+    'Header'
+    info_layout.add_blockref('Header', (0,0))
+
+    
+    info_layout.add_text('Command: Style -> Font  = ArialNarrow', dxfattribs={'layer': 'V_InfoField', 'height': 2}).set_pos((0, 245), align='LEFT')
+    info_layout.add_text('Tegneforklaring -> Hatch', dxfattribs={'layer': 'V_InfoField', 'height': 2}).set_pos((0, 242), align='LEFT')
+    info_layout.add_text('Alle bilder tas i TimestampCamera.', dxfattribs={'layer': 'V_InfoField', 'height': 2}).set_pos((0, 236), align='LEFT')
+    info_layout.add_text('Lagres på følgende måte (vær nøyaktig):', dxfattribs={'layer': 'V_InfoField', 'height': 2}).set_pos((0, 233), align='LEFT')
+    info_layout.add_text('[pel] [posisjon] Eks: 1234 hs', dxfattribs={'layer': 'V_InfoField', 'height': 2}).set_pos((0, 230), align='LEFT')
+    info_layout.add_text('[skadekode]-[kommenter] Eks: B2-Vrakbolt, ikke nødvendig å erstatte ', dxfattribs={'layer': 'V_InfoField', 'height': 2}).set_pos((0, 227), align='LEFT')
+    
+    # Sett inn sider for tunnelkartleggingskjema
     for paper in range(getPages(T_start, T_stop)['pages']):
         l.append(paper)
         l[paper] = drawing.layouts.new('Pel {} - {}'.format(p,p+T_scale))
