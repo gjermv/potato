@@ -10,6 +10,9 @@ import gpxtricks
 import os.path
 from datetime import timedelta as dtt
 import xml.etree.ElementTree as ET
+import glob
+from pathlib import Path
+from PIL import Image
 
         
 
@@ -87,7 +90,16 @@ var polygon{0} = L.polygon(
 polygon{0}.bindPopup("{2}<br>{3}");""".format(i,gpxtricks.getKommuneGrense(kommune=item[2]),item[1],item[0])
     return txtstr
 
-
+def reSizePictures(folder_name):
+    for img in glob.glob(folder_name+'*_full.jpg'):
+        f_name = Path(img).resolve().stem.replace('_full','')
+        
+        im = Image.open(img)
+        
+        width, height = im.size
+        im1 = im.resize((650,390),resample = 3)
+        im1.save(folder_name+'{}.jpg'.format(f_name))
+        
         
 def createWebpages():
     """ Load the rapport template """
@@ -118,7 +130,7 @@ def createWebpages():
         kom['neste_kommune'] = besteget[bC]
         kom['forrige_kommune'] = besteget[bC-2]
         bC+=1
-        print(kom)
+
         kom['select_fylkeliste'] = gpxtricks.get_selected_fylke(kom['kommunenr'])
         kom['select_kommuneliste'] = kommune_selected
         
@@ -133,7 +145,10 @@ def createWebpages():
             gpx_df = gpxtricks.GPXtoDataFrame(gpxfile)
             kom['stoplocations'] = gpxtricks.exportStopLoc(gpx_df)
             kom['tripcoordinates'] = gpxtricks.exportRedPoints(gpx_df)
-            gpxtricks.plotElevationProfile(gpx_df, 'C:\\python\\kommuner\\outdata\\profile2\\{}.png'.format(kom['kommunenr']))
+            #gpxtricks.plotElevationProfile(gpx_df, 'C:\\python\\kommuner\\outdata\\profile2\\{}.png'.format(kom['kommunenr']))
+            
+            kom['elevation_dist'], kom['elevation_height'] = gpxtricks.getElevationData(gpx_df)
+            
             mainInfo = gpxtricks.getmainInfo(gpx_df)
             kom.update(mainInfo)
         
@@ -197,6 +212,7 @@ def createWebpages():
         file = open('C:\\python\\kommuner\\outdata\\stat{:0>2}.html'.format(i),'w',encoding='utf-8')
         file.write(template_stat.render(newStat))
         file.close()
+
+reSizePictures('C:\\Users\\vinge\\Pictures\\Kommunetopper\\0829 Kviteseid\\web\\')
     
-createWebpages()
-#createExcelList()
+#createWebpages()
