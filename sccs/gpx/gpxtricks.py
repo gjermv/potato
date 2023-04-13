@@ -350,6 +350,13 @@ def plotElevationProfile(dataframe,filename=None):
     else:
         plt.show()
 
+def getElevationData(dataframe):
+    """ For kommunetopper """
+    dist = list(dataframe[dataframe['ele'] != np.nan]['dist'])
+    ele = list(dataframe[dataframe['ele'] != np.nan]['ele'])
+    
+    return (dist,ele)
+
 def plotElevationProfile2(dataframe,filename=None):
     """ For Training analyser """
     dist = list(dataframe[dataframe['ele'] != np.nan]['dist'])
@@ -539,7 +546,6 @@ def exportRedPoints2(dataframe):
         
         if group == 'Ski':
             geojson += getSkiText()
-
         elif group == 'Cycle':
             geojson += getCycleText()
         else:
@@ -569,7 +575,6 @@ def exportRedPoints(dataframe):
         
         if activityType == 'Ski':
             geojson += getSkiText()
-
         elif activityType == 'Cycle':
             geojson += getCycleText()
         else:
@@ -631,11 +636,12 @@ def xmltoCSV(xml_file):
     
     p = etree.XMLParser(remove_blank_text=True)
     et = etree.parse(xml_file,parser=p)      
-    d = dict()
+    
     df = pd.DataFrame()
     
+    
     for kommune in et.iter('kommune'):
-        
+        d = dict()
         d['areal'] = kommune.find('areal').text
         d['befolkning'] = kommune.find('befolkning').text
         d['beskrivelse'] = kommune.find('beskrivelse').text
@@ -649,8 +655,34 @@ def xmltoCSV(xml_file):
         d['lng'] = kommune.find('lng').text
         d['topp'] = kommune.find('topp').text
         
-        df = df.append(d,ignore_index=True)
-    df.to_csv('C:\\python\\kommuner\\temp\\kommunetopp.csv', encoding='utf-8')
+        
+        gpxfile_1 = my_dir+"\\res\\gpx\\{0}.gpx".format(d['kommunenr'])
+        gpxfile_2 = my_dir+"\\res\\gpx\\{0}_ex.gpx".format(d['kommunenr'])
+        
+        if os.path.isfile(gpxfile_1):
+            gpx_df = GPXtoDataFrame(gpxfile_1)
+            print(len(gpx_df))
+            mainInfo = getmainInfo(gpx_df)
+            mainInfo['Dublicate'] = 'False'
+            d.update(mainInfo)
+        elif os.path.isfile(gpxfile_2):
+            gpx_df = GPXtoDataFrame(gpxfile_2)
+            mainInfo = getmainInfo(gpx_df)
+            mainInfo['Dublicate'] = 'True'
+            d.update(mainInfo)
+        else:
+            mainInfo = dict()
+            d.update(mainInfo)
+            
+        
+        tmp_d = pd.DataFrame([d])
+        
+        
+        df = pd.concat([df,tmp_d],ignore_index=True)
+    
+    
+    
+    df.to_csv('C:\\python\\kommuner\\temp\\kommunetopp.csv', encoding='ANSI')
         
 
 def readkommunexml(xml_file):
