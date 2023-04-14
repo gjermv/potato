@@ -231,7 +231,7 @@ def googleElevation(dataframe,df2=None):
     ele1 = []
     ele2 = []
     
-    gmaps = googlemaps.Client(key='AIzaSyC2F01wKnb0vmW8qxF5KvGIe2pbJgmm7HY')
+    gmaps = googlemaps.Client(key='')
     
     for df in dataframe.iterrows():
         tub = {'lat':df[1]['lat'],'lng':df[1]['lon']}
