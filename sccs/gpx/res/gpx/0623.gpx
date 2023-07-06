@@ -4,8 +4,8 @@
 	<name>0623.gpx</name>
 </metadata>
 <trk>
-	<name>Cycling</name>
-	<desc>Cycling</desc>
+	<name>Cycle</name>
+	<desc>Cycle</desc>
 	<trkseg>
 		<trkpt lat="59.899999" lon="10.223919">
 			<ele>202.50</ele>
@@ -4075,10 +4075,6 @@
 				</gpxtpx:TrackPointExtension>
 			</extensions>
 		</trkpt>
-		<extensions>
-			<gte:name>Cycling</gte:name>
-			<gte:color>#fbaf00</gte:color>
-		</extensions>
 	</trkseg>
 </trk>
 <trk>
@@ -8036,15 +8032,11 @@
 				</gpxtpx:TrackPointExtension>
 			</extensions>
 		</trkpt>
-		<extensions>
-			<gte:name>Walk</gte:name>
-			<gte:color>#00ce00</gte:color>
-		</extensions>
 	</trkseg>
 </trk>
 <trk>
-	<name>Cycling</name>
-	<desc>Cycling</desc>	
+	<name>Cycle</name>
+	<desc>Cycle</desc>	
 	<trkseg>
 		<trkpt lat="59.950208" lon="10.173651">
 			<ele>501.40</ele>
