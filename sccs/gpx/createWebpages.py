@@ -139,16 +139,18 @@ def createWebpages():
             totstat['tot_antall_besteget'] +=1
         
         # Info from GPX file, if the file exist
+        
+        
+        
         gpxfile = my_dir+"\\res\\gpx\\{0}.gpx".format(kom['kommunenr'])
         if os.path.isfile(gpxfile):
             
             gpx_df = gpxtricks.GPXtoDataFrame(gpxfile)
+            
             kom['stoplocations'] = gpxtricks.exportStopLoc(gpx_df)
             kom['tripcoordinates'] = gpxtricks.exportRedPoints(gpx_df)
-            #gpxtricks.plotElevationProfile(gpx_df, 'C:\\python\\kommuner\\outdata\\profile2\\{}.png'.format(kom['kommunenr']))
-            
             kom['elevation_dist'], kom['elevation_height'] = gpxtricks.getElevationData(gpx_df)
-            
+            kom['elevation_dist_max'] = round(kom['elevation_dist'][-1],0)
             mainInfo = gpxtricks.getmainInfo(gpx_df)
             kom.update(mainInfo)
         
@@ -164,6 +166,8 @@ def createWebpages():
                 gpx_df = gpxtricks.GPXtoDataFrame(gpxfile_ex)
                 kom['stoplocations'] = gpxtricks.exportStopLoc(gpx_df)
                 kom['tripcoordinates'] = gpxtricks.exportRedPoints(gpx_df)
+                kom['elevation_dist'], kom['elevation_height'] = gpxtricks.getElevationData(gpx_df)
+                kom['elevation_dist_max'] = round(kom['elevation_dist'][-1],0)
                 gpxtricks.plotElevationProfile(gpx_df, 'C:\\python\\kommuner\\outdata\\profile2\\{}.png'.format(kom['kommunenr']))
                 mainInfo = gpxtricks.getmainInfo(gpx_df)
                 kom.update(mainInfo)
@@ -203,7 +207,12 @@ def createWebpages():
     newStat.update(totstat1)
     newStat.update(siste_rapporter)
     
+    print("Start creating statReports!")
+    
+
+
     for i,key in enumerate(statistikk_overskrifter()):
+        print('Startreport: ',key)
         newStat['stat_overskrift'] = key
         newStat['stat_detaljer'] = create_stat_details(stat[key])
         newStat['stat_komm_grenser'] = create_stat_komm_grenser(stat[key])
@@ -212,7 +221,8 @@ def createWebpages():
         file = open('C:\\python\\kommuner\\outdata\\stat{:0>2}.html'.format(i),'w',encoding='utf-8')
         file.write(template_stat.render(newStat))
         file.close()
-
-reSizePictures('C:\\Users\\vinge\\Pictures\\Kommunetopper\\0829 Kviteseid\\web\\')
+    print("Finished creating statReports!")
+#picFolder = '1822 Leirfjord'
+#reSizePictures('C:\\Users\\vinge\\Pictures\\Kommunetopper\\web\\')
     
-#createWebpages()
+createWebpages()

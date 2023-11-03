@@ -24,27 +24,27 @@ import matplotlib.cm as cm
 import os.path
 from itertools import groupby
 from operator import itemgetter
-
+import zlib
 import fitdecode
 
 def GPXtoDataFrame(filename):
     """ Reads a gpx file and returns a dataframe with the important parameters.
     'name','desc','segno','dist','lat','lng','ele','time','duration','speed' """
-    
+
     f = open(filename,encoding='utf-8')
     ns = findNamespace(f)
     xml = etree.parse(f)
     f.close()
-    
+
     gpxinfo = list() 
     segc = -1 #Segment counter
-    
+
     point = xml.find(ns+"trk/"+ns+"trkseg/"+ns+"trkpt")
     tmp_lat = float(point.attrib['lat'])
     tmp_lon = float(point.attrib['lon'])
-    
+
     startTime = gpxtimeToStr(point.find(ns+'time').text)
-    
+
     trks = xml.iterfind(ns+'trk')
     dist = 0
     for trk in trks:
@@ -52,12 +52,12 @@ def GPXtoDataFrame(filename):
         if name != None:
             name = name.text 
         else: name = "NA"
-        
+
         desc = trk.find(ns+'desc')
         if desc != None:
             desc = desc.text
         else: desc = "NA"
-    
+
         trksegs = trk.iterfind(ns+'trkseg')
         for trkseg in trksegs:
             segc += 1
@@ -68,23 +68,23 @@ def GPXtoDataFrame(filename):
                     lon = float(point.attrib['lon'])       
                     ele = round(float(point.find(ns+'ele').text),2)
                     time = point.find(ns+'time').text
-                    
+
                     dist += round(utm.haversine(tmp_lon,tmp_lat,lon,lat),2)
                     timez = gpxtimeToStr(time)
                     duration = (timez - startTime).total_seconds()
                     tmp_lat,tmp_lon = lat,lon
-                    
+
                     hr = getHeartRate(point,ns)
                     gpxinfo.append([name,desc,segc,dist,lat,lon,ele,timez,duration,hr])
                     ## Test function
-                    
+
                 except:
                     print("Points does not have all information needed, or namespace is wrong")
-    
+
     gpxdf = pd.DataFrame(gpxinfo,columns=['name','desc','segno','dist','lat','lon','ele','time','duration','heartrate'])
     gpxdf['speed'] = (gpxdf['dist'].shift(-1)-gpxdf['dist'])/(gpxdf['duration'].shift(-1)-gpxdf['duration'])
     gpxdf['speed'] = gpxdf['speed'].shift(1)
-    
+
     return gpxdf
 
 def TCXtoDataFrame(filename):
@@ -183,11 +183,17 @@ def calcEleDiff(elemin,elemax):
 
 def getmainInfo(dataframe):
     print('Number of points:',len(dataframe))    
+    
     length = dataframe['dist'].max()
     tottime = max(dataframe['duration']) 
     length = dataframe['dist'].max()
     tottime = max(dataframe['duration'])
-    dateandtime = dataframe['time'][0] 
+    
+    dateandtime = dataframe['time'].iat[0]
+    startPointLat = dataframe['lat'].iat[0]
+    startPointLon = dataframe['lon'].iat[0]
+    endPointLat = dataframe['lat'].iat[-1]
+    endPointLon = dataframe['lon'].iat[-1]
     
     stopframe = (dataframe[dataframe['speed']<0.2777][['duration']].index)
     stoptime = sum(dataframe['duration'].diff()[stopframe])
@@ -200,6 +206,28 @@ def getmainInfo(dataframe):
     climbing = getClimbingHeightGPS(dataframe)
     steepness = climbing/(length/2)
     climbingrate = climbing/(walktime/2)
+    
+    
+    # Calculate walk, ski and cycle distance. 
+    move_type = {'Walk': 0, 'Ski': 0, 'Cycle': 0}
+    minDist = 0
+    minTime = 0
+    
+    for segno, group in dataframe.groupby(['segno']):
+        seg_name = group['desc'].max()
+        seg_dist = group['dist'].max()-minDist
+        minDist = group['dist'].max()
+        seg_dur = group['duration'].max()-minTime
+        mintime = group['duration'].max()
+        
+        if seg_name == 'Ski':
+            move_type['Ski'] += seg_dist
+        elif seg_name == 'Cycle':
+            move_type['Cycle'] += seg_dist
+        else: 
+            move_type['Walk'] += seg_dist
+            
+        print('{}, {}, {}'.format(seg_name, seg_dist, seg_dur))
     
     try: 
         kupert_faktor = climbing/elediff
@@ -223,6 +251,14 @@ def getmainInfo(dataframe):
     info['climbingrate'] = round(climbingrate*60,1)
     info['kupert_faktor'] = round(kupert_faktor,2)
     info['topptur_faktor'] = round(topptur_faktor*100,1)
+    info['Walk'] = round(move_type['Walk'],1)
+    info['Ski'] = round(move_type['Ski'],1)
+    info['Cycle'] = round(move_type['Cycle'],1)
+    info['startPointLat'] = startPointLat
+    info['startPointLon'] =startPointLon
+    info['endPointLat'] = endPointLat
+    info['endPointLon'] = endPointLon
+    
     return info
 
 def googleElevation(dataframe,df2=None):
@@ -352,8 +388,11 @@ def plotElevationProfile(dataframe,filename=None):
 
 def getElevationData(dataframe):
     """ For kommunetopper """
-    dist = list(dataframe[dataframe['ele'] != np.nan]['dist'])
+    ds = dataframe[dataframe['dist'] != np.nan]['dist']
+    ds = ds.round(2)
+    dist = list(ds)
     ele = list(dataframe[dataframe['ele'] != np.nan]['ele'])
+    
     
     return (dist,ele)
 
@@ -639,7 +678,6 @@ def xmltoCSV(xml_file):
     
     df = pd.DataFrame()
     
-    
     for kommune in et.iter('kommune'):
         d = dict()
         d['areal'] = kommune.find('areal').text
@@ -651,8 +689,8 @@ def xmltoCSV(xml_file):
         d['hoyde'] = kommune.find('hoyde').text
         d['kommunenavn'] = kommune.find('kommunenavn').text
         d['kommunenr'] = kommune.find('kommunenr').text
-        d['lat'] = kommune.find('lat').text
-        d['lng'] = kommune.find('lng').text
+        d['lat'] = float(kommune.find('lat').text)
+        d['lng'] = float(kommune.find('lng').text)
         d['topp'] = kommune.find('topp').text
         
         
@@ -663,13 +701,21 @@ def xmltoCSV(xml_file):
             gpx_df = GPXtoDataFrame(gpxfile_1)
             print(len(gpx_df))
             mainInfo = getmainInfo(gpx_df)
+            
+            point =[d['lng'],d['lat']]
+            mainInfo['closestPoint'] = get_closestPoint(gpx_df, point)
             mainInfo['Dublicate'] = 'False'
+            mainInfo['crc32_hash'] = crc32(gpxfile_1)
             d.update(mainInfo)
+        
         elif os.path.isfile(gpxfile_2):
             gpx_df = GPXtoDataFrame(gpxfile_2)
             mainInfo = getmainInfo(gpx_df)
             mainInfo['Dublicate'] = 'True'
+            mainInfo['closestPoint'] = -99999
+            mainInfo['crc32_hash'] = crc32(gpxfile_2)
             d.update(mainInfo)
+        
         else:
             mainInfo = dict()
             d.update(mainInfo)
@@ -679,11 +725,21 @@ def xmltoCSV(xml_file):
         
         
         df = pd.concat([df,tmp_d],ignore_index=True)
-    
-    
+        df.sort_values('dateandtime', axis=0, ascending=True, inplace=True)
     
     df.to_csv('C:\\python\\kommuner\\temp\\kommunetopp.csv', encoding='ANSI')
-        
+
+
+def crc32(fileName):
+    with open(fileName, 'rb') as fh:
+        hash = 0
+        while True:
+            s = fh.read(65536)
+            if not s:
+                break
+            hash = zlib.crc32(s, hash)
+        return hash
+    
 
 def readkommunexml(xml_file):
     """ Reads the Offical kommunedatalist and yields a dictionary with basic information """
@@ -1017,6 +1073,8 @@ def calculateSufferScore(dataframe):
     return df['suffer'].sum()
 
 def get_closestPoint(dataframe,point):
+    trk = dataframe.copy()
+    
     trk['dist_from_point'] = trk.apply(lambda row: utm.haversine(row['lon'],row['lat'],point[0],point[1]), axis=1 ) 
     
     #print(trk.ix[trk['dist_from_point'].idxmin()])

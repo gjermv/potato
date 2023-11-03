@@ -9,14 +9,6 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title></title>
 
-<script>(function(d, s, id) {
-	var js, fjs = d.getElementsByTagName(s)[0];
-	if (d.getElementById(id)) return;
-	js = d.createElement(s); js.id = id;
-	js.src = "//connect.facebook.net/nb_NO/sdk.js#xfbml=1&version=v2.4";
-	fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
-</script>
 
 <script>
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -31,10 +23,9 @@
 
 <body>
 	<div id="header">
-	<hr>
 		<div id="statistikk">
 		<!-- <img src='fig/statistic.png' width='30px' align='left'> -->
-		        <a href='index.html'>LITT STATISTIKK:</a><br>
+		<a href='index.html'>LITT STATISTIKK:</a><br>
 		<a href='stat00.html'>{{tot_antall_besteget}}/429 kommuner</a><br>
 		<a href='stat02.html'>{{tot_tottid}} timer på tur</a><br>
 		<a href='stat01.html'>{{tot_length}} kilometer</a><br>
@@ -78,68 +69,67 @@
 		</select>
 		</form>
 		</div>
-		<div id="banner">
-		<img src='fig/banner-logo3.png'>
-		
-		</div>
+<!--	<div id="banner"> 
+		<img src='fig/banner-logo3.png'> 
+		</div>		-->
+	<hr>
 	</div>
 
 	<div id="main">
-	<hr>
-	</div>
-	<div id="main">
 		<div id="article">
 			<div id="articleheader">
-			{{topp}} - {{hoyde2}} moh
-			<a href="{{neste_kommune}}.html">
-			<img src='fig/right.png' align='right'></a></div>
-			<div id="articlestat">
-			KOMMUNE: {{kommunenavn}}
+				{{topp}} - {{hoyde2}} moh
+				<a href="{{neste_kommune}}.html">
+				<img src='fig/right.png' align='right'></a>
 			</div>
 			<div id="articlestat">
-			DATO: {{dateandtime}}
+				KOMMUNE: {{kommunenavn}}
 			</div>
-			<div id="articleintro">
-			{{topp}}
+			<div id="articlestat">
+				DATO: {{dateandtime}}
 			</div>
+			<!-- <div id="articleintro">
+				{{topp}}
+			</div> -->
 			<div id="articletekst">
-			{{beskrivelse}}
+				{{beskrivelse}}
 			</div>
-			<div id="articlemap">
-			<div id="map">
-			</div>
-			<div><canvas id="myChart"></canvas></div>
-			</div>
+		</div>
+		<div id="picstat">
+			<table width='100%'>
+			<tr>
+			<td><b>Tur info</b></td><td align='left'></td><td align='right'></td></tr><tr>
+			<td align='left'>{{length}} km </td>
+			<td align='center'> {{walk_time}} t </td>
+			<td align='right'>{{avg_speed}} km/t </td>
+			</tr>
+
+			</table>
+			<hr>
 			
-			<div class="fb-comments" data-href="http://www.vingerhagen.com/topp/{{kommunenr}}.html" data-width="640" data-numposts="5">
-			</div>
+			<table width='100%'>
+			<tr><td>Pauser:</td><td align='right'>{{stop_time}} t</td><td align='right'><i>(-)</i></td></tr>
+			<tr><td>Pausefaktor:</td><td align='right'>{{pause_faktor}}% </td><td align='right'><i>(-)</i></td></tr>
+			<tr><td>Høydeforskjell:</td><td align='right'>{{elediff}} m</td><td align='right'><i>(-)</i></td></tr>
+			<tr><td>Total stigning:</td><td align='right'>{{climbing}} m</td><td align='right'><i>(-)</i></td></tr>
+			<tr><td>Bratthet:</td><td align='right'> {{steepness}} m/km</td><td align='right'><i>(-)</i></td></tr>
+			<tr><td>Høydemeter pr min:</td><td align='right'> {{climbingrate}} m/min</td><td align='right'><i>(-)</i></td></tr>
+			<tr><td>Kuperthetsfaktor:</td><td align='right'> {{kupert_faktor}} </td><td align='right'><i>(-)</i></td></tr>
+			<tr><td>Toppturfaktor:</td><td align='right'> {{topptur_faktor}} %</td><td align='right'><i>(-)</i></td></tr><tr>
+			</table>
+		</div>
+		
+		<div><canvas id="myChart"></canvas></div>
+		
+		<div id="articlemap">
+			<div id="map"></div>
 		</div>
 		
 		<div id="pic">
-			<img src='img/{{kommunenr}}.jpg' width='360' onerror="this.src='fig/fjell-error2.png'">
-			<div id="pictekst">
-		</div> 
-		<div id="picstat">
-		GPS Statistikk</br>
-		<hr>
-		<table width='100%'>
-		<tr>
-		<td><b>Tur info</b></td><td align='left'></td><td align='right'></td></tr><tr>
-		<td align='left'>{{length}} km </td>
-		<td align='center'> {{walk_time}} t </td>
-		<td align='right'>{{avg_speed}} km/t </td>
-		</tr>
-		
-		</table><hr><table width='100%'>
-		<tr><td>Pauser:</td><td align='right'>{{stop_time}} t</td><td align='right'><i>(-)</i></td></tr>
-		<tr><td>Pausefaktor:</td><td align='right'>{{pause_faktor}}% </td><td align='right'><i>(-)</i></td></tr>
-		<tr><td>Høydeforskjell:</td><td align='right'>{{elediff}} m</td><td align='right'><i>(-)</i></td></tr>
-		<tr><td>Total stigning:</td><td align='right'>{{climbing}} m</td><td align='right'><i>(-)</i></td></tr>
-		<tr><td>Bratthet:</td><td align='right'> {{steepness}} m/km</td><td align='right'><i>(-)</i></td></tr>
-		<tr><td>Høydemeter pr min:</td><td align='right'> {{climbingrate}} m/min</td><td align='right'><i>(-)</i></td></tr>
-		<tr><td>Kuperthetsfaktor:</td><td align='right'> {{kupert_faktor}} </td><td align='right'><i>(-)</i></td></tr>
-		<tr><td>Toppturfaktor:</td><td align='right'> {{topptur_faktor}} %</td><td align='right'><i>(-)</i></td></tr><tr>
-		<table></div></div></div>
+			<img src='img/{{kommunenr}}.jpg' width='800' onerror="this.src='fig/fjell-error2.png'">	
+		</div>
+	</div>
+
 
 </body>
 
@@ -238,10 +228,10 @@ const data = {
   type: 'scatter',
   data: data,
   options: {
-   scales: {
+  scales: {
             x: {
                 min: 0,
-                suggestedMax: 100
+                max: {{elevation_dist_max}},
             },
      }},
   };

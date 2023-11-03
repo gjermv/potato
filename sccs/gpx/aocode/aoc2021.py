@@ -684,15 +684,21 @@ def a16():
     myS = ''
     for s in 'C0015000016115A2E0802F182340':
         myS += myD[s]
-        
 
-with open("C:\\python_proj\\aocode\\aoc25t.txt", "r") as fp:
-   inp = fp.read().split('\n')
 
-l = []
-for line in inp:
-    l2 = line.replace('.','0').replace('>','1').replace('v','2')
-    l.append(list(l2))
+def returnCent(year):
+    cent = (year-1)//100 + 1
+    return cent
 
-arr = np.array(l).astype(int)
-print(arr)
+print(returnCent(1699))
+
+# with open("C:\\python_proj\\aocode\\aoc25t.txt", "r") as fp:
+#    inp = fp.read().split('\n')
+
+# l = []
+# for line in inp:
+#     l2 = line.replace('.','0').replace('>','1').replace('v','2')
+#     l.append(list(l2))
+
+# arr = np.array(l).astype(int)
+# print(arr)

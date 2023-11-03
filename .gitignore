@@ -27,3 +27,6 @@ sccs/PEuler/AFRY_Adv9.py
 sccs/PEuler/AFRY_Adv9.txt
 sccs/PEuler/AFRY_AdvMal.py
 sccs/gpx/res/gpx/1729_feil.gpx
+*.png
+sccs/gpx/res/templates/template_rapport - backup.html
+*.db
