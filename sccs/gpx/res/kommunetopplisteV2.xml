@@ -344,7 +344,7 @@
       <beskrivelse>Kommer snart</beskrivelse>
       <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>19.04.2020</dato>
       <hoyde>345</hoyde>
       <hoyde2>347,0</hoyde2>
       <km_fottur/>
@@ -365,7 +365,7 @@
       <beskrivelse>En retur til gamle Ski kommune for å gå opp på toppen som tidligere måtte avbrytes på grunn av dårlig knær i dobbeltoppforsøket med Enebakk. Noen minusgrader gjennom natten gjorde at den lille snøen og isen som lå i skogen bar veldig godt. Det var mye stier tegnet inn på kartet på nord-sør gående åsrygger, så det var bare å velge en sti og legge i vei mot toppen, og forsøke å unngå områdene med den glatteste isen. Utsikten vestover fra Tømmerås var langt bedre enn jeg hadde forestilt meg. Både Norefjell og Gaustatoppen var synlig i det fjerne. Valgte noen litt andre stier tilbake, og gikk bare på snørra på isen engang i løpet av turen. </beskrivelse>
       <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>06.03.2021</dato>
       <hoyde>313</hoyde>
       <hoyde2>313,1</hoyde2>
       <km_fottur/>
@@ -383,10 +383,10 @@
     <kommune>
       <areal>206,61</areal>
       <befolkning>15686</befolkning>
-      <beskrivelse>Kommer snart</beskrivelse>
+      <beskrivelse>Vårtur til Romerike for å bestige kommunetoppene i Sørum og Skedsmo. Parkerte ved skytebanen i XXX og hele familien gikk mot Bjørnholen. Der ble det slått basecamp, mens jeg fortsatte alene til Kohinor-hytta. På tilbaketuren fra Bjørnholen ble det valgt en litt annen rute for å få litt variasjon.  </beskrivelse>
       <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>19.04.2020</dato>
       <hoyde>347</hoyde>
       <hoyde2>347,4</hoyde2>
       <km_fottur/>
@@ -1912,10 +1912,10 @@ Jeg parkert ved et skilt som pekte mot Elgåhogna, like før en plass som het Da
     <kommune>
       <areal>724,27</areal>
       <befolkning>19154</befolkning>
-      <beskrivelse>Feil kommunetopp - Kjørte inn en grusvei like ved Malungstugua og betalte 40 kroner i bompenger med mobiltelefonen. Det hang noen røde merker i trærne som så ut til å lede mot Orrkjølen der bilen ble parkert. De røde merkene ble forsøkt fulgt i begynnelsen, men siden stien ikke var så mye brukt og dermed var vanskelig å følge, og siden det begynte å bli mørkt, var det plutselig ikke noen flere røde merker å følge. Når det ble ordentlig mørkt, ble soveposen funnet fram og det ble tatt en god natts pause. Når det lysnet av dag igjen tråkket man seg videre over myrer og flere myrer, for dette var en myrete tur. Etterhvert kom man plutselig inn på de røde merkene igjen, og de ledet ganske riktig fram til Orrkjølen. På toppen var det bok, et utsiktstårn og en liten varmestue. De røde merkene ble fulgt på veien tilbake igj</beskrivelse>
-      <besteget>False</besteget>
+      <beskrivelse>Retur til Stange kommune sitt høyeste punkt, en topp jeg nesten hadde vært på 12 år tidligere, men der forarbeidet og kartgrunnlaget på forrige tur ikke var nøye nok gått igjennom. Denne gangen ble det en knapp kilometer lengre og i underkant av 1 meter høyere opp sammenlignet med Nord-Odal sitt høyeste punkt på Orrkjølen. Etter jobb-besøk i Gjøvik Svømmehall kjørte jeg Fv. 24 sørover fra Hamarområdet, og svingte inn på en grusvei ved Malungen. Fulgte Grysætervegen (avgift 70 kr) et godt stykke innover i skogen, og parkerte på en liten P-plass nær Gjellbekksætra. Byttet ut verneskoene med joggesko, og småløp oppover mot toppen. Ingen stopp på Orrkjølen på vei oppover, men fortsatte rett til Søndre Fjellsjøhøgda. Der var info om når toppen var blitt kommunetoppmål for knapt 10 år siden. Det ble samme rute tilbake, men tok meg tid til å klatre opp i tårnet på Orrkjølen. </beskrivelse>
+      <besteget>True</besteget>
       <bilde>img/orrkjolen.jpg</bilde>
-      <dato>11.08.2012</dato>
+      <dato>05.08.2024</dato>
       <hoyde>641</hoyde>
       <hoyde2>642,0</hoyde2>
       <km_fottur>12,2</km_fottur>
@@ -1954,10 +1954,10 @@ Jeg parkert ved et skilt som pekte mot Elgåhogna, like før en plass som het Da
     <kommune>
       <areal>516,74</areal>
       <befolkning>7831</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Dette var dagens andre topp etter først å ha vært på Stange sin kommunetopp. Granberget var en enkel sykkeltopp. Bilen ble parkert på en P-plass nær Odal verk, og så var det relativt jevn stigning oppover og nordover på skogsbilveier mot Granberget. En hydraulisk svikt i dempegaffelen på setet gjorde at sykkelturen ikke ble maksimalt effektiv, men opp kom man seg. Ved Granbergsetra nær toppen var det utsikt vestover, men selve toppunktet var godt gjemt inne i skogen uten tegn til å være særlig mye besøkt. Det var allikevel satt opp et skilt på en trestamme som viste at man hadde kommet til riktig sted. Tilbaketuren til bilen gikk kjapt med sykkel. </beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>05.08.2024</dato>
       <hoyde>526</hoyde>
       <hoyde2>526,5</hoyde2>
       <km_fottur/>
@@ -2465,7 +2465,7 @@ Jeg parkert ved et skilt som pekte mot Elgåhogna, like før en plass som het Da
       <beskrivelse>Parkerte ved en møtelomme, som hadde plass til ihvertfall parkering av 3-4 biler. Tok nærmeste sti fra P-plassen som førte mot toppen. Dette skulle vise seg å være en feiltakelse for stien stoppet etter et par hundre meter og jeg ble gående sikksakking utenfor stier opp gjennom lia, under og rundt et klatrefelt før jeg kom inn på en sti som hadde startet 100 meter videre langs veien. Denne stien var tydelig og lett og følge opp til varden på toppen. Rakk akkurat å skrive meg inn i toppboka som forøvrig var fullstendig fullskrevet før det kom noen dråper regn. I T-skjorte og shorts ble litt kaldt å bruke for lang tid på toppen, men fikk raskt varmen tilbake med småjogg tilbake til bilen. Ned fulgte jeg stien hele veien og unngikk kavingen gjennom skogen.</beskrivelse>
       <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>22.07.2018</dato>
       <hoyde>324</hoyde>
       <hoyde2>324,4</hoyde2>
       <km_fottur/>
@@ -6634,7 +6634,7 @@ Været var heller labert på turen. Det var regn, vind og tåke over 1800 meter,
       <beskrivelse>Selv om været var fint og snøforholdene gode, gjorde store gnagsår på føttene det lite fristende å gjøre en ny topptur etter gårsdagens bestigning av Eidskyrkja i Volda . I stedet ble det en to timers biltur til Vågsøy for å forhåpentligvis finne en snøfri topp som man kunne gå opp på i lave sko. Parkerte bilen på en utfartsparkering ved et lite vann nederst i Austadalen, og fulgte vei/sti hele veien opp til toppen. Som jeg håpet var det ingen snø på veien opp, men noen mindre myrområder gjorde allikevel at skoene ble litt våte. Fin tur med god utsikt utover havet fra toppen. Fortsatte turen utover til Refsviksanda for litt lokal guiding. Marie S. var med på turen. </beskrivelse>
       <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>26.04.2020</dato>
       <hoyde>689</hoyde>
       <hoyde2>689,1</hoyde2>
       <km_fottur/>
@@ -7335,7 +7335,7 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
     <kommune>
       <areal>708,46</areal>
       <befolkning>2501</befolkning>
-      <beskrivelse>Etter en nøyere kikk på kommunetoppkartet ved spisebordet i Bø, ble det oppdaget et par topper til i Telemark som var innenfor dagsturavstand. Påskeaften ble turen satt mot Sveinsheii i Kviteseid. Vi kjørte til Foldsæ og satset på at det var spor oppover Røyningdalen. På en liten parkeringsplass nederst i dalen stod snøscootererne parkert, og det var godt med spor oppover veien. Vi la universalklister under - mer kommer snart</beskrivelse>
+      <beskrivelse>Etter en nøyere kikk på kommunetoppkartet ved spisebordet i Bø, ble det oppdaget et par topper til i Telemark som var innenfor dagsturavstand. Påskeaften ble turen satt mot Sveinsheii i Kviteseid. Vi kjørte til Foldsæ og satset på at det var spor oppover Røyningdalen. På en liten parkeringsplass nederst i dalen stod snøscootererne parkert, og det var godt med spor oppover veien. Vi la universalklister under fjellskiene, og fulgte scootersporene oppover. Ned fra toppen ble det valgt en litt annen rute, der det tidvis var litt fin skikjøring for fjellski.</beskrivelse>
       <besteget>True</besteget>
       <bilde/>
       <dato>08.04.2023</dato>
@@ -8141,10 +8141,10 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
     <kommune>
       <areal>262,47</areal>
       <befolkning>9415</befolkning>
-      <beskrivelse/>
+      <beskrivelse>To kommunetopper ganske tett i tett. Parkerte ved veien og det var felles marsj opp til tårnet på toppen. Derifra gikk jeg alene over til topppunktet til Lyngdal. Mens resten av turfølget fulgte veien ned igjen, gikk jeg utenfor vei over til Farsund sin kommunetopp.</beskrivelse>
       <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>25.07.2018</dato>
       <hoyde>486</hoyde>
       <hoyde2>486,6</hoyde2>
       <km_fottur/>
@@ -8267,10 +8267,10 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
     <kommune>
       <areal>391,02</areal>
       <befolkning>7815</befolkning>
-      <beskrivelse/>
+      <beskrivelse>To kommunetopper ganske tett i tett. Parkerte ved veien og det var felles marsj opp til tårnet på toppen. Derifra gikk jeg alene over til topppunktet til Lyngdal. Mens resten av turfølget fulgte veien ned igjen, gikk jeg utenfor vei over til Farsund sin kommunetopp.</beskrivelse>
       <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>25.07.2018</dato>
       <hoyde>506</hoyde>
       <hoyde2>504,4</hoyde2>
       <km_fottur/>
@@ -8460,7 +8460,9 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
     <kommune>
       <areal>163,12</areal>
       <befolkning>3073</befolkning>
-      <beskrivelse>Kommer snart</beskrivelse>
+      <beskrivelse>Kommer snart...
+	  Kommunetoppturraid til Vestfold bestående av Hof, Tønsberg, Stokke, Nøtterøy, Tjøme, Re og Andebu. Brukte campingplass i Tønsberg som utgangspunkt for kjøring til de ulike kommunetoppene. Kan ikke huske at det var noen spesielle utfordringer til noen av toppene - begrenset høydeforskjell og stier opp til alle toppene. 
+	  </beskrivelse>
       <besteget>True</besteget>
       <bilde/>
       <dato>13.07.2020</dato>
@@ -8628,10 +8630,10 @@ I Rissa sentrum jaktet vi på Napoleonskake for å feire dagens bragd, men mått
     <kommune>
       <areal>121,06</areal>
       <befolkning>43648</befolkning>
-      <beskrivelse/>
+      <beskrivelse>Kommer snart...</beskrivelse>
       <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>29.07.2018</dato>
       <hoyde>148</hoyde>
       <hoyde2>147,5</hoyde2>
       <km_fottur/>

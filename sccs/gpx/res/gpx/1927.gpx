@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.1" creator="GPS Track Editor" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gte="http://www.gpstrackeditor.com/xmlschemas/General/1" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" targetNamespace="http://www.topografix.com/GPX/1/1" elementFormDefault="qualified" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
 <metadata>
-	<name>Tredjefjellet_H_yeste_fjellet_i_Tran_y.gpx</name>
+	<name>1927.gpx</name>
 </metadata>
 <trk>
 	<name>Tredjefjellet - Høyeste fjellet i Tranøy</name>
@@ -149,7 +149,7 @@
 				</gpxtpx:TrackPointExtension>
 			</extensions>
 		</trkpt>
-		<trkpt lat="69.298126" lon="17.334048">
+		<trkpt lat="69.298119" lon="17.334049">
 			<ele>308.80</ele>
 			<time>2023-07-10T09:26:37Z</time>
 			<extensions>
@@ -12784,17 +12784,6 @@
 				<gpxtpx:TrackPointExtension>
 					<gpxtpx:hr>120</gpxtpx:hr>
 					<gpxtpx:cad>50</gpxtpx:cad>
-					<gpxtpx:atemp>29.0</gpxtpx:atemp>
-				</gpxtpx:TrackPointExtension>
-			</extensions>
-		</trkpt>
-		<trkpt lat="69.297840" lon="17.331472">
-			<ele>329.00</ele>
-			<time>2023-07-10T13:25:58Z</time>
-			<extensions>
-				<gpxtpx:TrackPointExtension>
-					<gpxtpx:hr>122</gpxtpx:hr>
-					<gpxtpx:cad>48</gpxtpx:cad>
 					<gpxtpx:atemp>29.0</gpxtpx:atemp>
 				</gpxtpx:TrackPointExtension>
 			</extensions>
