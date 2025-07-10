@@ -874,10 +874,10 @@
     <kommune>
       <areal>753,54</areal>
       <befolkning>2140</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kommer snart!</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>x</dato>
       <hoyde>1920</hoyde>
       <hoyde2>1920,5</hoyde2>
       <km_fottur/>
@@ -895,10 +895,10 @@
     <kommune>
       <areal>1854,63</areal>
       <befolkning>4453</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kommer snart!</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>18.02.2025</dato>
       <hoyde>1933</hoyde>
       <hoyde2>1933,3</hoyde2>
       <km_fottur/>
@@ -5401,10 +5401,10 @@ Været var heller labert på turen. Det var regn, vind og tåke over 1800 meter,
     <kommune>
       <areal>1505,45</areal>
       <befolkning>1591</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kommer snart!</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>14.04.2025</dato>
       <hoyde>2208</hoyde>
       <hoyde2>2207,5</hoyde2>
       <km_fottur/>
@@ -5527,10 +5527,10 @@ Været var heller labert på turen. Det var regn, vind og tåke over 1800 meter,
     <kommune>
       <areal>963,10</areal>
       <befolkning>3171</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kommer snart!</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>14.04.2025</dato>
       <hoyde>2010</hoyde>
       <hoyde2>2010,0</hoyde2>
       <km_fottur/>
@@ -6484,10 +6484,10 @@ Været var heller labert på turen. Det var regn, vind og tåke over 1800 meter,
     <kommune>
       <areal>1342,45</areal>
       <befolkning>2224</befolkning>
-      <beskrivelse/>
-      <besteget>False</besteget>
+      <beskrivelse>Kommer snart!</beskrivelse>
+      <besteget>True</besteget>
       <bilde/>
-      <dato/>
+      <dato>09.07.2025</dato>
       <hoyde>1920</hoyde>
       <hoyde2>1921,2</hoyde2>
       <km_fottur/>
