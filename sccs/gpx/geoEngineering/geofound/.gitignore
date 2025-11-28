@@ -1,5 +1,0 @@
-.idea/
-*.pyc
-geofound/__pycache__/
-dist/
-geofound.egg-info/
