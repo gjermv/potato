@@ -1,3 +1,0 @@
-sfsimodels==0.9.12
-numpy
-pytest

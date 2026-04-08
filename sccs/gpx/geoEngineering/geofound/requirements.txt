@@ -1,6 +1,0 @@
-sfsimodels>=0.8.2
-numpy
-
-# testing
-pytest>=3.6
-pytest-cov
