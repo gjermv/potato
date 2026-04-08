@@ -5,6 +5,7 @@
 </metadata>
 <trk>
 	<name>Ski</name>
+	<desc>Ski</desc>
 	<trkseg>
 		<trkpt lat="59.954991" lon="6.989778">
 			<ele>854.20</ele>
